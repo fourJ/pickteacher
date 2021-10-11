@@ -6,4 +6,5 @@ import kr.pe.fourj.domain.Student;
 
 public interface StudentRepository extends CrudRepository<Student, Long>{
 
+
 }
