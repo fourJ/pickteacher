@@ -1,5 +1,8 @@
 package kr.pe.fourj.controller;
 
-public class reviewController {
+import org.springframework.web.bind.annotation.RestController;
 
+@RestController
+public class reviewController {
+	
 }
