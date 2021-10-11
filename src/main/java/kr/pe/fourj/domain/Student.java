@@ -1,5 +1,6 @@
 package kr.pe.fourj.domain;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -11,14 +12,14 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@AllArgsConstructor
+@RequiredArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
@@ -39,7 +40,9 @@ public class Student {
 	private String name;
 	
 	@NonNull
-	private Integer birth;
+	private Date birth;
+	
+	private Integer age;
 	
 	@NonNull
 	@Column(name="nick_name")
