@@ -34,7 +34,7 @@ public class reviewController {
 		
 		reviewRepository.save(new Review(student, course, dto.getContent(), dto.getDateTime(), dto.getStar()));
 		
-		return "저장 성공";
+		return "저장 성공2";
 	}
 	
 	//후기수정
