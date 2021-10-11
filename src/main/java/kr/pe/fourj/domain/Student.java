@@ -12,8 +12,11 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 
+<<<<<<< HEAD
 import org.springframework.lang.Nullable;
 
+=======
+>>>>>>> feature
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -44,7 +47,10 @@ public class Student {
 	@NonNull
 	private Date birth;
 	
+<<<<<<< HEAD
 	@NonNull
+=======
+>>>>>>> feature
 	private Integer age;
 	
 	@NonNull
