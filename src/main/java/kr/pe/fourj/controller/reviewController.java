@@ -14,9 +14,9 @@ import kr.pe.fourj.repository.ReviewRepository;
 import kr.pe.fourj.repository.StudentRepository;
 
 @RestController
-public class reviewController {
+public class ReviewController {
 	
-	public reviewController() {}
+	public ReviewController() {}
 	
 	@Autowired
 	private ReviewRepository reviewRepository;
