@@ -12,6 +12,10 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 
+
+import org.springframework.lang.Nullable;
+
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -42,6 +46,8 @@ public class Student {
 	@NonNull
 	private Date birth;
 	
+
+	@NonNull
 	private Integer age;
 	
 	@NonNull
@@ -69,4 +75,5 @@ public class Student {
 	@OneToMany(mappedBy="studentIdx", cascade=CascadeType.ALL)
 	private List<Review> reviewList;
 
+	
 }
