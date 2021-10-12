@@ -1,21 +1,21 @@
-INSERT INTO student values(STUDENT_SEQ.nextval, 'ÇÑ±¹', 26, '1996/11/01', 1, 'js0989', '±èÁö¸í', '¼öÁö', '010-8748-9878', 'ºñ¹Ğ~');
-INSERT INTO student values(STUDENT_SEQ.nextval, 'Áß±¹', 26, '1996/11/02', 0, 'js0989', '¼­ÁÖ¿¬', '¼öÁö', '010-8748-9878', 'ºñ¹Ğ~');
-INSERT INTO student values(STUDENT_SEQ.nextval, 'ÀÏº»', 26, '1996/11/03', 0, 'js0989', '¹èÁö¼ö', '¼öÁö', '010-8748-9878', 'ºñ¹Ğ~');
-INSERT INTO student values(STUDENT_SEQ.nextval, 'º£Æ®³²', 27, '1995/11/04', 0, 'yj5989', '¸¶À¯Áø', 'À¯Áø', '010-9878-9878', 'ºñ¹Ğ~');
+INSERT INTO student values(STUDENT_SEQ.nextval, 'í•œêµ­', 26, '1996/11/01', 1, 'js0989', 'ê¹€ì§€ëª…', 'ìˆ˜ì§€', '010-8748-9878', 'ë¹„ë°€~');
+INSERT INTO student values(STUDENT_SEQ.nextval, 'ì¤‘êµ­', 26, '1996/11/02', 0, 'js0989', 'ì„œì£¼ì—°', 'ìˆ˜ì§€', '010-8748-9878', 'ë¹„ë°€~');
+INSERT INTO student values(STUDENT_SEQ.nextval, 'ì¼ë³¸', 26, '1996/11/03', 0, 'js0989', 'ë°°ì§€ìˆ˜', 'ìˆ˜ì§€', '010-8748-9878', 'ë¹„ë°€~');
+INSERT INTO student values(STUDENT_SEQ.nextval, 'ë² íŠ¸ë‚¨', 27, '1995/11/04', 0, 'yj5989', 'ë§ˆìœ ì§„', 'ìœ ì§„', '010-9878-9878', 'ë¹„ë°€~');
 
-INSERT INTO TEACHER VALUES (teacher_SEQ.nextval, 'ÁÖ¼Ò1', '½ÅÀÔ', sysdate, 1, 'id1', 'Àü°ø1', '¼±»ı´Ô1', '010-xxxx-xxxx', 'pw1', 'ÇĞ±³1');
-INSERT INTO TEACHER VALUES (teacher_SEQ.nextval, 'ÁÖ¼Ò2', '1³â', sysdate, 1, 'id2', 'Àü°ø2', '¼±»ı´Ô2', '010-xxxx-xxxx', 'pw2', 'ÇĞ±³2');
-INSERT INTO TEACHER VALUES (teacher_SEQ.nextval, 'ÁÖ¼Ò3', '2³â', sysdate, 1, 'id3', 'Àü°ø3', '¼±»ı´Ô3', '010-xxxx-xxxx', 'pw3', 'ÇĞ±³3');
+INSERT INTO TEACHER VALUES (teacher_SEQ.nextval, 'ì£¼ì†Œ1', 'ì‹ ì…', sysdate, 1, 'id1', 'ì „ê³µ1', 'ì„ ìƒë‹˜1', '010-xxxx-xxxx', 'pw1', 'í•™êµ1');
+INSERT INTO TEACHER VALUES (teacher_SEQ.nextval, 'ì£¼ì†Œ2', '1ë…„', sysdate, 1, 'id2', 'ì „ê³µ2', 'ì„ ìƒë‹˜2', '010-xxxx-xxxx', 'pw2', 'í•™êµ2');
+INSERT INTO TEACHER VALUES (teacher_SEQ.nextval, 'ì£¼ì†Œ3', '2ë…„', sysdate, 1, 'id3', 'ì „ê³µ3', 'ì„ ìƒë‹˜3', '010-xxxx-xxxx', 'pw3', 'í•™êµ3');
 
-INSERT INTO COURSE values(course_seq.nextval, '2021/11/11', 10, '2021/10/11', '¿ù8½Ã', 'ÁøÇàÁß', '±¹¾î', '°í1', 250000, '¿ÀÇÁ¶óÀÎ', '1');
-INSERT INTO COURSE values(course_seq.nextval, '2021/11/12', 5, '2021/10/12', 'È­7½Ã', '¸¶°¨', '¼öÇĞ', '°í2', 450000, '¿ÀÇÁ¶óÀÎ', '2');
-INSERT INTO COURSE values(course_seq.nextval, '2021/11/13', 3, '2021/10/13', 'Åä12½Ã', '¹Ì°³°­', '¿µ¾î', '°í3', 350000, '¿Â¶óÀÎ', '3');
+INSERT INTO COURSE values(course_seq.nextval, '2021/11/11', 10, '2021/10/11', 'ì›”8ì‹œ', 'ì§„í–‰ì¤‘', 'êµ­ì–´', 'ê³ 1', 250000, 'ì˜¤í”„ë¼ì¸', '1');
+INSERT INTO COURSE values(course_seq.nextval, '2021/11/12', 5, '2021/10/12', 'í™”7ì‹œ', 'ë§ˆê°', 'ìˆ˜í•™', 'ê³ 2', 450000, 'ì˜¤í”„ë¼ì¸', '2');
+INSERT INTO COURSE values(course_seq.nextval, '2021/11/13', 3, '2021/10/13', 'í† 12ì‹œ', 'ë¯¸ê°œê°•', 'ì˜ì–´', 'ê³ 3', 350000, 'ì˜¨ë¼ì¸', '3');
 
-INSERT INTO review VALUES(review_seq.nextval, '°­ÀÇ ½±°í ³Ê¹« Àç¹ÌÀÖ¾î¿ä!', '2021/10/11', 5, 1, 1);
-INSERT INTO review VALUES(review_seq.nextval, '¿ª½Ã ¹Ï°í µè´Â ½Ü °­ÀÇ', '2021/10/11', 5, 1, 2);
-INSERT INTO review VALUES(review_seq.nextval, '³Ê¹« ¾î·Á¿ö¼­ ÀÌÇØÇÏ±â Èûµå³×¿©', '2021/10/11', 1, 2, 2);
-INSERT INTO review VALUES(review_seq.nextval, '¹º¼Ò¸®?', '2021/10/11', 1, 2, 1);
-INSERT INTO review VALUES(review_seq.nextval, '¤©¤·¤»¤»', '2021/10/11', 3, 3, 3);
-INSERT INTO review VALUES(review_seq.nextval, '¤¾¤»2', '2021/10/11', 3, 3, 1);
+INSERT INTO review VALUES(review_seq.nextval, 'ê°•ì˜ ì‰½ê³  ë„ˆë¬´ ì¬ë¯¸ìˆì–´ìš”!', '2021/10/11', 5, 1, 1);
+INSERT INTO review VALUES(review_seq.nextval, 'ì—­ì‹œ ë¯¿ê³  ë“£ëŠ” ìŒ¤ ê°•ì˜', '2021/10/11', 5, 1, 2);
+INSERT INTO review VALUES(review_seq.nextval, 'ë„ˆë¬´ ì–´ë ¤ì›Œì„œ ì´í•´í•˜ê¸° í˜ë“œë„¤ì—¬', '2021/10/11', 1, 2, 2);
+INSERT INTO review VALUES(review_seq.nextval, 'ë­”ì†Œë¦¬?', '2021/10/11', 1, 2, 1);
+INSERT INTO review VALUES(review_seq.nextval, 'ã„¹ã…‡ã…‹ã…‹', '2021/10/11', 3, 3, 3);
+INSERT INTO review VALUES(review_seq.nextval, 'ã…ã…‹2', '2021/10/11', 3, 3, 1);
 
 commit;

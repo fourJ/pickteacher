@@ -44,6 +44,8 @@ public class Student {
 	@NonNull
 	private Date birth;
 	
+
+	@NonNull
 	private Integer age;
 	
 	@NonNull
@@ -75,4 +77,5 @@ public class Student {
 	@JsonBackReference
 	private List<Review> reviewList;
 
+	
 }
