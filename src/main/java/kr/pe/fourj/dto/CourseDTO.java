@@ -44,7 +44,7 @@ public class CourseDTO {
 	@Data
 	public static class Get {
 		private Long idx;
-		private Teacher teacherIdx;
+		private Long teacherIdx;
 		private String title;
 		private String subject;
 		private String schedule;

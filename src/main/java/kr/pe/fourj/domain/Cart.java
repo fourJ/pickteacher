@@ -1,7 +1,6 @@
 package kr.pe.fourj.domain;
 
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -9,7 +8,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,14 +29,14 @@ public class Cart {
 	private Long idx;
 	
 	@NonNull
+	@JsonManagedReference
 	@ManyToOne
-	@JsonBackReference
 	@JoinColumn(name="student_idx")
 	private Student studentIdx;
 	
 	@NonNull
+	@JsonManagedReference
 	@ManyToOne
-	@JsonBackReference
 	@JoinColumn(name="course_idx")
 	private Course courseIdx;
 	

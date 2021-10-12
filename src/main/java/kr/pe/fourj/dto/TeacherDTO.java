@@ -1,7 +1,5 @@
 package kr.pe.fourj.dto;
 
-import java.util.Date;
-
 import lombok.Data;
 
 public class TeacherDTO {
@@ -17,7 +15,6 @@ public class TeacherDTO {
 		private String career;		
 		private String major;
 		private String school;
-		private Date enrollDate;
 	}
 	
 	@Data
@@ -43,6 +40,8 @@ public class TeacherDTO {
 		private Integer gender;
 		private String address;
 		private String phone;
+		private String major;
+		private String school;
 	}
 
 }
