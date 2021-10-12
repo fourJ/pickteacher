@@ -156,7 +156,7 @@ public class TeacherController {
 		return new ResponseDTO.TeacherListResponse(true, teacherList);
 	}
 	
-	//전공명으로 조회
+	//전공명으로 검색
 	@GetMapping("/teacher/major")
 	public ResponseDTO.TeacherListResponse findAllByMajor(@RequestBody TeacherDTO.Get dto) {
 		System.out.println("-- 전공명 " + dto.getMajor() + " 으로 선생님 검색 시도 --");
@@ -166,7 +166,7 @@ public class TeacherController {
 		return new ResponseDTO.TeacherListResponse(true, teacherList);
 	}
 	
-	//전공명 일부로 조회
+	//전공명 일부로 검색
 	@GetMapping("/teacher/majorcontaining")
 	public ResponseDTO.TeacherListResponse findAllByMajorContaining(@RequestBody TeacherDTO.Get dto) {
 		System.out.println("-- 전공명에 " + dto.getMajor() + " 가 들어간 선생님 검색 시도 --");
