@@ -1,6 +1,6 @@
 package kr.pe.fourj.domain;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -61,9 +61,17 @@ public class Teacher {
 	
 	@NonNull
 	@Column(name="enroll_date")
-	private Date enrollDate;
-	
+	private LocalDate enrollDate;
+
 	@OneToMany(mappedBy="teacherIdx", cascade=CascadeType.ALL)
 	@JsonBackReference
 	private List<Course> courseList;
+
+	@Override
+	public String toString() {
+		return "[아이디 : " + id + ", 이름 : " + name + ", 성별 : " + gender + 
+				", 주소 : " + address + ", 핸드폰 번호 : " + phone + ", 경력 : " + 
+				career + ", 전공 : " + major + ", 학교 : " + school + ", 등록일 : " + enrollDate + "]";
+	}
+	
 }

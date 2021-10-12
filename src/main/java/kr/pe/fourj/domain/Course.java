@@ -15,6 +15,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -35,6 +36,7 @@ public class Course {
 	private Long idx;
 	
 	@NonNull
+	@JsonManagedReference	
 	@ManyToOne
 	@JoinColumn(name="teacher_idx")
 	private Teacher teacherIdx;
