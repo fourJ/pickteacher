@@ -1,8 +1,5 @@
 package kr.pe.fourj.dto;
 
-import java.util.List;
-
-import kr.pe.fourj.domain.Course;
 import lombok.Data;
 
 public class TeacherDTO {
