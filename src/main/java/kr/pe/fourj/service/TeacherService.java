@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import kr.pe.fourj.domain.Teacher;
-import kr.pe.fourj.dto.ResponseDTO;
 import kr.pe.fourj.dto.TeacherDTO;
 import kr.pe.fourj.exception.Exception;
 import kr.pe.fourj.exception.Exception.ArgumentNullException;
@@ -19,19 +18,19 @@ public class TeacherService {
 	@Autowired
 	private TeacherRepository teacherRepository;
 
-	public Long saveTeacher(ResponseDTO.TeacherResponse teacherResponse) throws ArgumentNullException {
+	public Long saveTeacher(Teacher teacher) throws ArgumentNullException {
 		Teacher save = null;
 
-		if(teacherResponse.getTeacher() == null) {
+		if(teacher == null) {
 			throw new Exception.ArgumentNullException("Teacher can't be null");
 		}
-		save = teacherRepository.save(teacherResponse.getTeacher());
+		save = teacherRepository.save(teacher);
 
 		return save.getIdx();
 	}
 
 	public void updateTeacher(TeacherDTO.Update dto) throws NotFoundException {
-		Teacher teacher = findOne(dto.getIdx()).getTeacher();
+		Teacher teacher = findOne(dto.getIdx());
 
 		teacher.setAddress(dto.getAddress());
 		teacher.setPhone(dto.getPhone());
@@ -39,62 +38,47 @@ public class TeacherService {
 		teacherRepository.save(teacher);
 	}	
 	
-	public void deleteTeacher(TeacherDTO.Delete dto) {
-		teacherRepository.deleteById(dto.getIdx());
+	public void deleteTeacher(TeacherDTO.Delete dto) throws NotFoundException {
+		Teacher teacher = findOne(dto.getIdx());
+		teacherRepository.deleteById(teacher.getIdx());
 	}
 	
-	public ResponseDTO.TeacherResponse findOne(Long teacherIdx) throws NotFoundException {
+	public Teacher findOne(Long teacherIdx) throws NotFoundException {
 		Teacher teacher = teacherRepository.findById(teacherIdx).orElseThrow(() -> new Exception.NotFoundException("Teacher with idx: " + teacherIdx + " is not valid"));
 		
-		return new ResponseDTO.TeacherResponse(true, teacher);
+		return teacher;
 	}
 	
-	public ResponseDTO.TeacherListResponse findAll() {
-		List<Teacher> teacherList = teacherRepository.findAll();
-		
-		return new ResponseDTO.TeacherListResponse(true, teacherList);
+	public List<Teacher> findAll() {
+		return teacherRepository.findAll();
 	}
 	
-	public ResponseDTO.TeacherListResponse findAllByName(TeacherDTO.Get dto) {
-		List<Teacher> teacherList = teacherRepository.findByName(dto.getName());
-		
-		return new ResponseDTO.TeacherListResponse(true, teacherList);
+	public List<Teacher> findAllByName(TeacherDTO.Get dto) {
+		return teacherRepository.findByName(dto.getName());
 	}
 	
-	public ResponseDTO.TeacherListResponse findAllByNameContaining(TeacherDTO.Get dto) {
-		List<Teacher> teacherList = teacherRepository.findByNameContaining(dto.getName());
-		
-		return new ResponseDTO.TeacherListResponse(true, teacherList);
+	public List<Teacher> findAllByNameContaining(TeacherDTO.Get dto) {
+		return teacherRepository.findByNameContaining(dto.getName());
 	}
 	
-	public ResponseDTO.TeacherListResponse findAllByGender(TeacherDTO.Get dto) {
-		List<Teacher> teacherList = teacherRepository.findByGender(dto.getGender());
-		
-		return new ResponseDTO.TeacherListResponse(true, teacherList);
+	public List<Teacher> findAllByGender(TeacherDTO.Get dto) {
+		return teacherRepository.findByGender(dto.getGender());
 	}
 	
-	public ResponseDTO.TeacherListResponse findAllBySchool(TeacherDTO.Get dto) {
-		List<Teacher> teacherList = teacherRepository.findBySchool(dto.getSchool());
-		
-		return new ResponseDTO.TeacherListResponse(true, teacherList);
+	public List<Teacher> findAllBySchool(TeacherDTO.Get dto) {
+		return teacherRepository.findBySchool(dto.getSchool());
 	}
 	
-	public ResponseDTO.TeacherListResponse findAllBySchoolContaining(TeacherDTO.Get dto) {
-		List<Teacher> teacherList = teacherRepository.findBySchoolContaining(dto.getSchool());
-		
-		return new ResponseDTO.TeacherListResponse(true, teacherList);
+	public List<Teacher> findAllBySchoolContaining(TeacherDTO.Get dto) {
+		return teacherRepository.findBySchoolContaining(dto.getSchool());
 	}
 	
-	public ResponseDTO.TeacherListResponse findAllByMajor(TeacherDTO.Get dto) {
-		List<Teacher> teacherList = teacherRepository.findByMajor(dto.getMajor());
-		
-		return new ResponseDTO.TeacherListResponse(true, teacherList);
+	public List<Teacher> findAllByMajor(TeacherDTO.Get dto) {
+		return teacherRepository.findByMajor(dto.getMajor());
 	}
 	
-	public ResponseDTO.TeacherListResponse findAllByMajorContaining(TeacherDTO.Get dto) {
-		List<Teacher> teacherList = teacherRepository.findByMajorContaining(dto.getMajor());
-		
-		return new ResponseDTO.TeacherListResponse(true, teacherList);
+	public List<Teacher> findAllByMajorContaining(TeacherDTO.Get dto) {
+		return teacherRepository.findByMajorContaining(dto.getMajor());
 	}
 
 }

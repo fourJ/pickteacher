@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import kr.pe.fourj.domain.Course;
 import kr.pe.fourj.dto.CourseDTO;
-import kr.pe.fourj.dto.ResponseDTO;
 import kr.pe.fourj.exception.Exception;
 import kr.pe.fourj.exception.Exception.ArgumentNullException;
 import kr.pe.fourj.exception.Exception.NotFoundException;
@@ -19,19 +18,19 @@ public class CourseService {
 	@Autowired
 	private CourseRepository courseRepository;
 	
-	public Long saveCourse(ResponseDTO.CourseResponse courseResponse) throws ArgumentNullException {
+	public Long saveCourse(Course course) throws ArgumentNullException {
 		Course save = null;
 		
-		if(courseResponse.getCourse() == null) {
+		if(course == null) {
 			throw new Exception.ArgumentNullException("Course can't be null");
 		}
-		save = courseRepository.save(courseResponse.getCourse());
+		save = courseRepository.save(course);
 		
 		return save.getIdx();
 	}
 	
 	public void updateCourse(CourseDTO.Update dto) throws NotFoundException {
-		Course course = findOne(dto.getIdx()).getCourse();
+		Course course = findOne(dto.getIdx());
 		
 		course.setSchedule(dto.getSchedule());
 		course.setOpenDate(dto.getOpenDate());
@@ -44,25 +43,22 @@ public class CourseService {
 		courseRepository.save(course);
 	}
 	
-	public void deleteCourse(CourseDTO.Delete dto) {
-		courseRepository.deleteById(dto.getIdx());
+	public void deleteCourse(CourseDTO.Delete dto) throws NotFoundException {
+		Course course = findOne(dto.getIdx());
+		courseRepository.deleteById(course.getIdx());
 	}
 	
-	public ResponseDTO.CourseResponse findOne(Long courseIdx) throws NotFoundException {
+	public Course findOne(Long courseIdx) throws NotFoundException {
 		Course course = courseRepository.findById(courseIdx).orElseThrow(() -> new Exception.NotFoundException("Course with idx: " + courseIdx + " is not valid"));
 	
-		return new ResponseDTO.CourseResponse(true, course);
+		return course;
 	}
 	
-	public ResponseDTO.CourseListResponse findAll() {
-		List<Course> courseList = courseRepository.findAll();
-		
-		return new ResponseDTO.CourseListResponse(true, courseList);
+	public List<Course> findAll() {
+		return courseRepository.findAll();
 	}
 	
-	public ResponseDTO.CourseListResponse findAllByTitle(String title) {
-		List<Course> courseList = courseRepository.findCourseListByTitleContaining(title);
-		
-		return new ResponseDTO.CourseListResponse(true, courseList);
+	public List<Course> findAllByTitle(String title) {
+		return courseRepository.findCourseListByTitleContaining(title);
 	}
 }

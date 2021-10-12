@@ -35,16 +35,15 @@ public class CourseController {
 		boolean result = false;
 		Long saveId = null;
 		try {
-			Teacher teacher = teacherService.findOne(dto.getTeacherIdx()).getTeacher();
+			Teacher teacher = teacherService.findOne(dto.getTeacherIdx());
 			
-			Course course = new Course(teacher, 
-									   dto.getTitle(), dto.getSubject(), 
-									   dto.getSchedule(), dto.getType(), 
-									   dto.getOpenDate(), dto.getCloseDate(), 
-									   dto.getStatus(), dto.getHeadCount(), 
-									   dto.getTuition(), dto.getTarget());
 			try {
-				saveId = courseService.saveCourse(new ResponseDTO.CourseResponse(true, course));
+				saveId = courseService.saveCourse(new Course(teacher, 
+															 dto.getTitle(), dto.getSubject(), 
+															 dto.getSchedule(), dto.getType(), 
+															 dto.getOpenDate(), dto.getCloseDate(), 
+															 dto.getStatus(), dto.getHeadCount(), 
+															 dto.getTuition(), dto.getTarget()));
 				result = true;
 			} catch (ArgumentNullException e) {
 				e.printStackTrace();
@@ -77,9 +76,15 @@ public class CourseController {
 	public ResponseDTO.Delete deleteCourse(@RequestBody CourseDTO.Delete dto) {
 		System.out.println("-- 강의 삭제 시도 --");
 		
-		courseService.deleteCourse(dto);
+		boolean result = false;
+		try {
+			courseService.deleteCourse(dto);
+			result = true;
+		} catch (NotFoundException e) {
+			e.printStackTrace();
+		}
 		
-		return new ResponseDTO.Delete(true);
+		return new ResponseDTO.Delete(result);
 	}
 	
 	//강의 단일 검색
@@ -90,7 +95,7 @@ public class CourseController {
 		boolean result = false;
 		Course course = null;
 		try {
-			course = courseService.findOne(dto.getIdx()).getCourse();
+			course = courseService.findOne(dto.getIdx());
 			result = true;
 		} catch (NotFoundException e) {
 			e.printStackTrace();
@@ -104,30 +109,30 @@ public class CourseController {
 	public ResponseDTO.CourseListResponse findAll() {
 		System.out.println("-- 강의 리스트 전체 검색 시도 --");
 		
-		List<Course> courseList = courseService.findAll().getCourseList();
+		List<Course> courseList = courseService.findAll();
 		
 		return new ResponseDTO.CourseListResponse(true, courseList);
 	}
 	
 	//특정 강의 제목으로 강의 리스트 검색
 	@GetMapping("/course/title")
-	public ResponseDTO.CourseListResponse findCourseByTitle(@RequestBody CourseDTO.Get dto) {
+	public ResponseDTO.CourseListResponse findAllCourseByTitle(@RequestBody CourseDTO.Get dto) {
 		System.out.println("-- 특정 강의 제목으로 강의 리스트 검색 시도 --");
 		
-		List<Course> courseList = courseService.findAllByTitle(dto.getTitle()).getCourseList();
+		List<Course> courseList = courseService.findAllByTitle(dto.getTitle());
 
 		return new ResponseDTO.CourseListResponse(true, courseList);
 	}
 
 	//특정 선생님의 강의 리스트 검색
 	@GetMapping("/course/teacherIdx")
-	public ResponseDTO.CourseListResponse findByTeacherIdx(@RequestBody CourseDTO.Get dto) {
+	public ResponseDTO.CourseListResponse findAllByTeacherIdx(@RequestBody CourseDTO.Get dto) {
 		System.out.println("-- 특정 선생님의 강의 리스트 검색 시도 --");
 		
 		boolean result = false;
 		List<Course> courseList = null;
 		try {
-			Teacher teacher = teacherService.findOne(dto.getTeacherIdx()).getTeacher();
+			Teacher teacher = teacherService.findOne(dto.getTeacherIdx());
 			courseList = teacher.getCourseList();
 			result = true;
 		} catch (NotFoundException e) {

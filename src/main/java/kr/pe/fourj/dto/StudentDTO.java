@@ -12,7 +12,6 @@ public class StudentDTO {
 		private String pw;
 		private String name;
 		private Date birth;
-		private Integer age;
 		private String nickName;
 		private Integer gender;
 		private String address;

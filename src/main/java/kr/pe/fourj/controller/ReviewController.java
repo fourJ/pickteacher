@@ -40,13 +40,12 @@ public class ReviewController {
 		boolean result = false;
 		Long saveId = null;
 		try {
-			Student student = studentService.findOne(dto.getStudentIdx()).getStudent();
-			Course course = courseService.findOne(dto.getCourseIdx()).getCourse();
+			Student student = studentService.findOne(dto.getStudentIdx());
+			Course course = courseService.findOne(dto.getCourseIdx());
 			LocalDateTime dateTime = LocalDateTime.now();
 
-			Review review = new Review(student, course, dto.getContent(), dateTime, dto.getStar());
 			try {
-				saveId = reviewService.saveReview(new ResponseDTO.ReviewResponse(true, review));
+				saveId = reviewService.saveReview(new Review(student, course, dto.getContent(), dateTime, dto.getStar()));
 				result = true;
 			} catch (ArgumentNullException e) {
 				e.printStackTrace();
@@ -79,9 +78,15 @@ public class ReviewController {
 	public ResponseDTO.Delete deleteReview(@RequestBody ReviewDTO.Delete dto) {
 		System.out.println("-- 후기 삭제 시도 --");
 		
-		reviewService.deleteReview(dto);
+		boolean result = false;
+		try {
+			reviewService.deleteReview(dto);
+			result = true;
+		} catch (NotFoundException e) {
+			e.printStackTrace();
+		}
 		
-		return new ResponseDTO.Delete(true);
+		return new ResponseDTO.Delete(result);
 	}
 
 	//후기 단일 검색
@@ -92,7 +97,7 @@ public class ReviewController {
 		boolean result = false;
 		Review review = null;
 		try {
-			review = reviewService.findOne(dto.getIdx()).getReview();
+			review = reviewService.findOne(dto.getIdx());
 			result = true;
 		} catch (NotFoundException e) {
 			e.printStackTrace();
@@ -106,20 +111,20 @@ public class ReviewController {
 	public ResponseDTO.ReviewListResponse findAll() {
 		System.out.println("-- 후기 리스트 전체 검색 시도 --");
 		
-		List<Review> reviewList = (List<Review>) reviewService.findAll().getReviewList();
+		List<Review> reviewList = reviewService.findAll();
 		
 		return new ResponseDTO.ReviewListResponse(true, reviewList);
 	}
 	
 	//특정 학생이 작성한 후기 리스트 검색
 	@GetMapping("/review/studentidx")
-	public ResponseDTO.ReviewListResponse findByStudentIdx(@RequestBody ReviewDTO.Get dto) {
+	public ResponseDTO.ReviewListResponse findAllByStudentIdx(@RequestBody ReviewDTO.Get dto) {
 		System.out.println("-- 특정 학생이 작성한 후기 리스트 검색 시도 --");
 		
 		boolean result = false;
 		List<Review> reviewList = null;
 		try {
-			Student student = studentService.findOne(dto.getStudentIdx()).getStudent();
+			Student student = studentService.findOne(dto.getStudentIdx());
 			reviewList = student.getReviewList();
 			result = true;
 		} catch (NotFoundException e) {
@@ -131,13 +136,13 @@ public class ReviewController {
 	
 	//특정 강의 이름으로 후기 리스트 검색
 	@GetMapping("/review/courseidx")
-	public ResponseDTO.ReviewListResponse findByCourseIdx(@RequestBody ReviewDTO.Get dto) {
+	public ResponseDTO.ReviewListResponse findAllByCourseIdx(@RequestBody ReviewDTO.Get dto) {
 		System.out.println("-- 특정 학생이 작성한 후기 리스트 검색 시도 --");
 		
 		boolean result = false;
 		List<Review> reviewList = null;
 		try {
-			Course course = courseService.findOne(dto.getCourseIdx()).getCourse();
+			Course course = courseService.findOne(dto.getCourseIdx());
 			reviewList = course.getReviewList();
 			result = true;
 		} catch (NotFoundException e) {

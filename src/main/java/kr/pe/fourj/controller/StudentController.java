@@ -45,12 +45,11 @@ public class StudentController {
 		current.setTime(new Date());
 		int age = current.get(Calendar.YEAR) - birth.get(Calendar.YEAR) + 1;
 		
-		Student student = new Student(dto.getId(), dto.getPw(), 
-									  dto.getName(), dto.getBirth(), age, 
-									  dto.getNickName(), dto.getGender(), 
-									  dto.getAddress(), dto.getPhone());
 		try {
-			saveId = studentService.saveStudent(new ResponseDTO.StudentResponse(true, student));
+			saveId = studentService.saveStudent(new Student(dto.getId(), dto.getPw(), 
+															dto.getName(), dto.getBirth(), age, 
+															dto.getNickName(), dto.getGender(), 
+															dto.getAddress(), dto.getPhone()));
 			result = true;
 		} catch (ArgumentNullException e) {
 			e.printStackTrace();
@@ -80,9 +79,15 @@ public class StudentController {
 	public ResponseDTO.Delete deleteStudent(@RequestBody StudentDTO.Delete dto) {
 		System.out.println("-- 학생 삭제 시도 --");
 		
-		studentService.deleteStudent(dto);
+		boolean result = false;
+		try {
+			studentService.deleteStudent(dto);
+			result = true;
+		} catch (NotFoundException e) {
+			e.printStackTrace();
+		}
 
-		return new ResponseDTO.Delete(true);
+		return new ResponseDTO.Delete(result);
 	}
 
 	//학생 단일 검색
@@ -93,7 +98,7 @@ public class StudentController {
 		boolean result = false;
 		Student student = null;
 		try {
-			student = studentService.findOne(dto.getIdx()).getStudent();
+			student = studentService.findOne(dto.getIdx());
 			result = true;
 		} catch (NotFoundException e) {
 			e.printStackTrace();
@@ -107,18 +112,18 @@ public class StudentController {
 	public ResponseDTO.StudentListResponse findAll(){
 		System.out.println("-- 학생 리스트 전체 검색 시도 --");
 		
-		List<Student> studentList = studentService.findAll().getStudentList();
+		List<Student> studentList = studentService.findAll();
 		
 		return new ResponseDTO.StudentListResponse(true, studentList);
 	}
 	
 	//특정 강의를 수강하는 학생 리스트 검색
 	@GetMapping("/student/courseIdx")
-	public ResponseDTO.StudentListResponse findBycourseIdx(@RequestBody StudentDTO.Get dto) {
+	public ResponseDTO.StudentListResponse findAllBycourseIdx(@RequestBody StudentDTO.Get dto) {
 		System.out.println("-- 특정 강의를 수강하는 학생 리스트 검색 시도 --");
 		
 		List<Student> studentList = new ArrayList<Student>();
-		List<Catalog> catalogList = catalogService.findAllByCourseIdx(dto.getCourseIdx()).getCatalogList();
+		List<Catalog> catalogList = catalogService.findAllByCourseIdx(dto.getCourseIdx());
 		catalogList.forEach(e -> studentList.add(e.getStudentIdx()));
 		
 		return new ResponseDTO.StudentListResponse(true, studentList);

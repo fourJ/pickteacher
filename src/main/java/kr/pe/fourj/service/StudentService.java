@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import kr.pe.fourj.domain.Student;
-import kr.pe.fourj.dto.ResponseDTO;
 import kr.pe.fourj.dto.StudentDTO;
 import kr.pe.fourj.exception.Exception;
 import kr.pe.fourj.exception.Exception.ArgumentNullException;
@@ -19,19 +18,19 @@ public class StudentService {
 	@Autowired
 	private StudentRepository studentRepository;
 	
-	public Long saveStudent(ResponseDTO.StudentResponse studentResponse) throws ArgumentNullException {
+	public Long saveStudent(Student student) throws ArgumentNullException {
 		Student save = null;
 
-		if(studentResponse.getStudent() == null) {
+		if(student == null) {
 			throw new Exception.ArgumentNullException("Student can't be null");
 		}
-		save = studentRepository.save(studentResponse.getStudent());
+		save = studentRepository.save(student);
 
 		return save.getIdx();
 	}
 
 	public void updateStudent(StudentDTO.Update dto) throws NotFoundException {
-		Student student = findOne(dto.getIdx()).getStudent();
+		Student student = findOne(dto.getIdx());
 		
 		student.setNickName(dto.getNickName());
 		student.setAddress(dto.getAddress());
@@ -40,19 +39,18 @@ public class StudentService {
 		studentRepository.save(student);
 	}
 	
-	public void deleteStudent(StudentDTO.Delete dto) {
-		studentRepository.deleteById(dto.getIdx());
+	public void deleteStudent(StudentDTO.Delete dto) throws NotFoundException {
+		Student student = findOne(dto.getIdx());
+		studentRepository.deleteById(student.getIdx());
 	}
 	
-	public ResponseDTO.StudentResponse findOne(Long studentIdx) throws NotFoundException {
+	public Student findOne(Long studentIdx) throws NotFoundException {
 		Student student = studentRepository.findById(studentIdx).orElseThrow(() -> new Exception.NotFoundException("Student with idx: " + studentIdx + " is not valid"));
 	
-		return new ResponseDTO.StudentResponse(true, student);
+		return student;
 	}
 	
-	public ResponseDTO.StudentListResponse findAll() {
-		List<Student> studentList = studentRepository.findAll();	
-		
-		return new ResponseDTO.StudentListResponse(true, studentList);
+	public List<Student> findAll() {
+		return studentRepository.findAll();
 	}
 }
