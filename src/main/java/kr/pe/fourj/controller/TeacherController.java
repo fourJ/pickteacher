@@ -11,8 +11,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import kr.pe.fourj.domain.Course;
 import kr.pe.fourj.domain.Teacher;
 import kr.pe.fourj.dto.TeacherDTO;
 import kr.pe.fourj.dto.TeacherDTO.Create;
@@ -27,22 +29,22 @@ public class TeacherController {
 	}
 	
 	@Autowired
-	private TeacherRepository dao;
+	private TeacherRepository teacherRepo;
 	
 	//저장
 	@PostMapping("teacher")
 	public Create save(@RequestBody TeacherDTO.Create dto) {
 		System.out.println("선생님 정보 저장 시도");
 		@NonNull LocalDateTime dateTime = LocalDateTime.now();
-		dao.save(new Teacher(dto.getId(),dto.getPw(), dto.getName(), dto.getGender(), dto.getAddress(), dto.getPhone(), dto.getCareer(), dto.getMajor(), dto.getSchool(), dateTime));
+		teacherRepo.save(new Teacher(dto.getId(),dto.getPw(), dto.getName(), dto.getGender(), dto.getAddress(), dto.getPhone(), dto.getCareer(), dto.getMajor(), dto.getSchool(), dateTime));
 		return dto;
 	}
 	
 	//모든 선생님 정보 조회
 	@GetMapping("teacherall")
-	public ArrayList<Teacher> getAllTeachers() {
+	public List<Teacher> getAllTeachers() {
 		System.out.println("모든 선생님 정보 조회 시도");
-		ArrayList<Teacher> teacherList = (ArrayList<Teacher>) dao.findAll();
+		List<Teacher> teacherList = (ArrayList<Teacher>) teacherRepo.findAll();
 		return (ArrayList<Teacher>) teacherList;
 	}
 	
@@ -50,7 +52,7 @@ public class TeacherController {
 	@GetMapping("teacher-name1")
 	public List<Teacher> searchByName1(@RequestBody TeacherDTO.Get dto) {
 		System.out.println("이름이 " + dto + " 인 선생님 조회 시도");
-		List<Teacher> teacherList = dao.findByName(dto.getName());
+		List<Teacher> teacherList = teacherRepo.findByName(dto.getName());
 		return teacherList;
 	}
 	
@@ -58,14 +60,14 @@ public class TeacherController {
 	@GetMapping("teacher-name2")
 	public List<Teacher> searchByName2(@RequestBody TeacherDTO.Get dto) {
 		System.out.println("이름에 " + dto + " 들어간 선생님 조회");
-		List<Teacher> teacherList = dao.findByNameContaining(dto.getName());
+		List<Teacher> teacherList = teacherRepo.findByNameContaining(dto.getName());
 		return teacherList;
 	}
 	
 	//성별로 조회
 	@GetMapping("teacher-gender")
 	public List<Teacher> searchByGender(@RequestBody TeacherDTO.Get dto) {
-		List<Teacher> teacherList = dao.findByGender(dto.getGender());
+		List<Teacher> teacherList = teacherRepo.findByGender(dto.getGender());
 		return teacherList;
 	}
 	
@@ -73,7 +75,7 @@ public class TeacherController {
 	@GetMapping("teacher-school1") 
 	public List<Teacher> searchBySchool1(@RequestBody TeacherDTO.Get dto) {
 		System.out.println("출신학교명 " + dto + " 로 조회 시도");
-		List<Teacher> teacherList = dao.findBySchool(dto.getSchool());
+		List<Teacher> teacherList = teacherRepo.findBySchool(dto.getSchool());
 		return teacherList;
 	}
 		
@@ -81,7 +83,7 @@ public class TeacherController {
 	@GetMapping("teacher-school2")
 	public List<Teacher> searchBySchool2(@RequestBody TeacherDTO.Get dto) {
 		System.out.println("출신학교명에" + dto + " 포함된 학교 조회 시도");
-		List<Teacher> teacherList = dao.findBySchoolContaining(dto.getSchool());
+		List<Teacher> teacherList = teacherRepo.findBySchoolContaining(dto.getSchool());
 		return teacherList;
 	}
 	
@@ -89,7 +91,7 @@ public class TeacherController {
 	@GetMapping("teacher-major1")
 	public List<Teacher> searchByMajor1(@RequestBody TeacherDTO.Get dto) {
 		System.out.println("전공명 " + dto + " 으로 조회 시도");
-		List<Teacher> teacherList = dao.findByMajor(dto.getMajor());
+		List<Teacher> teacherList = teacherRepo.findByMajor(dto.getMajor());
 		return teacherList;
 	}
 	
@@ -97,16 +99,23 @@ public class TeacherController {
 	@GetMapping("teacher-major2")
 	public List<Teacher> searchByMajor2(@RequestBody TeacherDTO.Get dto) {
 		System.out.println("전공명에 " + dto + " 가 들어간 전공 조회 시도");
-		List<Teacher> teacherList = dao.findByMajorContaining(dto.getMajor());
+		List<Teacher> teacherList = teacherRepo.findByMajorContaining(dto.getMajor());
 		return teacherList;
-		
+	}
+	
+	//선생님 idx로 강의 리스트 조회
+	@GetMapping("teacher-courselist")
+	public List<Course> getCourseList(@RequestBody TeacherDTO.Get dto) {
+		System.out.println("선생님 idx로 해당 선생님의 강의 리스트 조회 시도");
+		Teacher teacher = teacherRepo.findById(dto.getIdx()).get();
+		return teacher.getCourseList();
 	}
 	
 	//수정
 	@PutMapping("teacher")
 	public Teacher update(@RequestBody TeacherDTO.Update dto) {
 		System.out.println("선생님 정보 수정 시도");
-		Teacher teacher = dao.findById(dto.getIdx()).get();
+		Teacher teacher = teacherRepo.findById(dto.getIdx()).get();
 		teacher.setAddress(dto.getAddress());
 		teacher.setPhone(dto.getPhone());
 		return teacher;
@@ -116,7 +125,7 @@ public class TeacherController {
 	@DeleteMapping("teacher")
 	public String delete(@RequestBody TeacherDTO.Delete dto) {
 		System.out.println("선생님 정보 삭제 시도");
-		dao.deleteById(dto.getIdx());
+		teacherRepo.deleteById(dto.getIdx());
 		return "삭제 완료";
 	}
 	

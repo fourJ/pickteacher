@@ -1,6 +1,6 @@
 package kr.pe.fourj;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -84,6 +84,13 @@ class PickTeacherApplicationTests {
 			
 			//선생님 전공명 일부로 조회
 //			mock.perform(get("/teacher-major2").content("{\"major\":\"전공\"}")
+//					.contentType(MediaType.APPLICATION_JSON)
+//					.accept(MediaType.APPLICATION_JSON))
+//			.andExpect(status().isOk())
+//			.andDo(print());
+			
+			//선생님 idx로 강의 리스트 조회
+//			mock.perform(get("/teacher-courselist").content("{\"idx\":\"2\"}")
 //					.contentType(MediaType.APPLICATION_JSON)
 //					.accept(MediaType.APPLICATION_JSON))
 //			.andExpect(status().isOk())

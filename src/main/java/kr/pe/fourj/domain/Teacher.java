@@ -12,6 +12,9 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -63,8 +66,8 @@ public class Teacher {
 	private LocalDateTime enrollDate;
 	
 
- 	@Getter(AccessLevel.NONE)
 	@OneToMany(mappedBy="teacherIdx", cascade=CascadeType.ALL)
+	@JsonBackReference
 	private List<Course> courseList;
 
 	@Override

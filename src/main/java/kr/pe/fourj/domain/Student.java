@@ -12,6 +12,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -58,15 +60,19 @@ public class Student {
 	private String phone;
 	
 	@OneToMany(mappedBy="studentIdx", cascade=CascadeType.ALL)
+	@JsonBackReference
 	private List<Catalog> catalogList;
 	
 	@OneToMany(mappedBy="studentIdx", cascade=CascadeType.ALL)
+	@JsonBackReference
 	private List<Cart> cartList;
 	
 	@OneToMany(mappedBy="studentIdx", cascade=CascadeType.ALL)
+	@JsonBackReference
 	private List<Likes> likesList;
 	
 	@OneToMany(mappedBy="studentIdx", cascade=CascadeType.ALL)
+	@JsonBackReference
 	private List<Review> reviewList;
 
 }
