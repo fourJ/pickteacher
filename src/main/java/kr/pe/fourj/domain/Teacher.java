@@ -1,6 +1,6 @@
 package kr.pe.fourj.domain;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -13,9 +13,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -63,8 +61,7 @@ public class Teacher {
 	
 	@NonNull
 	@Column(name="enroll_date")
-	private LocalDateTime enrollDate;
-	
+	private LocalDate enrollDate;
 
 	@OneToMany(mappedBy="teacherIdx", cascade=CascadeType.ALL)
 	@JsonBackReference
@@ -76,7 +73,5 @@ public class Teacher {
 				", 주소 : " + address + ", 핸드폰 번호 : " + phone + ", 경력 : " + 
 				career + ", 전공 : " + major + ", 학교 : " + school + ", 등록일 : " + enrollDate + "]";
 	}
-	
-	
 	
 }

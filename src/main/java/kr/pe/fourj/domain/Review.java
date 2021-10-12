@@ -33,14 +33,14 @@ public class Review {
 	
 	@NonNull
 	@ManyToOne
-	@JsonManagedReference
 	@JoinColumn(name="student_idx")
+	@JsonManagedReference
 	private Student studentIdx;
 	
 	@NonNull
 	@ManyToOne
-	@JsonManagedReference
 	@JoinColumn(name="course_idx")
+	@JsonManagedReference
 	private Course courseIdx;
 	
 	@NonNull

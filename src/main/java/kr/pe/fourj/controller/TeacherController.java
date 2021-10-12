@@ -1,6 +1,6 @@
 package kr.pe.fourj.controller;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,16 +30,16 @@ public class TeacherController {
 	private TeacherRepository teacherRepo;
 	
 	//저장
-	@PostMapping("teacher")
+	@PostMapping("/teacher")
 	public Create save(@RequestBody TeacherDTO.Create dto) {
 		System.out.println("선생님 정보 저장 시도");
-		@NonNull LocalDateTime dateTime = LocalDateTime.now();
-		teacherRepo.save(new Teacher(dto.getId(),dto.getPw(), dto.getName(), dto.getGender(), dto.getAddress(), dto.getPhone(), dto.getCareer(), dto.getMajor(), dto.getSchool(), dateTime));
+		@NonNull LocalDate date = LocalDate.now();
+		teacherRepo.save(new Teacher(dto.getId(),dto.getPw(), dto.getName(), dto.getGender(), dto.getAddress(), dto.getPhone(), dto.getCareer(), dto.getMajor(), dto.getSchool(), date));
 		return dto;
 	}
 	
 	//모든 선생님 정보 조회
-	@GetMapping("teacherall")
+	@GetMapping("/teacherall")
 	public List<Teacher> getAllTeachers() {
 		System.out.println("모든 선생님 정보 조회 시도");
 		List<Teacher> teacherList = (ArrayList<Teacher>) teacherRepo.findAll();
@@ -47,7 +47,7 @@ public class TeacherController {
 	}
 	
 	//이름으로 조회
-	@GetMapping("teacher-name1")
+	@GetMapping("/teacher-name1")
 	public List<Teacher> searchByName1(@RequestBody TeacherDTO.Get dto) {
 		System.out.println("이름이 " + dto + " 인 선생님 조회 시도");
 		List<Teacher> teacherList = teacherRepo.findByName(dto.getName());
@@ -55,7 +55,7 @@ public class TeacherController {
 	}
 	
 	//이름 일부로 조회
-	@GetMapping("teacher-name2")
+	@GetMapping("/teacher-name2")
 	public List<Teacher> searchByName2(@RequestBody TeacherDTO.Get dto) {
 		System.out.println("이름에 " + dto + " 들어간 선생님 조회");
 		List<Teacher> teacherList = teacherRepo.findByNameContaining(dto.getName());
@@ -63,14 +63,14 @@ public class TeacherController {
 	}
 	
 	//성별로 조회
-	@GetMapping("teacher-gender")
+	@GetMapping("/teacher-gender")
 	public List<Teacher> searchByGender(@RequestBody TeacherDTO.Get dto) {
 		List<Teacher> teacherList = teacherRepo.findByGender(dto.getGender());
 		return teacherList;
 	}
 	
 	//출신학교명으로 조회
-	@GetMapping("teacher-school1") 
+	@GetMapping("/teacher-school1") 
 	public List<Teacher> searchBySchool1(@RequestBody TeacherDTO.Get dto) {
 		System.out.println("출신학교명 " + dto + " 로 조회 시도");
 		List<Teacher> teacherList = teacherRepo.findBySchool(dto.getSchool());
@@ -78,7 +78,7 @@ public class TeacherController {
 	}
 		
 	//출신학교명 일부로 조회
-	@GetMapping("teacher-school2")
+	@GetMapping("/teacher-school2")
 	public List<Teacher> searchBySchool2(@RequestBody TeacherDTO.Get dto) {
 		System.out.println("출신학교명에" + dto + " 포함된 학교 조회 시도");
 		List<Teacher> teacherList = teacherRepo.findBySchoolContaining(dto.getSchool());
@@ -86,7 +86,7 @@ public class TeacherController {
 	}
 	
 	//전공명으로 조회
-	@GetMapping("teacher-major1")
+	@GetMapping("/teacher-major1")
 	public List<Teacher> searchByMajor1(@RequestBody TeacherDTO.Get dto) {
 		System.out.println("전공명 " + dto + " 으로 조회 시도");
 		List<Teacher> teacherList = teacherRepo.findByMajor(dto.getMajor());
@@ -94,7 +94,7 @@ public class TeacherController {
 	}
 	
 	//전공명 일부로 조회
-	@GetMapping("teacher-major2")
+	@GetMapping("/teacher-major2")
 	public List<Teacher> searchByMajor2(@RequestBody TeacherDTO.Get dto) {
 		System.out.println("전공명에 " + dto + " 가 들어간 전공 조회 시도");
 		List<Teacher> teacherList = teacherRepo.findByMajorContaining(dto.getMajor());
@@ -102,7 +102,7 @@ public class TeacherController {
 	}
 	
 	//선생님 idx로 강의 리스트 조회
-	@GetMapping("teacher-courselist")
+	@GetMapping("/teacher-courselist")
 	public List<Course> getCourseList(@RequestBody TeacherDTO.Get dto) {
 		System.out.println("선생님 idx로 해당 선생님의 강의 리스트 조회 시도");
 		Teacher teacher = teacherRepo.findById(dto.getIdx()).get();
@@ -110,7 +110,7 @@ public class TeacherController {
 	}
 	
 	//수정
-	@PutMapping("teacher")
+	@PutMapping("/teacher")
 	public Teacher update(@RequestBody TeacherDTO.Update dto) {
 		System.out.println("선생님 정보 수정 시도");
 		Teacher teacher = teacherRepo.findById(dto.getIdx()).get();
@@ -120,7 +120,7 @@ public class TeacherController {
 	}
 	
 	//삭제
-	@DeleteMapping("teacher")
+	@DeleteMapping("/teacher")
 	public String delete(@RequestBody TeacherDTO.Delete dto) {
 		System.out.println("선생님 정보 삭제 시도");
 		teacherRepo.deleteById(dto.getIdx());
