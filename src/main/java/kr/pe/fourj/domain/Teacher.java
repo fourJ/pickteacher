@@ -12,6 +12,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -60,7 +62,8 @@ public class Teacher {
 	@NonNull
 	@Column(name="enroll_date")
 	private Date enrollDate;
-
+	
 	@OneToMany(mappedBy="teacherIdx", cascade=CascadeType.ALL)
+	@JsonBackReference
 	private List<Course> courseList;
 }

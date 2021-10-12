@@ -1,7 +1,7 @@
-INSERT INTO student values(STUDENT_SEQ.nextval, '한국', '26', '1996/11/59', 1, 'js0989', '김지명', '수지', '010-8748-9878', '비밀~');
-INSERT INTO student values(STUDENT_SEQ.nextval, '중국', '26', '1996/11/59', 0, 'js0989', '서주연', '수지', '010-8748-9878', '비밀~');
-INSERT INTO student values(STUDENT_SEQ.nextval, '일본', '26', '1996/11/59', 0, 'js0989', '배지수', '수지', '010-8748-9878', '비밀~');
-INSERT INTO student values(STUDENT_SEQ.nextval, '베트남', '27', '1995/11/17', 0, 'yj5989', '마유진', '유진', '010-9878-9878', '비밀~');
+INSERT INTO student values(STUDENT_SEQ.nextval, '한국', 26, '1996/11/01', 1, 'js0989', '김지명', '수지', '010-8748-9878', '비밀~');
+INSERT INTO student values(STUDENT_SEQ.nextval, '중국', 26, '1996/11/02', 0, 'js0989', '서주연', '수지', '010-8748-9878', '비밀~');
+INSERT INTO student values(STUDENT_SEQ.nextval, '일본', 26, '1996/11/03', 0, 'js0989', '배지수', '수지', '010-8748-9878', '비밀~');
+INSERT INTO student values(STUDENT_SEQ.nextval, '베트남', 27, '1995/11/04', 0, 'yj5989', '마유진', '유진', '010-9878-9878', '비밀~');
 
 INSERT INTO TEACHER VALUES (teacher_SEQ.nextval, '주소1', '신입', sysdate, 1, 'id1', '전공1', '선생님1', '010-xxxx-xxxx', 'pw1', '학교1');
 INSERT INTO TEACHER VALUES (teacher_SEQ.nextval, '주소2', '1년', sysdate, 1, 'id2', '전공2', '선생님2', '010-xxxx-xxxx', 'pw2', '학교2');
