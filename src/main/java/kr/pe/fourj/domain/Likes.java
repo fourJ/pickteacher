@@ -9,6 +9,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -28,12 +30,14 @@ public class Likes {
 	private Long idx;
 	
 	@NonNull
-	@ManyToOne(fetch=FetchType.LAZY)
+	@ManyToOne
+	@JsonBackReference
 	@JoinColumn(name="student_idx")
 	private Student studentIdx;
 	
 	@NonNull
-	@ManyToOne(fetch=FetchType.LAZY)
+	@ManyToOne
+	@JsonBackReference
 	@JoinColumn(name="course_idx")
 	private Course courseIdx;
 	
