@@ -1,9 +1,12 @@
 package kr.pe.fourj.repository;
 
-import org.springframework.data.repository.CrudRepository;
+import java.util.List;
+
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import kr.pe.fourj.domain.Catalog;
 
-public interface CatalogRepository extends CrudRepository<Catalog, Long>{
-
+public interface CatalogRepository extends JpaRepository<Catalog, Long>{
+	
+	List<Catalog> findAllByCourseIdx(Long courseIdx);
 }

@@ -36,6 +36,7 @@ public class StudentDTO {
 	@Data
 	public static class Get {
 		private Long idx;
+		private Long courseIdx;
 	}
 
 }

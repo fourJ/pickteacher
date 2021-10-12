@@ -1,7 +1,6 @@
 package kr.pe.fourj.controller;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,95 +14,137 @@ import org.springframework.web.bind.annotation.RestController;
 import kr.pe.fourj.domain.Course;
 import kr.pe.fourj.domain.Review;
 import kr.pe.fourj.domain.Student;
+import kr.pe.fourj.dto.ResponseDTO;
 import kr.pe.fourj.dto.ReviewDTO;
-import kr.pe.fourj.repository.CourseRepository;
-import kr.pe.fourj.repository.ReviewRepository;
-import kr.pe.fourj.repository.StudentRepository;
+import kr.pe.fourj.exception.Exception.ArgumentNullException;
+import kr.pe.fourj.exception.Exception.NotFoundException;
+import kr.pe.fourj.service.CourseService;
+import kr.pe.fourj.service.ReviewService;
+import kr.pe.fourj.service.StudentService;
 
 @RestController
 public class ReviewController {
 	
 	@Autowired
-	private ReviewRepository reviewRepository;
+	private ReviewService reviewService;
 	@Autowired
-	private StudentRepository studentRepository;
+	private StudentService studentService;
 	@Autowired
-	private CourseRepository courseRepository;
+	private CourseService courseService;
 	
 	//후기 저장
 	@PostMapping("/review")
-	public String saveReview(@RequestBody ReviewDTO.Create dto) {
+	public ResponseDTO.Create saveReview(@RequestBody ReviewDTO.Create dto) {
 		System.out.println("-- 후기 저장 시도 --");
-		Student student = studentRepository.findById(dto.getStudentIdx()).get();
-		Course course = courseRepository.findById(dto.getCourseIdx()).get();
-		LocalDateTime dateTime = LocalDateTime.now();
 		
-		reviewRepository.save(new Review(student, course, dto.getContent(), dateTime, dto.getStar()));
-		
-		return "저장 성공";
+		boolean result = false;
+		Long saveId = null;
+		try {
+			Student student = studentService.findOne(dto.getStudentIdx()).getStudent();
+			Course course = courseService.findOne(dto.getCourseIdx()).getCourse();
+			LocalDateTime dateTime = LocalDateTime.now();
+
+			Review review = new Review(student, course, dto.getContent(), dateTime, dto.getStar());
+			try {
+				saveId = reviewService.saveReview(new ResponseDTO.ReviewResponse(true, review));
+				result = true;
+			} catch (ArgumentNullException e) {
+				e.printStackTrace();
+			}
+		} catch (NotFoundException e) {
+			e.printStackTrace();
+		}
+
+		return new ResponseDTO.Create(saveId, result);
 	}
 	
 	//후기 수정
 	@PutMapping("/review")
-	public String updateReview(@RequestBody ReviewDTO.Update dto) {
+	public ResponseDTO.Update updateReview(@RequestBody ReviewDTO.Update dto) {
 		System.out.println("-- 후기 수정 시도 --");
-		Review review = reviewRepository.findById(dto.getIdx()).get();
-		LocalDateTime dateTime = LocalDateTime.now();
 		
-		review.setContent(dto.getContent());
-		review.setDateTime(dateTime);
-		review.setStar(dto.getStar());
+		boolean result = false;
+		try {
+			reviewService.updateReview(dto);
+			result = true;
+		} catch (NotFoundException e) {
+			e.printStackTrace();
+		}
 		
-		reviewRepository.save(review);
-		
-		return "수정 성공";
+		return new ResponseDTO.Update(result);
 	}
 	
 	//후기 삭제
 	@DeleteMapping("/review")
-	public String deleteReview(@RequestBody ReviewDTO.Delete dto) {
+	public ResponseDTO.Delete deleteReview(@RequestBody ReviewDTO.Delete dto) {
 		System.out.println("-- 후기 삭제 시도 --");
 		
-		reviewRepository.deleteById(dto.getIdx());
+		reviewService.deleteReview(dto);
 		
-		return "삭제 성공";
+		return new ResponseDTO.Delete(true);
 	}
 
 	//후기 단일 검색
 	@GetMapping("/review")
-	public Review findOne(@RequestBody ReviewDTO.Get dto) {
+	public ResponseDTO.ReviewResponse findOne(@RequestBody ReviewDTO.Get dto) {
 		System.out.println("-- 후기 단일 검색 시도 --");
 		
-		return reviewRepository.findById(dto.getIdx()).get();
+		boolean result = false;
+		Review review = null;
+		try {
+			review = reviewService.findOne(dto.getIdx()).getReview();
+			result = true;
+		} catch (NotFoundException e) {
+			e.printStackTrace();
+		}
+		
+		return new ResponseDTO.ReviewResponse(result, review);
 	}
 	
 	//후기 리스트 전체 검색
 	@GetMapping("/reviewall")
-	public List<Review> findAll() {
+	public ResponseDTO.ReviewListResponse findAll() {
 		System.out.println("-- 후기 리스트 전체 검색 시도 --");
-		List<Review> reviewList = new ArrayList<Review>();
 		
-		reviewRepository.findAll().forEach(e -> reviewList.add(e));
+		List<Review> reviewList = (List<Review>) reviewService.findAll().getReviewList();
 		
-		return reviewList;
+		return new ResponseDTO.ReviewListResponse(true, reviewList);
 	}
 	
 	//특정 학생이 작성한 후기 리스트 검색
 	@GetMapping("/review/studentidx")
-	public List<Review> findByStudentIdx(@RequestBody ReviewDTO.Get dto) {
+	public ResponseDTO.ReviewListResponse findByStudentIdx(@RequestBody ReviewDTO.Get dto) {
 		System.out.println("-- 특정 학생이 작성한 후기 리스트 검색 시도 --");
-		Student student = studentRepository.findById(dto.getStudentIdx()).get();
 		
-		return student.getReviewList();
+		boolean result = false;
+		List<Review> reviewList = null;
+		try {
+			Student student = studentService.findOne(dto.getStudentIdx()).getStudent();
+			reviewList = student.getReviewList();
+			result = true;
+		} catch (NotFoundException e) {
+			e.printStackTrace();
+		}
+		
+		return new ResponseDTO.ReviewListResponse(result, reviewList);
 	}
 	
 	//특정 강의 이름으로 후기 리스트 검색
 	@GetMapping("/review/courseidx")
-	public List<Review> findByCourseIdx(@RequestBody ReviewDTO.Get dto) {
+	public ResponseDTO.ReviewListResponse findByCourseIdx(@RequestBody ReviewDTO.Get dto) {
 		System.out.println("-- 특정 학생이 작성한 후기 리스트 검색 시도 --");
-		Course course = courseRepository.findById(dto.getCourseIdx()).get();
 		
-		return course.getReviewList();
+		boolean result = false;
+		List<Review> reviewList = null;
+		try {
+			Course course = courseService.findOne(dto.getCourseIdx()).getCourse();
+			reviewList = course.getReviewList();
+			result = true;
+		} catch (NotFoundException e) {
+			e.printStackTrace();
+		}
+		
+		return new ResponseDTO.ReviewListResponse(result, reviewList);
 	}
 	
 }
