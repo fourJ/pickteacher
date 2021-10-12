@@ -7,9 +7,9 @@ INSERT INTO TEACHER VALUES (teacher_SEQ.nextval, '주소1', '신입', sysdate, 1
 INSERT INTO TEACHER VALUES (teacher_SEQ.nextval, '주소2', '1년', sysdate, 1, 'id2', '전공2', '선생님2', '010-xxxx-xxxx', 'pw2', '학교2');
 INSERT INTO TEACHER VALUES (teacher_SEQ.nextval, '주소3', '2년', sysdate, 1, 'id3', '전공3', '선생님3', '010-xxxx-xxxx', 'pw3', '학교3');
 
-INSERT INTO COURSE values(course_seq.nextval, '2021/11/11', 10, '2021/10/11', '월8시', '진행중', '국어', '고1', 250000, '오프라인', '1');
-INSERT INTO COURSE values(course_seq.nextval, '2021/11/12', 5, '2021/10/12', '화7시', '마감', '수학', '고2', 450000, '오프라인', '2');
-INSERT INTO COURSE values(course_seq.nextval, '2021/11/13', 3, '2021/10/13', '토12시', '미개강', '영어', '고3', 350000, '온라인', '3');
+INSERT INTO COURSE values(course_seq.nextval, '2021/11/11', 10, '2021/10/11', '월8시', '진행중', '국어', '고1', '고1국어', 250000, '오프라인', '1');
+INSERT INTO COURSE values(course_seq.nextval, '2021/11/12', 5, '2021/10/12', '화7시', '마감', '수학', '고2', '고2수학', 450000, '오프라인', '2');
+INSERT INTO COURSE values(course_seq.nextval, '2021/11/13', 3, '2021/10/13', '토12시', '미개강', '영어', '고3', '고3영어', 350000, '온라인', '3');
 
 INSERT INTO review VALUES(review_seq.nextval, '강의 쉽고 너무 재미있어요!', '2021/10/11', 5, 1, 1);
 INSERT INTO review VALUES(review_seq.nextval, '역시 믿고 듣는 쌤 강의', '2021/10/11', 5, 1, 2);
@@ -18,4 +18,4 @@ INSERT INTO review VALUES(review_seq.nextval, '뭔소리?', '2021/10/11', 1, 2, 
 INSERT INTO review VALUES(review_seq.nextval, 'ㄹㅇㅋㅋ', '2021/10/11', 3, 3, 3);
 INSERT INTO review VALUES(review_seq.nextval, 'ㅎㅋ2', '2021/10/11', 3, 3, 1);
 
-commit;
+COMMIT;

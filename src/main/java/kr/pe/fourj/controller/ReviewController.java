@@ -23,8 +23,6 @@ import kr.pe.fourj.repository.StudentRepository;
 @RestController
 public class ReviewController {
 	
-	public ReviewController() {}
-	
 	@Autowired
 	private ReviewRepository reviewRepository;
 	@Autowired
@@ -32,7 +30,7 @@ public class ReviewController {
 	@Autowired
 	private CourseRepository courseRepository;
 	
-	//후기 등록
+	//후기 저장
 	@PostMapping("/review")
 	public String saveReview(@RequestBody ReviewDTO.Create dto) {
 		System.out.println("-- 후기 저장 시도 --");
@@ -80,7 +78,7 @@ public class ReviewController {
 	}
 	
 	//후기 리스트 전체 검색
-	@GetMapping("/reviewAll")
+	@GetMapping("/reviewall")
 	public List<Review> findAll() {
 		System.out.println("-- 후기 리스트 전체 검색 시도 --");
 		List<Review> reviewList = new ArrayList<Review>();
@@ -90,19 +88,19 @@ public class ReviewController {
 		return reviewList;
 	}
 	
-	//특정 학생이 작성한 후기 리스트 전체 검색
-	@GetMapping("/findByStudentIdx")
+	//특정 학생이 작성한 후기 리스트 검색
+	@GetMapping("/review/studentidx")
 	public List<Review> findByStudentIdx(@RequestBody ReviewDTO.Get dto) {
-		System.out.println("-- 특정 학생이 작성한 후기 리스트 전체 검색 시도 --");
+		System.out.println("-- 특정 학생이 작성한 후기 리스트 검색 시도 --");
 		Student student = studentRepository.findById(dto.getStudentIdx()).get();
 		
 		return student.getReviewList();
 	}
 	
-	//특정 강의 이름으로 후기리스트 검색
-	@GetMapping("/findByCourseIdx")
+	//특정 강의 이름으로 후기 리스트 검색
+	@GetMapping("/review/courseidx")
 	public List<Review> findByCourseIdx(@RequestBody ReviewDTO.Get dto) {
-		System.out.println("-- 특정 학생이 작성한 후기 리스트 전체 검색 시도 --");
+		System.out.println("-- 특정 학생이 작성한 후기 리스트 검색 시도 --");
 		Course course = courseRepository.findById(dto.getCourseIdx()).get();
 		
 		return course.getReviewList();

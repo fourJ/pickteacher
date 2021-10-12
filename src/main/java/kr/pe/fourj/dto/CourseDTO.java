@@ -2,7 +2,6 @@ package kr.pe.fourj.dto;
 
 import java.util.Date;
 
-import kr.pe.fourj.domain.Teacher;
 import lombok.Data;
 
 public class CourseDTO {
@@ -38,7 +37,6 @@ public class CourseDTO {
 	@Data
 	public static class Delete {
 		private Long idx;
-		private String title;
 	}
 	
 	@Data
@@ -46,14 +44,5 @@ public class CourseDTO {
 		private Long idx;
 		private Long teacherIdx;
 		private String title;
-		private String subject;
-		private String schedule;
-		private String type;
-		private Date openDate;
-		private Date closeDate;
-		private String status;
-		private Integer headCount;
-		private Integer tuition;
-		private String target;
 	}
 }
