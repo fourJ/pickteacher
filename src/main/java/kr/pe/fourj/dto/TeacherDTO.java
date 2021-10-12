@@ -32,16 +32,10 @@ public class TeacherDTO {
 	@Data
 	public static class Get {
 		private Long idx;
-		private String id;
-		private String pw;
 		private String name;
-		private Integer birth;
-		private String nickName;
 		private Integer gender;
-		private String address;
-		private String phone;
-		private String major;
 		private String school;
+		private String major;
 	}
 
 }
