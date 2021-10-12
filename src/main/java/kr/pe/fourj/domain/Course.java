@@ -42,6 +42,9 @@ public class Course {
 	private Teacher teacherIdx;
 	
 	@NonNull
+	private String title;
+	
+	@NonNull
 	private String subject;
 	
 	@NonNull
@@ -51,9 +54,11 @@ public class Course {
 	private String type;
 	
 	@Column(name="open_date")
+	@NonNull
 	private Date openDate;
 	
 	@Column(name="close_date")
+	@NonNull
 	private Date closeDate;
 	
 	@NonNull
