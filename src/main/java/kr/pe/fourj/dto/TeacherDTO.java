@@ -36,7 +36,6 @@ public class TeacherDTO {
 		private String pw;
 		private String name;
 		private Integer birth;
-		private String nickName;
 		private Integer gender;
 		private String address;
 		private String phone;
