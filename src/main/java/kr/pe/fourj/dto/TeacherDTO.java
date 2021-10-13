@@ -1,6 +1,7 @@
 package kr.pe.fourj.dto;
 
 import lombok.Data;
+import lombok.NonNull;
 
 public class TeacherDTO {
 	
@@ -36,6 +37,15 @@ public class TeacherDTO {
 		private Integer gender;
 		private String school;
 		private String major;
+	}
+	
+	@Data
+	public static class Login {
+		@NonNull
+		private String id;
+		
+		@NonNull
+		private String pw;
 	}
 
 }
