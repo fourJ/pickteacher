@@ -15,80 +15,119 @@ import kr.pe.fourj.domain.Catalog;
 import kr.pe.fourj.domain.Course;
 import kr.pe.fourj.domain.Student;
 import kr.pe.fourj.dto.CartDTO;
-import kr.pe.fourj.repository.CartRepository;
-import kr.pe.fourj.repository.CatalogRepository;
-import kr.pe.fourj.repository.CourseRepository;
-import kr.pe.fourj.repository.StudentRepository;
+import kr.pe.fourj.dto.ResponseDTO;
+import kr.pe.fourj.exception.Exception.ArgumentNullException;
+import kr.pe.fourj.exception.Exception.NotFoundException;
+import kr.pe.fourj.service.CartService;
+import kr.pe.fourj.service.CatalogService;
+import kr.pe.fourj.service.CourseService;
+import kr.pe.fourj.service.StudentService;
 
 @RestController
 public class CartController {
 	
 	@Autowired
-	private CartRepository cartRepository;
+	private CartService cartService;
 	@Autowired
-	private StudentRepository studentRepository;
+	private StudentService studentService;
 	@Autowired
-	private CourseRepository courseRepository;
+	private CourseService courseService;
 	@Autowired
-	private CatalogRepository catalogRepository;
+	private CatalogService catalogService;
 	
 	//카트 저장
 	@PostMapping("/cart")
-	public String saveCart(@RequestBody CartDTO.Create dto) {
-		System.out.println("-- 카트 정보 저장 시도 --");
-		Student student = studentRepository.findById(dto.getStudentIdx()).get();
-		Course course = courseRepository.findById(dto.getCourseIdx()).get();
+	public ResponseDTO.Create saveCart(@RequestBody CartDTO.Create dto) {
+		System.out.println("-- 카트 저장 시도 --");
 		
-		if(isNotAlreadyCart(student, course)) {
-			cartRepository.save(new Cart(student, course));
-			return "저장 성공";
-		}else {
-			return "저장 실패";
+		boolean result = false;
+		Long saveId = null;
+		try {
+			Student student = studentService.findOne(dto.getStudentIdx());
+			Course course = courseService.findOne(dto.getCourseIdx());
+			
+			if(cartService.isNotAlreadyCart(student, course)) {
+				try {
+					saveId = cartService.saveCart(new Cart(student, course));
+					result = true;
+				} catch (ArgumentNullException e) {
+					e.printStackTrace();
+				}
+			}
+		} catch (NotFoundException e) {
+			e.printStackTrace();
 		}
+		
+		return new ResponseDTO.Create(saveId, result);
 	}
 	
 	//카트 삭제
 	@DeleteMapping("/cart")
-	public String deleteCart(@RequestBody CartDTO.Delete dto) {
+	public ResponseDTO.Delete deleteCart(@RequestBody CartDTO.Delete dto) {
 		System.out.println("-- 카트 삭제 시도 --");
 		
-		cartRepository.deleteById(dto.getIdx());
+		boolean result = false;
+		try {
+			cartService.deleteCart(dto.getIdx());
+			result = true;
+		} catch (NotFoundException e) {
+			e.printStackTrace();
+		}
 		
-		return "삭제 성공";
+		return new ResponseDTO.Delete(result);
 	}
 
-	//특정 학생의 카트 조회
-	@GetMapping("/cart")
-	public List<Cart> findList(@RequestBody CartDTO.Get dto) {
-		System.out.println("-- 특정 카트 목록 조회 시도 --");
-		Student student = studentRepository.findById(dto.getStudentIdx()).get();
+	//특정 학생의 카트 리스트 검색
+	@GetMapping("/cart/studentidx")
+	public ResponseDTO.CartListResponse findAllByStudentIdx(@RequestBody CartDTO.Get dto) {
+		System.out.println("-- 특정 학생의 카트 리스트 검색 시도 --");
 		
-		return student.getCartList();
+		boolean result = false;
+		List<Cart> cartList = null;
+		
+		Student student;
+		try {
+			student = studentService.findOne(dto.getStudentIdx());
+			cartList = student.getCartList();
+			result = true;
+		} catch (NotFoundException e) {
+			e.printStackTrace();
+		}
+		
+		return new ResponseDTO.CartListResponse(result, cartList);
 	}
 	
 	//수강 신청시 수강 내역으로 연동
 	@PostMapping("/cart/send")
-	public List<Catalog> sendCatalog(@RequestBody CartDTO.Get dto) {
-		System.out.println("수강 내역으로 보내기 시도");
-		Student student = studentRepository.findById(dto.getStudentIdx()).get();
-		Course course = courseRepository.findById(dto.getCourseIdx()).get();
-		LocalDateTime dateTime = LocalDateTime.now();
-//		catalogRepository.save(new Catalog(student, course, dateTime));
-		List<Catalog> catalogList = student.getCatalogList();
+	public ResponseDTO.CartToCatalogResponse sendCatalog(@RequestBody CartDTO.Get dto) {
+		System.out.println("-- 수강 내역으로 보내기 시도 --");
 		
-		cartRepository.deleteById(dto.getIdx());
+		boolean result = false;
+		Long saveId = null;
+		List<Cart> cartList = null;
+		List<Catalog> catalogList = null;
+		try {
+			Student student = studentService.findOne(dto.getStudentIdx());
+			Course course = courseService.findOne(dto.getStudentIdx());		
+			LocalDateTime dateTime = LocalDateTime.now();
+			
+			try {
+				saveId = catalogService.saveCatalog(new Catalog(student, course, dateTime));
+				cartService.deleteCart(dto.getIdx());
+				result = true;
+			} catch (ArgumentNullException e) {
+				e.printStackTrace();
+			}
+			
+			cartList = student.getCartList();
+			catalogList = student.getCatalogList();
+		} catch (NotFoundException e) {
+			e.printStackTrace();
+		}
 		
-		return catalogList;
+		return new ResponseDTO.CartToCatalogResponse(saveId, result, cartList, catalogList);
 	}
 	
-	private boolean isNotAlreadyCart(Student studentDTO , Course courseDTO) {
-		boolean flag = false;
-		Student student = studentRepository.findById(studentDTO.getIdx()).get();
-		Course course = courseRepository.findById(courseDTO.getIdx()).get();
-        Cart cart = cartRepository.findByStudentIdxAndCourseIdx(student, course);
-        if(cart == null) flag = true;
-        else if(cart != null) flag = false;
-        return flag;
-    }
+	
 
 }

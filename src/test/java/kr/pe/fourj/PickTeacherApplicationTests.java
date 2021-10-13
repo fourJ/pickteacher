@@ -4,6 +4,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.time.LocalDateTime;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,12 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import kr.pe.fourj.controller.TeacherController;
+import kr.pe.fourj.domain.Course;
+import kr.pe.fourj.domain.Student;
+import kr.pe.fourj.dto.ReviewDTO;
+import kr.pe.fourj.exception.Exception.NotFoundException;
+import kr.pe.fourj.service.CourseService;
+import kr.pe.fourj.service.StudentService;
 
 @SpringBootTest
 class PickTeacherApplicationTests {
@@ -27,7 +35,7 @@ class PickTeacherApplicationTests {
 		mock = MockMvcBuilders.standaloneSetup(controller).build();
 	}
 
-	@Test
+	//@Test
 	void contextLoads() {
 		try {
 			//선생님 정보 저장
@@ -113,6 +121,34 @@ class PickTeacherApplicationTests {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	StudentService studentService;
+	CourseService courseService;
+	
+	@Test
+	void dtoToEntity() {
+		
+		try {
+			Long idx = Long.parseLong("1");
+			Student studentIdx = studentService.findOne(1L);
+			Course courseIdx = courseService.findOne(1L); 
+			String content = "123";
+			LocalDateTime dateTime = LocalDateTime.now();
+			Integer star = Integer.parseInt("3");
+			
+			ReviewDTO dto = new ReviewDTO();
+			dto.setIdx(idx);
+			dto.setStudentIdx(studentIdx);
+			dto.setCourseIdx(courseIdx);
+			dto.setContent(content);
+			dto.setDateTime(dateTime);
+			
+		} catch (NotFoundException e) {
+			e.printStackTrace();
+		}
+		
+		
 	}
 
 }

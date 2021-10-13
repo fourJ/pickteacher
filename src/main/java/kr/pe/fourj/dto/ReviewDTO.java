@@ -1,20 +1,20 @@
 package kr.pe.fourj.dto;
 
+import java.time.LocalDateTime;
+
+import kr.pe.fourj.domain.Course;
+import kr.pe.fourj.domain.Student;
 import lombok.Data;
 
+@Data
 public class ReviewDTO {
 	
-//	private Long idx;
-//	private Student studentIdx;
-//	private Course courseIdx;
-//	private String content;
-//	private LocalDateTime dateTime;
-//	private Integer star;
-//	
-//	public ReviewDTO() {
-//		
-//	}
-	
+	private Long idx;
+	private Student studentIdx;
+	private Course courseIdx;
+	private String content;
+	private LocalDateTime dateTime;
+	private Integer star;
 	
 	@Data
 	public static class Create {

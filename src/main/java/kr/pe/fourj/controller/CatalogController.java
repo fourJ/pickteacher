@@ -1,7 +1,6 @@
 package kr.pe.fourj.controller;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,92 +14,128 @@ import kr.pe.fourj.domain.Catalog;
 import kr.pe.fourj.domain.Course;
 import kr.pe.fourj.domain.Student;
 import kr.pe.fourj.dto.CatalogDTO;
-import kr.pe.fourj.repository.CatalogRepository;
-import kr.pe.fourj.repository.CourseRepository;
-import kr.pe.fourj.repository.StudentRepository;
+import kr.pe.fourj.dto.ResponseDTO;
+import kr.pe.fourj.exception.Exception.ArgumentNullException;
+import kr.pe.fourj.exception.Exception.NotFoundException;
+import kr.pe.fourj.service.CatalogService;
+import kr.pe.fourj.service.CourseService;
+import kr.pe.fourj.service.StudentService;
 
 @RestController
 public class CatalogController {
 	
 	@Autowired
-	private CatalogRepository catalogRepository;
+	private CatalogService catalogService;
 	@Autowired
-	private StudentRepository studentRepository;
+	private StudentService studentService;
 	@Autowired
-	private CourseRepository courseRepository;
+	private CourseService courseService;
 	
 	//수강 내역 저장
 	@PostMapping("/catalog")
-	public String saveCatalog(@RequestBody CatalogDTO.Create dto) {
+	public ResponseDTO.Create saveCatalog(@RequestBody CatalogDTO.Create dto) {
 		System.out.println("-- 수강 내역 저장 시도 --");
-		Student student = studentRepository.findById(dto.getStudentIdx()).get();
-		Course course = courseRepository.findById(dto.getCourseIdx()).get();
-		LocalDateTime dateTime = LocalDateTime.now();
 		
-		if(isNotAlreadyCatalog(student, course)) {
-			catalogRepository.save(new Catalog(student, course, dateTime));
-			return "저장 성공";
-		}else {
-			return "저장 실패";
+		boolean result = false;
+		Long saveId = null;
+		try {
+			Student student = studentService.findOne(dto.getStudentIdx());
+			Course course = courseService.findOne(dto.getCourseIdx());
+			LocalDateTime dateTime = LocalDateTime.now();
+			
+			if(catalogService.isNotAlreadyCatalog(student, course)) {
+				try {
+					saveId = catalogService.saveCatalog(new Catalog(student, course, dateTime));
+					result = true;
+				} catch (ArgumentNullException e) {
+					e.printStackTrace();
+				}
+			}
+		} catch (NotFoundException e) {
+			e.printStackTrace();
 		}
+		
+		return new ResponseDTO.Create(saveId, result);
 	}
 	
 	//수강 내역 삭제
 	@DeleteMapping("/catalog")
-	public String deleteCatalog(@RequestBody CatalogDTO.Delete dto) {
+	public ResponseDTO.Delete deleteCatalog(@RequestBody CatalogDTO.Delete dto) {
 		System.out.println("-- 수강 내역 삭제 시도 --");
 		
-		catalogRepository.deleteById(dto.getIdx());
+		boolean result = false;
+		try {
+			catalogService.deleteCatalog(dto);
+			result = true;
+		} catch (NotFoundException e) {
+			e.printStackTrace();
+		}
 		
-		return "삭제 성공";
+		return new ResponseDTO.Delete(result);
 	}
 
 	//수강 내역 단일 검색
 	@GetMapping("/catalog")
-	public Catalog findOneCatalog(@RequestBody CatalogDTO.Get dto) {
+	public ResponseDTO.CatalogResponse findOneCatalog(@RequestBody CatalogDTO.Get dto) {
 		System.out.println("-- 수강 내역 단일 검색 시도 --");
 		
-		return catalogRepository.findById(dto.getIdx()).get();
+		boolean result = false;
+		Catalog catalog = null;
+		try {
+			catalog = catalogService.findOne(dto.getIdx());
+			result = true;
+		} catch (NotFoundException e) {
+			e.printStackTrace();
+		}
+		
+		return new ResponseDTO.CatalogResponse(result, catalog);
 	}
 	
 	//수강 내역 전체 검색
 	@GetMapping("/catalogall")
-	public List<Catalog> findAllCatalog() {
+	public ResponseDTO.CatalogListResponse findAllCatalog() {
 		System.out.println("-- 수강 내역 전체 검색 시도 --");
-		List<Catalog> catalogList = new ArrayList<Catalog>();
 		
-		catalogRepository.findAll().forEach(e -> catalogList.add(e));
+		List<Catalog> catalogList = catalogService.findAll();
 		
-		return catalogList;
+		return new ResponseDTO.CatalogListResponse(true, catalogList);
 	}
 	
 	//특정 학생 id로 수강 내역 검색
 	@GetMapping("/catalog/studentidx")
-	public List<Catalog> findCatalogByStudentIdx(@RequestBody CatalogDTO.Get dto) {
+	public ResponseDTO.CatalogListResponse findAllByStudentIdx(@RequestBody CatalogDTO.Get dto) {
 		System.out.println("-- 특정 학생이 수강한 내역 검색 시도 --");
-		Student student = studentRepository.findById(dto.getStudentIdx()).get();
 		
-		return student.getCatalogList();
+		boolean result = false;
+		List<Catalog> catalogList = null;
+		try {
+			Student student = studentService.findOne(dto.getStudentIdx());
+			catalogList = student.getCatalogList();
+			result = true;
+		} catch (NotFoundException e) {
+			e.printStackTrace();
+		}
+		
+		return new ResponseDTO.CatalogListResponse(result, catalogList);
 	}
 	
 	//특정 강의 id로 수강 내역 검색
 	@GetMapping("/catalog/courseidx")
-	public List<Catalog> findCatalogByCourseIdx(@RequestBody CatalogDTO.Get dto) {
+	public ResponseDTO.CatalogListResponse findAllByCourseIdx(@RequestBody CatalogDTO.Get dto) {
 		System.out.println("-- 특정 강의 이름으로 수강 내역 검색 시도 --");
-		Course course = courseRepository.findById(dto.getCourseIdx()).get();
 		
-		return course.getCatalogList();
+		boolean result = false;
+		List<Catalog> catalogList = null;
+		Course course;
+		try {
+			course = courseService.findOne(dto.getCourseIdx());
+			catalogList = course.getCatalogList();
+			result = true;
+		} catch (NotFoundException e) {
+			e.printStackTrace();
+		}
+		
+		return new ResponseDTO.CatalogListResponse(result, catalogList);
 	}
-	
-	//특정 학생 중복 수강 방지
-	private boolean isNotAlreadyCatalog(Student studentDTO , Course courseDTO) {
-		boolean flag = false;
-		Student student = studentRepository.findById(studentDTO.getIdx()).get();
-		Course course = courseRepository.findById(courseDTO.getIdx()).get();
-        Catalog catalog = catalogRepository.findByStudentIdxAndCourseIdx(student, course);
-        if(catalog == null) flag = true;
-        else if(catalog != null) flag = false;
-        return flag;
-    }
 	
 }
