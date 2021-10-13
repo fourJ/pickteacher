@@ -15,12 +15,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import kr.pe.fourj.domain.Catalog;
+import kr.pe.fourj.domain.Course;
 import kr.pe.fourj.domain.Student;
 import kr.pe.fourj.dto.ResponseDTO;
 import kr.pe.fourj.dto.StudentDTO;
 import kr.pe.fourj.exception.Exception.ArgumentNullException;
 import kr.pe.fourj.exception.Exception.NotFoundException;
 import kr.pe.fourj.service.CatalogService;
+import kr.pe.fourj.service.CourseService;
 import kr.pe.fourj.service.StudentService;
 
 @RestController
@@ -30,6 +32,8 @@ public class StudentController {
 	private StudentService studentService;
 	@Autowired
 	private CatalogService catalogService;
+	@Autowired
+	private CourseService courseService;
 	
 	//학생 저장
 	@PostMapping("/student")
@@ -122,11 +126,18 @@ public class StudentController {
 	public ResponseDTO.StudentListResponse findAllBycourseIdx(@RequestBody StudentDTO.Get dto) {
 		System.out.println("-- 특정 강의를 수강하는 학생 리스트 검색 시도 --");
 		
+		boolean result = false;
 		List<Student> studentList = new ArrayList<Student>();
-		List<Catalog> catalogList = catalogService.findAllByCourseIdx(dto.getCourseIdx());
-		catalogList.forEach(e -> studentList.add(e.getStudentIdx()));
+		try {
+			Course course = courseService.findOne(dto.getCourseIdx());
+			List<Catalog> catalogList = catalogService.findAllByCourseIdx(course);
+			catalogList.forEach(e -> studentList.add(e.getStudentIdx()));
+			result = true;
+		} catch (NotFoundException e1) {
+			e1.printStackTrace();
+		}
 		
-		return new ResponseDTO.StudentListResponse(true, studentList);
+		return new ResponseDTO.StudentListResponse(result, studentList);
 	}
 	
 }
