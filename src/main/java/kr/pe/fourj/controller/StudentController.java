@@ -6,9 +6,9 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.SessionAttributes;
 
 import kr.pe.fourj.domain.Catalog;
 import kr.pe.fourj.domain.Course;
@@ -31,7 +30,6 @@ import kr.pe.fourj.service.CourseService;
 import kr.pe.fourj.service.StudentService;
 
 @RestController
-@SessionAttributes({"studentId", "password"})
 public class StudentController {
 
 	@Autowired
@@ -73,12 +71,50 @@ public class StudentController {
 		return new ResponseDTO.Create(saveId, result);
 	}
 
-//	public void validateDuplicateStudent(Student student) {
-//		Student findStudent = studentRepository.findStudentById(student.getId());
-//		if(findStudent != null) {
-//			throw new IllegalStateException("이미 존재하는 회원입니다.");
-//		}
-//	}
+	
+	//학생 로그인
+	@RequestMapping("/student/login")
+	public ResponseDTO.Login login(HttpServletRequest request, @RequestBody StudentDTO.Login dto) {
+
+		boolean result = false;
+		Student student = studentService.findStudentById(dto.getId());
+		if(student != null) {
+			if(student.getPw().equals(dto.getPw())) {
+				request.getSession().setAttribute("student", student);
+				
+				Object object = request.getSession().getAttribute("student");
+				Student entity = (Student)object;
+				System.out.println(entity.getId());
+				System.out.println(entity.getPw());
+				
+				result = true;
+				System.out.println(entity.getId() + " " + entity.getPw() + " " + "로그인 성공!");
+			}
+		}
+
+		return new ResponseDTO.Login(result);
+	}
+	
+	//학생 로그아웃
+	@RequestMapping("/student/logout")
+	public ResponseDTO.Logout logout(HttpServletRequest request) {
+		
+		boolean result = false;
+		if(request.getSession().getAttribute("student") != null) {
+			
+			Object object = request.getSession().getAttribute("student");
+			Student entity = (Student)object;
+			System.out.println(entity.getId());
+			System.out.println(entity.getPw());
+			
+			System.out.println(entity.getId() + " " + entity.getPw() + " " + "로그아웃 성공!");
+			request.getSession().removeAttribute("student");
+			result = true;
+		}
+				
+		return new ResponseDTO.Logout(result);
+	}
+	
 
 	// 학생 수정
 	@PutMapping("/student")
@@ -111,16 +147,6 @@ public class StudentController {
 
 		return new ResponseDTO.Delete(result);
 	}
-
-	
-//	@RequestMapping("/student/login")
-//	public String studentLogin(String studentId, String password) {
-//		Student student = studentRepository.findStudentById(studentId);
-//		if( student.getId().equals(studentId) && student.getPw().equals(password)) {
-//			model.addAttribute("student", student);
-//		}
-//		return "로그인 성공";
-//	}
 	
 	// 학생 단일 검색
 	@GetMapping("/student")

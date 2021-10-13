@@ -41,6 +41,18 @@ public class ResponseDTO {
 		}
 	}
 	
+	public static class Login extends BaseResponse {
+		public Login(Boolean success) {
+			super(success);
+		}
+	}
+	
+	public static class Logout extends BaseResponse {
+		public Logout(Boolean success) {
+			super(success);
+		}
+	}
+	
 	@Data
 	@AllArgsConstructor
 	public static class CartResponse {
@@ -147,4 +159,5 @@ public class ResponseDTO {
 		private List<Cart> cartList;
 		private List<Catalog> catalogList;
 	}
+
 }

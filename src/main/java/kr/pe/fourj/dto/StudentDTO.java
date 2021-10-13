@@ -3,6 +3,7 @@ package kr.pe.fourj.dto;
 import java.util.Date;
 
 import lombok.Data;
+import lombok.NonNull;
 
 public class StudentDTO {
 	
@@ -17,7 +18,6 @@ public class StudentDTO {
 		private String address;
 		private String phone;
 	}
-	
 	
 	@Data
 	public static class Update {
@@ -37,9 +37,13 @@ public class StudentDTO {
 		private Long idx;
 		private Long courseIdx;
 	}
+	
 	@Data
 	public static class Login {
+		@NonNull
 		private String id;
+		
+		@NonNull
 		private String pw;
 	}
 

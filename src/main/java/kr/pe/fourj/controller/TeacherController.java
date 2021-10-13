@@ -3,12 +3,15 @@ package kr.pe.fourj.controller;
 import java.time.LocalDate;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import kr.pe.fourj.domain.Teacher;
@@ -47,6 +50,49 @@ public class TeacherController {
 			System.out.println("이미 존재하는 회원id입니다.");
 		}
 		return new ResponseDTO.Create(saveId, result);
+	}
+
+	//선생님 로그인
+	@RequestMapping("/teacher/login")
+	public ResponseDTO.Login login(HttpServletRequest request, @RequestBody TeacherDTO.Login dto) {
+
+		boolean result = false;
+		Teacher teacher = teacherService.findTeacherById(dto.getId());
+		if(teacher != null) {
+			if(teacher.getPw().equals(dto.getPw())) {
+				request.getSession().setAttribute("teacher", teacher);
+
+				Object object = request.getSession().getAttribute("teacher");
+				Teacher entity = (Teacher)object;
+				System.out.println(entity.getId());
+				System.out.println(entity.getPw());
+
+				result = true;
+				System.out.println(entity.getId() + " " + entity.getPw() + " " + "로그인 성공!");
+			}
+		}
+
+		return new ResponseDTO.Login(result);
+	}
+
+	//선생님 로그아웃
+	@RequestMapping("/teacher/logout")
+	public ResponseDTO.Logout logout(HttpServletRequest request) {
+
+		boolean result = false;
+		if(request.getSession().getAttribute("teacher") != null) {
+
+			Object object = request.getSession().getAttribute("teacher");
+			Teacher entity = (Teacher)object;
+			System.out.println(entity.getId());
+			System.out.println(entity.getPw());
+
+			System.out.println(entity.getId() + " " + entity.getPw() + " " + "로그아웃 성공!");
+			request.getSession().removeAttribute("teacher");
+			result = true;
+		}
+
+		return new ResponseDTO.Logout(result);
 	}
 
 	//선생님 수정
