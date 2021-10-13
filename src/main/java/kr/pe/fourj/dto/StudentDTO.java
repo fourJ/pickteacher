@@ -37,5 +37,10 @@ public class StudentDTO {
 		private Long idx;
 		private Long courseIdx;
 	}
+	@Data
+	public static class Login {
+		private String id;
+		private String pw;
+	}
 
 }

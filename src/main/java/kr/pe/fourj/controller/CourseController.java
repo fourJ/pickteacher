@@ -1,5 +1,7 @@
 package kr.pe.fourj.controller;
 
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,13 +38,24 @@ public class CourseController {
 		Long saveId = null;
 		try {
 			Teacher teacher = teacherService.findOne(dto.getTeacherIdx());
+			Date now = new Date();
+			System.out.println("현재 시간 : " + now);
+			String status = "";
+			
+			if(now.getTime() <= dto.getOpenDate().getTime()) {
+				status = "미개강";
+			}else if(now.getTime() >= dto.getOpenDate().getTime() && now.getTime() <= dto.getCloseDate().getTime()) {
+				status = "진행중";
+			}else {
+				status = "마감";
+			}
 			
 			try {
 				saveId = courseService.saveCourse(new Course(teacher, 
 															 dto.getTitle(), dto.getSubject(), 
 															 dto.getSchedule(), dto.getType(), 
 															 dto.getOpenDate(), dto.getCloseDate(), 
-															 dto.getStatus(), dto.getHeadCount(), 
+															 status, dto.getHeadCount(), 
 															 dto.getTuition(), dto.getTarget()));
 				result = true;
 			} catch (ArgumentNullException e) {
