@@ -1,6 +1,5 @@
 package kr.pe.fourj.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,99 +13,133 @@ import org.springframework.web.bind.annotation.RestController;
 import kr.pe.fourj.domain.Course;
 import kr.pe.fourj.domain.Teacher;
 import kr.pe.fourj.dto.CourseDTO;
-import kr.pe.fourj.repository.CourseRepository;
-import kr.pe.fourj.repository.TeacherRepository;
+import kr.pe.fourj.dto.ResponseDTO;
+import kr.pe.fourj.exception.Exception.ArgumentNullException;
+import kr.pe.fourj.exception.Exception.NotFoundException;
+import kr.pe.fourj.service.CourseService;
+import kr.pe.fourj.service.TeacherService;
 
 @RestController
 public class CourseController {
 	
 	@Autowired
-	private CourseRepository courseRepository;
+	private CourseService courseService;
 	@Autowired
-	private TeacherRepository teacherRepository;
+	private TeacherService teacherService;
 	
 	//강의 저장
 	@PostMapping("/course")
-	public String saveCourse(@RequestBody CourseDTO.Create dto) {
+	public ResponseDTO.Create saveCourse(@RequestBody CourseDTO.Create dto) {
 		System.out.println("-- 강의 저장 시도 --");
-		Teacher teacher = teacherRepository.findById(dto.getTeacherIdx()).get();
 		
-		courseRepository.save(new Course(teacher, 
-										 dto.getTitle(), dto.getSubject(), 
-										 dto.getSchedule(), dto.getType(), 
-										 dto.getOpenDate(), dto.getCloseDate(),
-										 dto.getStatus(), dto.getHeadCount(), 
-										 dto.getTuition(), dto.getTarget()));
-
-		return "강의가 열렸습니다!";
+		boolean result = false;
+		Long saveId = null;
+		try {
+			Teacher teacher = teacherService.findOne(dto.getTeacherIdx());
+			
+			try {
+				saveId = courseService.saveCourse(new Course(teacher, 
+															 dto.getTitle(), dto.getSubject(), 
+															 dto.getSchedule(), dto.getType(), 
+															 dto.getOpenDate(), dto.getCloseDate(), 
+															 dto.getStatus(), dto.getHeadCount(), 
+															 dto.getTuition(), dto.getTarget()));
+				result = true;
+			} catch (ArgumentNullException e) {
+				e.printStackTrace();
+			}
+		} catch (NotFoundException e) {
+			e.printStackTrace();
+		}
+		
+		return new ResponseDTO.Create(saveId, result);
 	}
 
 	//강의 수정
 	@PutMapping("/course")
-	public String updateCourse(@RequestBody CourseDTO.Update dto) {
+	public ResponseDTO.Update updateCourse(@RequestBody CourseDTO.Update dto) {
 		System.out.println("-- 강의 수정 시도 --");
-		Course course = courseRepository.findById(dto.getIdx()).get();
 		
-		course.setSchedule(dto.getSchedule());
-		course.setOpenDate(dto.getOpenDate());
-		course.setCloseDate(dto.getCloseDate());
-		course.setType(dto.getType());
-		course.setStatus(dto.getStatus());
-		course.setTuition(dto.getTuition());
-		course.setTarget(dto.getTarget());
-		
-		courseRepository.save(course);
+		boolean result = false;
+		try {
+			courseService.updateCourse(dto);
+			result = true;
+		} catch (NotFoundException e) {
+			e.printStackTrace();
+		}
 
-		return "수정했습니다";
+		return new ResponseDTO.Update(result);
 	}
 
 	//강의 삭제
 	@DeleteMapping("/course")
-	public String deleteCourse(@RequestBody CourseDTO.Delete dto) {
+	public ResponseDTO.Delete deleteCourse(@RequestBody CourseDTO.Delete dto) {
 		System.out.println("-- 강의 삭제 시도 --");
 		
-		courseRepository.deleteById(dto.getIdx());
+		boolean result = false;
+		try {
+			courseService.deleteCourse(dto);
+			result = true;
+		} catch (NotFoundException e) {
+			e.printStackTrace();
+		}
 		
-		return "강의를 삭제했습니다!";
+		return new ResponseDTO.Delete(result);
 	}
 	
 	//강의 단일 검색
 	@GetMapping("/course")
-	public Course findOne(@RequestBody CourseDTO.Get dto) {
+	public ResponseDTO.CourseResponse findOne(@RequestBody CourseDTO.Get dto) {
 		System.out.println("-- 강의 단일 검색 시도 --");
 		
-		return courseRepository.findById(dto.getIdx()).get();
+		boolean result = false;
+		Course course = null;
+		try {
+			course = courseService.findOne(dto.getIdx());
+			result = true;
+		} catch (NotFoundException e) {
+			e.printStackTrace();
+		}
+		
+		return new ResponseDTO.CourseResponse(result, course);
 	}
 
 	//강의 리스트 전체 검색
 	@GetMapping("/courseall")
-	public List<Course> findAll() {
+	public ResponseDTO.CourseListResponse findAll() {
 		System.out.println("-- 강의 리스트 전체 검색 시도 --");
-		List<Course> courseList = new ArrayList<Course>();
 		
-		courseRepository.findAll().forEach(e -> courseList.add(e));
+		List<Course> courseList = courseService.findAll();
 		
-		return courseList;
+		return new ResponseDTO.CourseListResponse(true, courseList);
 	}
 	
 	//특정 강의 제목으로 강의 리스트 검색
 	@GetMapping("/course/title")
-	public List<Course> findCourseByTitle(@RequestBody CourseDTO.Get dto) {
+	public ResponseDTO.CourseListResponse findAllCourseByTitle(@RequestBody CourseDTO.Get dto) {
 		System.out.println("-- 특정 강의 제목으로 강의 리스트 검색 시도 --");
-		List<Course> courseList = new ArrayList<Course>();
 		
-		courseRepository.findCourseListByTitleContaining(dto.getTitle()).forEach(e -> courseList.add(e));
+		List<Course> courseList = courseService.findAllByTitle(dto.getTitle());
 
-		return courseList;
+		return new ResponseDTO.CourseListResponse(true, courseList);
 	}
 
 	//특정 선생님의 강의 리스트 검색
 	@GetMapping("/course/teacherIdx")
-	public List<Course> findByTeacherIdx(@RequestBody CourseDTO.Get dto) {
-		System.out.println("선생님 idx로 해당 선생님의 강의 리스트 조회 시도");
-		Teacher teacher = teacherRepository.findById(dto.getTeacherIdx()).get();
+	public ResponseDTO.CourseListResponse findAllByTeacherIdx(@RequestBody CourseDTO.Get dto) {
+		System.out.println("-- 특정 선생님의 강의 리스트 검색 시도 --");
 		
-		return teacher.getCourseList();
+		boolean result = false;
+		List<Course> courseList = null;
+		try {
+			Teacher teacher = teacherService.findOne(dto.getTeacherIdx());
+			courseList = teacher.getCourseList();
+			result = true;
+		} catch (NotFoundException e) {
+			e.printStackTrace();
+		}
+		
+		return new ResponseDTO.CourseListResponse(result, courseList);
 	}
 
 }
