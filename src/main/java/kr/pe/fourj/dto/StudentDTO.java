@@ -21,15 +21,9 @@ public class StudentDTO {
 	
 	@Data
 	public static class Update {
-		private Long idx;
 		private String nickName;
 		private String address;
 		private String phone;
-	}
-	
-	@Data
-	public static class Delete {
-		private Long idx;
 	}
 	
 	@Data

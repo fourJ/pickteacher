@@ -12,12 +12,11 @@ public class CartDTO {
 	
 	@Data
 	public static class Delete {
-		private Long idx;
+		private Long courseIdx;
 	}
 	
 	@Data
 	public static class Get {
-		private Long idx;
 		private Long studentIdx;
 		private Long courseIdx;
 	}

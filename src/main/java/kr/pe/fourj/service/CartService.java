@@ -10,18 +10,12 @@ import kr.pe.fourj.exception.Exception;
 import kr.pe.fourj.exception.Exception.ArgumentNullException;
 import kr.pe.fourj.exception.Exception.NotFoundException;
 import kr.pe.fourj.repository.CartRepository;
-import kr.pe.fourj.repository.CourseRepository;
-import kr.pe.fourj.repository.StudentRepository;
 
 @Service
 public class CartService {
 	
 	@Autowired
 	private CartRepository cartRepository;
-	@Autowired
-	private StudentRepository studentRepository;
-	@Autowired
-	private CourseRepository courseRepository;
 	
 	public Long saveCart(Cart cart) throws ArgumentNullException {
 		Cart save = null;
@@ -36,16 +30,14 @@ public class CartService {
 	
 	public boolean isNotAlreadyCart(Student student , Course course) {
 		boolean flag = false;
-		Student findStudent = studentRepository.findById(student.getIdx()).get();
-		Course findCourse = courseRepository.findById(course.getIdx()).get();
-        Cart cart = cartRepository.findByStudentIdxAndCourseIdx(findStudent, findCourse);
+        Cart cart = cartRepository.findByStudentIdxAndCourseIdx(student, course);
         flag = (cart == null)? true : false; 
         
         return flag;
     }
 	
-	public void deleteCart(Long idx) throws NotFoundException {
-		Cart cart = findOne(idx);
+	public void deleteCart(Student student, Course course) throws NotFoundException {
+		Cart cart = cartRepository.findByStudentIdxAndCourseIdx(student, course);
 		cartRepository.deleteById(cart.getIdx());
 	}
 	

@@ -29,17 +29,14 @@ public class TeacherService {
 		return save.getIdx();
 	}
 
-	public void updateTeacher(TeacherDTO.Update dto) throws NotFoundException {
-		Teacher teacher = findOne(dto.getIdx());
-
+	public void updateTeacher(Teacher teacher, TeacherDTO.Update dto) throws NotFoundException {
 		teacher.setAddress(dto.getAddress());
 		teacher.setPhone(dto.getPhone());
 		
 		teacherRepository.save(teacher);
 	}	
 	
-	public void deleteTeacher(TeacherDTO.Delete dto) throws NotFoundException {
-		Teacher teacher = findOne(dto.getIdx());
+	public void deleteTeacher(Teacher teacher) throws NotFoundException {
 		teacherRepository.deleteById(teacher.getIdx());
 	}
 	

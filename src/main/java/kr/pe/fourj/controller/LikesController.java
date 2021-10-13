@@ -2,6 +2,8 @@ package kr.pe.fourj.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,7 +20,6 @@ import kr.pe.fourj.exception.Exception.ArgumentNullException;
 import kr.pe.fourj.exception.Exception.NotFoundException;
 import kr.pe.fourj.service.CourseService;
 import kr.pe.fourj.service.LikesService;
-import kr.pe.fourj.service.StudentService;
 
 @RestController
 public class LikesController {
@@ -26,32 +27,34 @@ public class LikesController {
 	@Autowired
 	private LikesService likesService;
 	@Autowired
-	private StudentService studentService;
-	@Autowired
 	private CourseService courseService;
 	
 	
 	//좋아요 저장
 	@PostMapping("/likes")
-	public ResponseDTO.Create saveLikes(@RequestBody LikesDTO.Create dto) {
+	public ResponseDTO.Create saveLikes(HttpServletRequest request, @RequestBody LikesDTO.Create dto) {
 		System.out.println("-- 좋아요 저장 시도 --");
 		
 		boolean result = false;
 		Long saveId = null;
-		try {
-			Student student = studentService.findOne(dto.getStudentIdx());
-			Course course = courseService.findOne(dto.getCourseIdx());
-			
-			if(likesService.isNotAlreadyLikes(student, course)) {
-				try {
-					saveId = likesService.saveLikes(new Likes(student, course));
-					result = true;
-				} catch (ArgumentNullException e) {
-					e.printStackTrace();
-				}
-			}	
-		} catch (NotFoundException e) {
-			e.printStackTrace();
+		if(request.getSession().getAttribute("student") != null) {
+			Object object = request.getSession().getAttribute("student");
+			Student entity = (Student)object;
+
+			try {
+				Course course = courseService.findOne(dto.getCourseIdx());
+
+				if(likesService.isNotAlreadyLikes(entity, course)) {
+					try {
+						saveId = likesService.saveLikes(new Likes(entity, course));
+						result = true;
+					} catch (ArgumentNullException e) {
+						e.printStackTrace();
+					}
+				}	
+			} catch (NotFoundException e) {
+				e.printStackTrace();
+			}
 		}
 		
 		return new ResponseDTO.Create(saveId, result);
@@ -59,13 +62,17 @@ public class LikesController {
 	
 	//좋아요 삭제
 	@DeleteMapping("/likes")
-	public ResponseDTO.Delete deleteLikes(@RequestBody LikesDTO.Delete dto) {
+	public ResponseDTO.Delete deleteLikes(HttpServletRequest request, @RequestBody LikesDTO.Delete dto) {
 		System.out.println("-- 좋아요 삭제 시도 --");
 
 		boolean result = false;
-		if(true) { //이 부분에 세션에서 정보 빼와서 dto 값과 확인 조건 필요
+		if(request.getSession().getAttribute("student") != null) { 
+			Object object = request.getSession().getAttribute("student");
+			Student entity = (Student)object;
+			
 			try {
-				likesService.deleteLikes(dto);
+				Course course = courseService.findOne(dto.getCourseIdx());
+				likesService.deleteLikes(entity, course);
 				result = true;
 			} catch (NotFoundException e) {
 				e.printStackTrace();
@@ -75,6 +82,7 @@ public class LikesController {
 		return new ResponseDTO.Delete(result);
 	}
 	
+	//???쓰일까요???
 	//좋아요 단일 검색
 	@GetMapping("/likes")
 	public ResponseDTO.LikesResponse findOne(@RequestBody LikesDTO.Get dto) {
@@ -92,6 +100,7 @@ public class LikesController {
 		return new ResponseDTO.LikesResponse(result, likes);
 	}
 	
+	//???쓰일까요???
 	//좋아요 리스트 전체 검색
 	@GetMapping("/likesall")
 	public ResponseDTO.LikesListResponse findAll(){
@@ -102,19 +111,18 @@ public class LikesController {
 		return new ResponseDTO.LikesListResponse(true, likesList);
 	}
 	
-	//특정 학생이 누른 좋아요 리스트 검색
+	//특정 학생(자신)이 누른 좋아요 리스트 검색
 	@GetMapping("/likes/studentidx")
-	public ResponseDTO.LikesListResponse findAllByStudentIdx(@RequestBody LikesDTO.Get dto) {
+	public ResponseDTO.LikesListResponse findAllByStudentIdx(HttpServletRequest request) {
 		System.out.println("-- 특정 학생이 누른 좋아요 리스트 전체 검색 시도 --");
 		
 		boolean result = false;
 		List<Likes> likesList = null;
-		try {
-			Student student = studentService.findOne(dto.getStudentIdx());
-			likesList = student.getLikesList();
+		if(request.getSession().getAttribute("student") != null) {
+			Object object = request.getSession().getAttribute("student");
+			Student entity = (Student)object;
+			likesList = entity.getLikesList();
 			result = true;
-		} catch (NotFoundException e) {
-			e.printStackTrace();
 		}
 		
 		return new ResponseDTO.LikesListResponse(result, likesList);

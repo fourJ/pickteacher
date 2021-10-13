@@ -41,7 +41,7 @@ public class StudentController {
 	@Autowired
 	StudentRepository studentRepository;
 
-	// 학생 저장
+	//학생 저장
 	@PostMapping("/student")
 	public ResponseDTO.Create saveStudent(@RequestBody StudentDTO.Create dto) throws NotFoundException {
 		System.out.println("-- 학생 저장시도 --");
@@ -116,39 +116,51 @@ public class StudentController {
 	}
 	
 
-	// 학생 수정
+	//학생 수정
 	@PutMapping("/student")
-	public ResponseDTO.Update updateStudent(@RequestBody StudentDTO.Update dto) {
+	public ResponseDTO.Update updateStudent(HttpServletRequest request, @RequestBody StudentDTO.Update dto) {
 		System.out.println("-- 학생 수정 시도 --");
 
 		boolean result = false;
-		try {
-			studentService.updateStudent(dto);
-			result = true;
-		} catch (NotFoundException e) {
-			e.printStackTrace();
-		}
+		if(request.getSession().getAttribute("student") != null) {
+			Object object = request.getSession().getAttribute("student");
+			Student entity = (Student)object;
 
+			try {
+				studentService.updateStudent(entity, dto);
+				result = true;
+			} catch (NotFoundException e) {
+				e.printStackTrace();
+			}
+		}
+		
 		return new ResponseDTO.Update(result);
 	}
 
-	// 학생 삭제
+	//학생 삭제
 	@DeleteMapping("/student")
-	public ResponseDTO.Delete deleteStudent(@RequestBody StudentDTO.Delete dto) {
+	public ResponseDTO.Delete deleteStudent(HttpServletRequest request) {
 		System.out.println("-- 학생 삭제 시도 --");
 
 		boolean result = false;
-		try {
-			studentService.deleteStudent(dto);
-			result = true;
-		} catch (NotFoundException e) {
-			e.printStackTrace();
+		if(request.getSession().getAttribute("student") != null) {
+			Object object = request.getSession().getAttribute("student");
+			Student entity = (Student)object;
+
+			try {
+				studentService.deleteStudent(entity);
+				request.getSession().removeAttribute("student"); //???학생 삭제 후 바로 로그아웃 되도록..?
+				result = true;
+			} catch (NotFoundException e) {
+				e.printStackTrace();
+			}		
 		}
 
 		return new ResponseDTO.Delete(result);
 	}
 	
-	// 학생 단일 검색
+	//???idx로 하는 검색이 쓰일까요???
+	//학생 단일 검색
 	@GetMapping("/student")
 	public ResponseDTO.StudentResponse findOne(@RequestBody StudentDTO.Get dto) {
 		System.out.println("-- 학생 단일 검색 시도 --");
@@ -165,7 +177,8 @@ public class StudentController {
 		return new ResponseDTO.StudentResponse(result, student);
 	}
 
-	// 학생 리스트 전체 검색
+	//???전체 학생 리스트를 검색하는 게 쓰일까요???
+	//학생 리스트 전체 검색
 	@GetMapping("/studentall")
 	public ResponseDTO.StudentListResponse findAll() {
 		System.out.println("-- 학생 리스트 전체 검색 시도 --");
@@ -175,7 +188,7 @@ public class StudentController {
 		return new ResponseDTO.StudentListResponse(true, studentList);
 	}
 
-	// 특정 강의를 수강하는 학생 리스트 검색
+	//특정 강의를 수강하는 학생 리스트 검색
 	@GetMapping("/student/courseIdx")
 	public ResponseDTO.StudentListResponse findAllBycourseIdx(@RequestBody StudentDTO.Get dto) {
 		System.out.println("-- 특정 강의를 수강하는 학생 리스트 검색 시도 --");
