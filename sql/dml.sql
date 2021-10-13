@@ -18,4 +18,8 @@ INSERT INTO review VALUES(review_seq.nextval, '뭔소리?', '2021/10/11', 1, 2, 
 INSERT INTO review VALUES(review_seq.nextval, 'ㄹㅇㅋㅋ', '2021/10/11', 3, 3, 3);
 INSERT INTO review VALUES(review_seq.nextval, 'ㅎㅋ2', '2021/10/11', 3, 3, 1);
 
+INSERT INTO "CATALOG" VALUES(catalog_seq.nextval, '2021/10/11', 1, 3);
+INSERT INTO "CATALOG" VALUES(catalog_seq.nextval, '2021/10/12', 2, 2);
+INSERT INTO "CATALOG" VALUES(catalog_seq.nextval, '2021/10/13', 3, 1);
+
 COMMIT;
