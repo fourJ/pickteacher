@@ -7,12 +7,16 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 import kr.pe.fourj.domain.Catalog;
 import kr.pe.fourj.domain.Course;
@@ -21,25 +25,29 @@ import kr.pe.fourj.dto.ResponseDTO;
 import kr.pe.fourj.dto.StudentDTO;
 import kr.pe.fourj.exception.Exception.ArgumentNullException;
 import kr.pe.fourj.exception.Exception.NotFoundException;
+import kr.pe.fourj.repository.StudentRepository;
 import kr.pe.fourj.service.CatalogService;
 import kr.pe.fourj.service.CourseService;
 import kr.pe.fourj.service.StudentService;
 
 @RestController
+@SessionAttributes({"studentId", "password"})
 public class StudentController {
-	
+
 	@Autowired
 	private StudentService studentService;
 	@Autowired
 	private CatalogService catalogService;
 	@Autowired
 	private CourseService courseService;
-	
-	//학생 저장
+	@Autowired
+	StudentRepository studentRepository;
+
+	// 학생 저장
 	@PostMapping("/student")
-	public ResponseDTO.Create saveStudent(@RequestBody StudentDTO.Create dto) {
+	public ResponseDTO.Create saveStudent(@RequestBody StudentDTO.Create dto) throws NotFoundException {
 		System.out.println("-- 학생 저장시도 --");
-		
+
 		boolean result = false;
 		Long saveId = null;
 
@@ -48,25 +56,35 @@ public class StudentController {
 		birth.setTime(dto.getBirth());
 		current.setTime(new Date());
 		int age = current.get(Calendar.YEAR) - birth.get(Calendar.YEAR) + 1;
-		
-		try {
-			saveId = studentService.saveStudent(new Student(dto.getId(), dto.getPw(), 
-															dto.getName(), dto.getBirth(), age, 
-															dto.getNickName(), dto.getGender(), 
-															dto.getAddress(), dto.getPhone()));
-			result = true;
-		} catch (ArgumentNullException e) {
-			e.printStackTrace();
+
+
+		if (studentService.findStudentById(dto.getId()) == null) {
+			try {
+				saveId = studentService.saveStudent(new Student(dto.getId(), dto.getPw(), dto.getName(), dto.getBirth(),
+						age, dto.getNickName(), dto.getGender(), dto.getAddress(), dto.getPhone()));
+				result = true;					
+			} catch (ArgumentNullException e) {
+				e.printStackTrace();
+			}
+		}else {
+			System.out.println("이미존재하는 회원id입니다.");
 		}
 
 		return new ResponseDTO.Create(saveId, result);
 	}
 
-	//학생 수정
+//	public void validateDuplicateStudent(Student student) {
+//		Student findStudent = studentRepository.findStudentById(student.getId());
+//		if(findStudent != null) {
+//			throw new IllegalStateException("이미 존재하는 회원입니다.");
+//		}
+//	}
+
+	// 학생 수정
 	@PutMapping("/student")
 	public ResponseDTO.Update updateStudent(@RequestBody StudentDTO.Update dto) {
 		System.out.println("-- 학생 수정 시도 --");
-		
+
 		boolean result = false;
 		try {
 			studentService.updateStudent(dto);
@@ -74,15 +92,15 @@ public class StudentController {
 		} catch (NotFoundException e) {
 			e.printStackTrace();
 		}
-		
+
 		return new ResponseDTO.Update(result);
 	}
 
-	//학생 삭제
+	// 학생 삭제
 	@DeleteMapping("/student")
 	public ResponseDTO.Delete deleteStudent(@RequestBody StudentDTO.Delete dto) {
 		System.out.println("-- 학생 삭제 시도 --");
-		
+
 		boolean result = false;
 		try {
 			studentService.deleteStudent(dto);
@@ -94,11 +112,21 @@ public class StudentController {
 		return new ResponseDTO.Delete(result);
 	}
 
-	//학생 단일 검색
+	
+//	@RequestMapping("/student/login")
+//	public String studentLogin(String studentId, String password) {
+//		Student student = studentRepository.findStudentById(studentId);
+//		if( student.getId().equals(studentId) && student.getPw().equals(password)) {
+//			model.addAttribute("student", student);
+//		}
+//		return "로그인 성공";
+//	}
+	
+	// 학생 단일 검색
 	@GetMapping("/student")
-	public ResponseDTO.StudentResponse findOne(@RequestBody StudentDTO.Get dto){
+	public ResponseDTO.StudentResponse findOne(@RequestBody StudentDTO.Get dto) {
 		System.out.println("-- 학생 단일 검색 시도 --");
-		
+
 		boolean result = false;
 		Student student = null;
 		try {
@@ -107,25 +135,25 @@ public class StudentController {
 		} catch (NotFoundException e) {
 			e.printStackTrace();
 		}
-		
+
 		return new ResponseDTO.StudentResponse(result, student);
 	}
 
-	//학생 리스트 전체 검색
+	// 학생 리스트 전체 검색
 	@GetMapping("/studentall")
-	public ResponseDTO.StudentListResponse findAll(){
+	public ResponseDTO.StudentListResponse findAll() {
 		System.out.println("-- 학생 리스트 전체 검색 시도 --");
-		
+
 		List<Student> studentList = studentService.findAll();
-		
+
 		return new ResponseDTO.StudentListResponse(true, studentList);
 	}
-	
-	//특정 강의를 수강하는 학생 리스트 검색
+
+	// 특정 강의를 수강하는 학생 리스트 검색
 	@GetMapping("/student/courseIdx")
 	public ResponseDTO.StudentListResponse findAllBycourseIdx(@RequestBody StudentDTO.Get dto) {
 		System.out.println("-- 특정 강의를 수강하는 학생 리스트 검색 시도 --");
-		
+
 		boolean result = false;
 		List<Student> studentList = new ArrayList<Student>();
 		try {
@@ -136,8 +164,8 @@ public class StudentController {
 		} catch (NotFoundException e1) {
 			e1.printStackTrace();
 		}
-		
+
 		return new ResponseDTO.StudentListResponse(result, studentList);
 	}
-	
+
 }

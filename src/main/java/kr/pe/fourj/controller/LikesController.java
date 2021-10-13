@@ -72,7 +72,7 @@ public class LikesController {
 	}
 	
 	//좋아요 단일 조회
-	@GetMapping("likes")
+	@GetMapping("/likes")
 	public Likes findOne(@RequestBody LikesDTO.Get dto) {
 //	public Likes findOne(@RequestParam Long id) {
 		System.out.println("--좋아요 단일 검색 시도--");
@@ -91,6 +91,8 @@ public class LikesController {
 		
 		return likesList;
 	}
+	
+	
 	
 	
 }
