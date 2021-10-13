@@ -49,6 +49,11 @@ public class TeacherService {
 		return teacher;
 	}
 	
+	public Teacher findTeacherById(String teacherId) {
+		Teacher teacher = teacherRepository.findTeacherById(teacherId);
+		return teacher;
+	}
+	
 	public List<Teacher> findAll() {
 		return teacherRepository.findAll();
 	}

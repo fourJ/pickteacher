@@ -32,18 +32,20 @@ public class TeacherController {
 		boolean result = false;
 		Long saveId = null;
 		LocalDate date = LocalDate.now();		
-		
-		try {
-			saveId = teacherService.saveTeacher(new Teacher(dto.getId(),dto.getPw(), 
-															dto.getName(), dto.getGender(), 
-															dto.getAddress(), dto.getPhone(), 
-															dto.getCareer(), dto.getMajor(), 
-															dto.getSchool(), date));
-			result = true;
-		} catch (ArgumentNullException e) {
-			e.printStackTrace();
+		if(teacherService.findTeacherById(dto.getId()) == null) {
+			try {
+				saveId = teacherService.saveTeacher(new Teacher(dto.getId(),dto.getPw(), 
+																dto.getName(), dto.getGender(), 
+																dto.getAddress(), dto.getPhone(), 
+																dto.getCareer(), dto.getMajor(), 
+																dto.getSchool(), date));
+				result = true;
+			} catch (ArgumentNullException e) {
+				e.printStackTrace();
+			}
+		}else {
+			System.out.println("이미 존재하는 회원id입니다.");
 		}
-		
 		return new ResponseDTO.Create(saveId, result);
 	}
 

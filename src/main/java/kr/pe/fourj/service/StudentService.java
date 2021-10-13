@@ -46,11 +46,16 @@ public class StudentService {
 	
 	public Student findOne(Long studentIdx) throws NotFoundException {
 		Student student = studentRepository.findById(studentIdx).orElseThrow(() -> new Exception.NotFoundException("Student with idx: " + studentIdx + " is not valid"));
-	
 		return student;
 	}
 	
 	public List<Student> findAll() {
 		return studentRepository.findAll();
 	}
+	
+	public Student findStudentById (String studentId) {
+		Student student = studentRepository.findStudentById(studentId);
+		return student;
+	}
+	
 }
