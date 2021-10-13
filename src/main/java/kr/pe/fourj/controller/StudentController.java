@@ -65,12 +65,11 @@ public class StudentController {
 				e.printStackTrace();
 			}
 		}else {
-			System.out.println("이미존재하는 회원id입니다.");
+			System.out.println("이미 존재하는 회원id입니다.");
 		}
 
 		return new ResponseDTO.Create(saveId, result);
 	}
-
 	
 	//학생 로그인
 	@RequestMapping("/student/login")
@@ -79,7 +78,7 @@ public class StudentController {
 		boolean result = false;
 		Student student = studentService.findStudentById(dto.getId());
 		if(student != null) {
-			if(student.getPw().equals(dto.getPw())) {
+			if(student.getPw().equals(dto.getPw()) && request.getSession().getAttribute("student") == null) {
 				request.getSession().setAttribute("student", student);
 				
 				Object object = request.getSession().getAttribute("student");
@@ -89,7 +88,11 @@ public class StudentController {
 				
 				result = true;
 				System.out.println(entity.getId() + " " + entity.getPw() + " " + "로그인 성공!");
+			}else {
+				System.out.println("로그인 실패! : 패스워드를 다시 확인해주세요. 중복 로그인은 불가합니다.");
 			}
+		}else {
+			System.out.println("로그인 실패! : 등록되지 않은 회원입니다.");
 		}
 
 		return new ResponseDTO.Login(result);
@@ -110,6 +113,8 @@ public class StudentController {
 			System.out.println(entity.getId() + " " + entity.getPw() + " " + "로그아웃 성공!");
 			request.getSession().removeAttribute("student");
 			result = true;
+		}else {
+			System.out.println("로그아웃 실패! : 로그인이 되어있지 않은 상태에서는 로그아웃이 불가합니다.");
 		}
 				
 		return new ResponseDTO.Logout(result);
@@ -127,11 +132,13 @@ public class StudentController {
 			Student entity = (Student)object;
 
 			try {
-				studentService.updateStudent(entity, dto);
+				studentService.updateStudent(entity.getIdx(), dto);
 				result = true;
 			} catch (NotFoundException e) {
 				e.printStackTrace();
 			}
+		}else {
+			System.out.println("로그인 정보가 없습니다. 로그인이 필요한 기능입니다.");
 		}
 		
 		return new ResponseDTO.Update(result);
@@ -148,12 +155,14 @@ public class StudentController {
 			Student entity = (Student)object;
 
 			try {
-				studentService.deleteStudent(entity);
-				request.getSession().removeAttribute("student"); //???학생 삭제 후 바로 로그아웃 되도록..?
+				studentService.deleteStudent(entity.getIdx());
+				request.getSession().removeAttribute("student"); //학생 삭제 후 바로 로그아웃 되도록
 				result = true;
 			} catch (NotFoundException e) {
 				e.printStackTrace();
 			}		
+		}else {
+			System.out.println("로그인 정보가 없습니다. 로그인이 필요한 기능입니다.");
 		}
 
 		return new ResponseDTO.Delete(result);

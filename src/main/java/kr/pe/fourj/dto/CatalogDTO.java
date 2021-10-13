@@ -6,7 +6,6 @@ public class CatalogDTO {
 	
 	@Data
 	public static class Create {
-		private Long studentIdx;
 		private Long courseIdx;
 	}
 	

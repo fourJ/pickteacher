@@ -23,6 +23,7 @@ import kr.pe.fourj.exception.Exception.NotFoundException;
 import kr.pe.fourj.service.CartService;
 import kr.pe.fourj.service.CatalogService;
 import kr.pe.fourj.service.CourseService;
+import kr.pe.fourj.service.StudentService;
 
 @RestController
 public class CartController {
@@ -31,6 +32,8 @@ public class CartController {
 	private CartService cartService;
 	@Autowired
 	private CourseService courseService;
+	@Autowired
+	private StudentService studentService;
 	@Autowired
 	private CatalogService catalogService;
 	
@@ -46,19 +49,24 @@ public class CartController {
 			Student entity = (Student)object;
 			
 			try {
+				Student student = studentService.findOne(entity.getIdx());
 				Course course = courseService.findOne(dto.getCourseIdx());
 				
-				if(cartService.isNotAlreadyCart(entity, course)) {
+				if(cartService.isNotAlreadyCart(student, course)) {
 					try {
-						saveId = cartService.saveCart(new Cart(entity, course));
+						saveId = cartService.saveCart(new Cart(student, course));
 						result = true;
 					} catch (ArgumentNullException e) {
 						e.printStackTrace();
 					}
+				}else {
+					System.out.println("동일한 강의를 이미 장바구니에 추가하셨습니다.");
 				}
 			} catch (NotFoundException e) {
 				e.printStackTrace();
 			}
+		}else {
+			System.out.println("로그인 정보가 없습니다. 로그인이 필요한 기능입니다.");
 		}
 		
 		return new ResponseDTO.Create(saveId, result);
@@ -75,12 +83,19 @@ public class CartController {
 			Student entity = (Student)object;
 			
 			try {
+				Student student = studentService.findOne(entity.getIdx());
 				Course course = courseService.findOne(dto.getCourseIdx());
-				cartService.deleteCart(entity, course);
-				result = true;
+				try {
+					cartService.deleteCart(student, course);
+				} catch (ArgumentNullException e) {
+					e.printStackTrace();
+					result = true;
+				}
 			} catch (NotFoundException e) {
 				e.printStackTrace();
 			}
+		}else {
+			System.out.println("로그인 정보가 없습니다. 로그인이 필요한 기능입니다.");
 		}
 		
 		return new ResponseDTO.Delete(result);
@@ -96,8 +111,16 @@ public class CartController {
 		if(request.getSession().getAttribute("student") != null) {
 			Object object = request.getSession().getAttribute("student");
 			Student entity = (Student)object;
-			cartList = entity.getCartList();
-			result = true;
+			
+			try {
+				Student student = studentService.findOne(entity.getIdx());
+				cartList = student.getCartList();
+				result = true;
+			} catch (NotFoundException e) {
+				e.printStackTrace();
+			}
+		}else {
+			System.out.println("로그인 정보가 없습니다. 로그인이 필요한 기능입니다.");
 		}
 		
 		return new ResponseDTO.CartListResponse(result, cartList);
@@ -115,12 +138,13 @@ public class CartController {
 			Student entity = (Student)object;
 			
 			try {
-				Course course = courseService.findOne(dto.getStudentIdx());		
+				Student student = studentService.findOne(entity.getIdx());
+				Course course = courseService.findOne(dto.getCourseIdx());		
 				LocalDateTime dateTime = LocalDateTime.now();
 				
 				try {
-					saveId = catalogService.saveCatalog(new Catalog(entity, course, dateTime));
-					cartService.deleteCart(entity, course);
+					saveId = catalogService.saveCatalog(new Catalog(student, course, dateTime));
+					cartService.deleteCart(student, course);
 					result = true;
 				} catch (ArgumentNullException e) {
 					e.printStackTrace();
@@ -129,6 +153,8 @@ public class CartController {
 			} catch (NotFoundException e) {
 				e.printStackTrace();
 			}
+		}else {
+			System.out.println("로그인 정보가 없습니다. 로그인이 필요한 기능입니다.");
 		}
 		
 		return new ResponseDTO.CartToCatalogResponse(saveId, result);

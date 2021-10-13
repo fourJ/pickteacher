@@ -38,9 +38,13 @@ public class CatalogService {
 		return flag;
 	}
 	
-	public void deleteCatalog(Student student, Course course) throws NotFoundException {
+	public void deleteCatalog(Student student, Course course) throws NotFoundException, ArgumentNullException {
 		Catalog catalog = catalogRepository.findByStudentIdxAndCourseIdx(student, course);
-		catalogRepository.deleteById(catalog.getIdx());
+		if(catalog != null) {
+			catalogRepository.deleteById(catalog.getIdx());
+		}else {
+			throw new Exception.ArgumentNullException("Catalog with " + student.getId() + " and " + course.getTitle() + " is not valid");
+		}
 	}
 	
 	public Catalog findOne(Long catalogIdx) throws NotFoundException {

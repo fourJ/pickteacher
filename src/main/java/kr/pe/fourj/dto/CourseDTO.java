@@ -15,7 +15,6 @@ public class CourseDTO {
 		private String type;
 		private Date openDate;
 		private Date closeDate;
-		private String status;
 		private Integer headCount;
 		private Integer tuition;
 		private String target;
@@ -29,7 +28,6 @@ public class CourseDTO {
 		private Date openDate;
 		private Date closeDate;
 		private String type;
-		private String status;
 		private Integer tuition;
 		private String target;
 	}
