@@ -3,6 +3,8 @@ package kr.pe.fourj.controller;
 import java.util.Date;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,17 +32,19 @@ public class CourseController {
 	
 	//강의 저장
 	@PostMapping("/course")
-	public ResponseDTO.Create saveCourse(@RequestBody CourseDTO.Create dto) {
+	public ResponseDTO.Create saveCourse(HttpServletRequest request, @RequestBody CourseDTO.Create dto) {
 		System.out.println("-- 강의 저장 시도 --");
 		
 		boolean result = false;
 		Long saveId = null;
-		try {
-			Teacher teacher = teacherService.findOne(dto.getTeacherIdx());
+		if(request.getSession().getAttribute("teacher") != null) {
+			Object object = request.getSession().getAttribute("teacher");
+			Teacher entity = (Teacher)object;
+
 			Date now = new Date();
 			System.out.println("현재 시간 : " + now);
 			String status = "";
-			
+
 			if(now.getTime() <= dto.getOpenDate().getTime()) {
 				status = "미개강";
 			}else if(now.getTime() >= dto.getOpenDate().getTime() && now.getTime() <= dto.getCloseDate().getTime()) {
@@ -48,9 +52,9 @@ public class CourseController {
 			}else {
 				status = "마감";
 			}
-			
+
 			try {
-				saveId = courseService.saveCourse(new Course(teacher, 
+				saveId = courseService.saveCourse(new Course(entity, 
 															 dto.getTitle(), dto.getSubject(), 
 															 dto.getSchedule(), dto.getType(), 
 															 dto.getOpenDate(), dto.getCloseDate(), 
@@ -60,8 +64,6 @@ public class CourseController {
 			} catch (ArgumentNullException e) {
 				e.printStackTrace();
 			}
-		} catch (NotFoundException e) {
-			e.printStackTrace();
 		}
 		
 		return new ResponseDTO.Create(saveId, result);
@@ -69,15 +71,27 @@ public class CourseController {
 
 	//강의 수정
 	@PutMapping("/course")
-	public ResponseDTO.Update updateCourse(@RequestBody CourseDTO.Update dto) {
+	public ResponseDTO.Update updateCourse(HttpServletRequest request, @RequestBody CourseDTO.Update dto) {
 		System.out.println("-- 강의 수정 시도 --");
 		
 		boolean result = false;
-		try {
-			courseService.updateCourse(dto);
-			result = true;
-		} catch (NotFoundException e) {
-			e.printStackTrace();
+		if(request.getSession().getAttribute("teacher") != null) {
+			Object object = request.getSession().getAttribute("teacher");
+			Teacher entity = (Teacher)object;
+			
+			List<Course> courseList = entity.getCourseList();
+			
+			for(Course c : courseList) {
+				if(c.getIdx() == dto.getIdx()) {
+					try {
+						courseService.updateCourse(dto);
+						result = true;
+					} catch (NotFoundException e) {
+						e.printStackTrace();
+					}
+					break;
+				}
+			}
 		}
 
 		return new ResponseDTO.Update(result);
@@ -85,20 +99,33 @@ public class CourseController {
 
 	//강의 삭제
 	@DeleteMapping("/course")
-	public ResponseDTO.Delete deleteCourse(@RequestBody CourseDTO.Delete dto) {
+	public ResponseDTO.Delete deleteCourse(HttpServletRequest request, @RequestBody CourseDTO.Delete dto) {
 		System.out.println("-- 강의 삭제 시도 --");
 		
 		boolean result = false;
-		try {
-			courseService.deleteCourse(dto);
-			result = true;
-		} catch (NotFoundException e) {
-			e.printStackTrace();
+		if(request.getSession().getAttribute("teacher") != null) {
+			Object object = request.getSession().getAttribute("teacher");
+			Teacher entity = (Teacher)object;
+			
+			List<Course> courseList = entity.getCourseList();
+			
+			for(Course c : courseList) {
+				if(c.getIdx() == dto.getIdx()) {
+					try {
+						courseService.deleteCourse(dto);
+						result = true;
+					} catch (NotFoundException e) {
+						e.printStackTrace();
+					}
+					break;
+				}
+			}
 		}
 		
 		return new ResponseDTO.Delete(result);
 	}
 	
+	//???idx로 하는 검색이 쓰일까요???
 	//강의 단일 검색
 	@GetMapping("/course")
 	public ResponseDTO.CourseResponse findOne(@RequestBody CourseDTO.Get dto) {

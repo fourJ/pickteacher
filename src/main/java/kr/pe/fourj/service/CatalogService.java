@@ -8,23 +8,16 @@ import org.springframework.stereotype.Service;
 import kr.pe.fourj.domain.Catalog;
 import kr.pe.fourj.domain.Course;
 import kr.pe.fourj.domain.Student;
-import kr.pe.fourj.dto.CatalogDTO;
 import kr.pe.fourj.exception.Exception;
 import kr.pe.fourj.exception.Exception.ArgumentNullException;
 import kr.pe.fourj.exception.Exception.NotFoundException;
 import kr.pe.fourj.repository.CatalogRepository;
-import kr.pe.fourj.repository.CourseRepository;
-import kr.pe.fourj.repository.StudentRepository;
 
 @Service
 public class CatalogService {
 	
 	@Autowired
 	private CatalogRepository catalogRepository;
-	@Autowired
-	private StudentRepository studentRepository;
-	@Autowired
-	private CourseRepository courseRepository;
 	
 	public Long saveCatalog(Catalog catalog) throws ArgumentNullException {
 		Catalog save = null;
@@ -39,16 +32,14 @@ public class CatalogService {
 	
 	public boolean isNotAlreadyCatalog(Student student , Course course) {
 		boolean flag = false;
-		Student findStudent = studentRepository.findById(student.getIdx()).get();
-		Course findCourse = courseRepository.findById(course.getIdx()).get();
-		Catalog catalog = catalogRepository.findByStudentIdxAndCourseIdx(findStudent, findCourse);
+		Catalog catalog = catalogRepository.findByStudentIdxAndCourseIdx(student, course);
 		flag = (catalog == null)? true : false; 
 		
 		return flag;
 	}
 	
-	public void deleteCatalog(CatalogDTO.Delete dto) throws NotFoundException {
-		Catalog catalog = findOne(dto.getIdx());
+	public void deleteCatalog(Student student, Course course) throws NotFoundException {
+		Catalog catalog = catalogRepository.findByStudentIdxAndCourseIdx(student, course);
 		catalogRepository.deleteById(catalog.getIdx());
 	}
 	

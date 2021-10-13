@@ -97,36 +97,48 @@ public class TeacherController {
 
 	//선생님 수정
 	@PutMapping("/teacher")
-	public ResponseDTO.Update updateTeacher(@RequestBody TeacherDTO.Update dto) {
+	public ResponseDTO.Update updateTeacher(HttpServletRequest request, @RequestBody TeacherDTO.Update dto) {
 		System.out.println("-- 선생님 수정 시도 --");
 		
 		boolean result = false;
-		try {
-			teacherService.updateTeacher(dto);
-			result = true;
-		} catch (NotFoundException e) {
-			e.printStackTrace();
-		}		
+		if(request.getSession().getAttribute("teacher") != null) {
+			Object object = request.getSession().getAttribute("teacher");
+			Teacher entity = (Teacher)object;
+			
+			try {
+				teacherService.updateTeacher(entity, dto);
+				result = true;
+			} catch (NotFoundException e) {
+				e.printStackTrace();
+			}		
+		}
 		
 		return new ResponseDTO.Update(result);
 	}
 
 	//선생님 삭제
 	@DeleteMapping("/teacher")
-	public ResponseDTO.Delete delete(@RequestBody TeacherDTO.Delete dto) {
+	public ResponseDTO.Delete delete(HttpServletRequest request) {
 		System.out.println("-- 선생님 삭제 시도 --");
 		
 		boolean result = false;
-		try {
-			teacherService.deleteTeacher(dto);
-			result = true;
-		} catch (NotFoundException e) {
-			e.printStackTrace();
+		if(request.getSession().getAttribute("teacher") != null) {
+			Object object = request.getSession().getAttribute("teacher");
+			Teacher entity = (Teacher)object;
+			
+			try {
+				teacherService.deleteTeacher(entity);
+				request.getSession().removeAttribute("teacher"); //???선생님 삭제 후 바로 로그아웃 되도록..?
+				result = true;
+			} catch (NotFoundException e) {
+				e.printStackTrace();
+			}		
 		}
 		
 		return new ResponseDTO.Delete(result);
 	}
 	
+	//???idx로 하는 검색이 쓰일까요???
 	//선생님 단일 검색
 	@GetMapping("/teacher")
 	public ResponseDTO.TeacherResponse findOne(@RequestBody TeacherDTO.Get dto) {

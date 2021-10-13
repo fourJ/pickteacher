@@ -53,6 +53,15 @@ public class ResponseDTO {
 		}
 	}
 	
+	public static class CartToCatalogResponse extends BaseResponse {
+		Long id;
+		
+		public CartToCatalogResponse(Long id, Boolean success) {
+			super(success);
+			this.id = id;
+		}
+	}
+	
 	@Data
 	@AllArgsConstructor
 	public static class CartResponse {
@@ -149,15 +158,6 @@ public class ResponseDTO {
 	public static class TeacherListResponse {
 		Boolean success;
 		private List<Teacher> teacherList;
-	}
-	
-	@Data
-	@AllArgsConstructor
-	public static class CartToCatalogResponse {
-		Long id;
-		Boolean success;
-		private List<Cart> cartList;
-		private List<Catalog> catalogList;
 	}
 
 }
