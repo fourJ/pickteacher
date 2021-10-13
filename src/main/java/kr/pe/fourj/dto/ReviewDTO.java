@@ -4,6 +4,18 @@ import lombok.Data;
 
 public class ReviewDTO {
 	
+//	private Long idx;
+//	private Student studentIdx;
+//	private Course courseIdx;
+//	private String content;
+//	private LocalDateTime dateTime;
+//	private Integer star;
+//	
+//	public ReviewDTO() {
+//		
+//	}
+	
+	
 	@Data
 	public static class Create {
 		private Long studentIdx;

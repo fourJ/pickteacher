@@ -2,11 +2,11 @@ package kr.pe.fourj.repository;
 
 import java.util.List;
 
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import kr.pe.fourj.domain.Course;
 
-public interface CourseRepository extends CrudRepository<Course, Long>{
+public interface CourseRepository extends JpaRepository<Course, Long>{
 	
 //	Course findCourseByTitle(String title);
 //	Course findCourseByTitleContaining(String title);

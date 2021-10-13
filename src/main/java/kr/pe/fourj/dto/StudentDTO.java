@@ -12,7 +12,6 @@ public class StudentDTO {
 		private String pw;
 		private String name;
 		private Date birth;
-		private Integer age;
 		private String nickName;
 		private Integer gender;
 		private String address;
@@ -36,6 +35,7 @@ public class StudentDTO {
 	@Data
 	public static class Get {
 		private Long idx;
+		private Long courseIdx;
 	}
 
 }

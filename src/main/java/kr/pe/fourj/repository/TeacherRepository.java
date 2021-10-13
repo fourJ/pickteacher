@@ -2,11 +2,11 @@ package kr.pe.fourj.repository;
 
 import java.util.List;
 
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import kr.pe.fourj.domain.Teacher;
 
-public interface TeacherRepository extends CrudRepository<Teacher, Long>{
+public interface TeacherRepository extends JpaRepository<Teacher, Long>{
 	
 	List<Teacher> findByName(String name);
 	List<Teacher> findByNameContaining(String name);
