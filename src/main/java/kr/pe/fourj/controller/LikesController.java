@@ -1,6 +1,5 @@
 package kr.pe.fourj.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,86 +12,112 @@ import org.springframework.web.bind.annotation.RestController;
 import kr.pe.fourj.domain.Course;
 import kr.pe.fourj.domain.Likes;
 import kr.pe.fourj.domain.Student;
-import kr.pe.fourj.dto.CourseDTO;
 import kr.pe.fourj.dto.LikesDTO;
-import kr.pe.fourj.dto.StudentDTO;
-import kr.pe.fourj.repository.CourseRepository;
-import kr.pe.fourj.repository.LikesRepository;
-import kr.pe.fourj.repository.StudentRepository;
+import kr.pe.fourj.dto.ResponseDTO;
+import kr.pe.fourj.exception.Exception.ArgumentNullException;
+import kr.pe.fourj.exception.Exception.NotFoundException;
+import kr.pe.fourj.service.CourseService;
+import kr.pe.fourj.service.LikesService;
+import kr.pe.fourj.service.StudentService;
 
 @RestController
 public class LikesController {
-
-	@Autowired
-	private LikesRepository likesRepository;
 	
 	@Autowired
-	private StudentRepository studentRepository;
-	
+	private LikesService likesService;
 	@Autowired
-	private CourseRepository courseRepository;
+	private StudentService studentService;
+	@Autowired
+	private CourseService courseService;
 	
 	
-	//좋아요 추가
+	//좋아요 저장
 	@PostMapping("/likes")
-	public String saveLikes(@RequestBody LikesDTO.Create dto) {
-		System.out.println("-- 좋아요 추가 시도--");
-		Student student = studentRepository.findById(dto.getStudentIdx()).get();
-		Course course = courseRepository.findById(dto.getCourseIdx()).get();
+	public ResponseDTO.Create saveLikes(@RequestBody LikesDTO.Create dto) {
+		System.out.println("-- 좋아요 저장 시도 --");
 		
-		if( isNotAlreadyLikes(student, course)) {
-			likesRepository.save(new Likes(student,course));
-			return "저장 성공";
-		}else {
-			return "저장실패";
-		}	
+		boolean result = false;
+		Long saveId = null;
+		try {
+			Student student = studentService.findOne(dto.getStudentIdx());
+			Course course = courseService.findOne(dto.getCourseIdx());
+			
+			if(likesService.isNotAlreadyLikes(student, course)) {
+				try {
+					saveId = likesService.saveLikes(new Likes(student, course));
+					result = true;
+				} catch (ArgumentNullException e) {
+					e.printStackTrace();
+				}
+			}	
+		} catch (NotFoundException e) {
+			e.printStackTrace();
+		}
+		
+		return new ResponseDTO.Create(saveId, result);
 	}
-	
-	private boolean isNotAlreadyLikes(Student studentDTO , Course courseDTO) {
-		boolean flag = false;
-		Student student = studentRepository.findById(studentDTO.getIdx()).get();
-		Course course = courseRepository.findById(courseDTO.getIdx()).get();
-        Likes likes = likesRepository.findByStudentIdxAndCourseIdx(student, course);
-        if(likes == null) flag = true;
-        else if(likes != null) flag = false;
-        return flag;
-    }
-
 	
 	//좋아요 삭제
 	@DeleteMapping("/likes")
-	public String deleteLikes(@RequestBody LikesDTO.Get dto, StudentDTO.Get studentDto, CourseDTO.Get courseDto) {
-		System.out.println("좋아요 삭제 시도");
+	public ResponseDTO.Delete deleteLikes(@RequestBody LikesDTO.Delete dto) {
+		System.out.println("-- 좋아요 삭제 시도 --");
 
-		if(dto.getStudentIdx()==studentDto.getIdx() || dto.getCourseIdx()==courseDto.getIdx()) {
-			likesRepository.deleteById(dto.getIdx());
-			return "삭제 성공!";
+		boolean result = false;
+		if(true) { //이 부분에 세션에서 정보 빼와서 dto 값과 확인 조건 필요
+			try {
+				likesService.deleteLikes(dto);
+				result = true;
+			} catch (NotFoundException e) {
+				e.printStackTrace();
+			}
 		}
-		return "삭제 실패!";
+		
+		return new ResponseDTO.Delete(result);
 	}
 	
-	//좋아요 단일 조회
+	//좋아요 단일 검색
 	@GetMapping("/likes")
-	public Likes findOne(@RequestBody LikesDTO.Get dto) {
-//	public Likes findOne(@RequestParam Long id) {
-		System.out.println("--좋아요 단일 검색 시도--");
+	public ResponseDTO.LikesResponse findOne(@RequestBody LikesDTO.Get dto) {
+		System.out.println("-- 좋아요 단일 검색 시도 --");
 		
-		return likesRepository.findById(dto.getIdx()).get();
+		boolean result = false;
+		Likes likes = null;
+		try {
+			likes = likesService.findOne(dto.getIdx());
+			result = true;
+		} catch (NotFoundException e) {
+			e.printStackTrace();
+		}
 		
-//		return likesRepository.findById(id).get();
+		return new ResponseDTO.LikesResponse(result, likes);
 	}
 	
-	//좋아요 전체보기
+	//좋아요 리스트 전체 검색
 	@GetMapping("/likesall")
-	public List<Likes> findAll(){
-		System.out.println("좋아요 전체 검색 시도");
-		List<Likes> likesList = new ArrayList<Likes>();
-		likesRepository.findAll().forEach(e -> likesList.add(e));
+	public ResponseDTO.LikesListResponse findAll(){
+		System.out.println("-- 좋아요 리스트 전체 검색 시도 --");
 		
-		return likesList;
+		List<Likes> likesList = likesService.findAll();
+		
+		return new ResponseDTO.LikesListResponse(true, likesList);
 	}
 	
-	
-	
-	
+	//특정 학생이 누른 좋아요 리스트 검색
+	@GetMapping("/likes/studentidx")
+	public ResponseDTO.LikesListResponse findAllByStudentIdx(@RequestBody LikesDTO.Get dto) {
+		System.out.println("-- 특정 학생이 누른 좋아요 리스트 전체 검색 시도 --");
+		
+		boolean result = false;
+		List<Likes> likesList = null;
+		try {
+			Student student = studentService.findOne(dto.getStudentIdx());
+			likesList = student.getLikesList();
+			result = true;
+		} catch (NotFoundException e) {
+			e.printStackTrace();
+		}
+		
+		return new ResponseDTO.LikesListResponse(result, likesList);
+	}
+
 }

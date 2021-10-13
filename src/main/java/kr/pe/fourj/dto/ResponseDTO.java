@@ -2,8 +2,10 @@ package kr.pe.fourj.dto;
 
 import java.util.List;
 
+import kr.pe.fourj.domain.Cart;
 import kr.pe.fourj.domain.Catalog;
 import kr.pe.fourj.domain.Course;
+import kr.pe.fourj.domain.Likes;
 import kr.pe.fourj.domain.Review;
 import kr.pe.fourj.domain.Student;
 import kr.pe.fourj.domain.Teacher;
@@ -41,6 +43,20 @@ public class ResponseDTO {
 	
 	@Data
 	@AllArgsConstructor
+	public static class CartResponse {
+		Boolean success;
+		private Cart cart;
+	}
+	
+	@Data
+	@AllArgsConstructor
+	public static class CartListResponse {
+		Boolean success;
+		private List<Cart> cartList;
+	}
+	
+	@Data
+	@AllArgsConstructor
 	public static class CatalogResponse {
 		Boolean success;
 		private Catalog catalog;
@@ -65,6 +81,20 @@ public class ResponseDTO {
 	public static class CourseListResponse {
 		Boolean success;
 		private List<Course> courseList;
+	}
+	
+	@Data
+	@AllArgsConstructor
+	public static class LikesResponse {
+		Boolean success;
+		private Likes likes;
+	}
+	
+	@Data
+	@AllArgsConstructor
+	public static class LikesListResponse {
+		Boolean success;
+		private List<Likes> likesList;
 	}
 	
 	@Data
@@ -107,5 +137,14 @@ public class ResponseDTO {
 	public static class TeacherListResponse {
 		Boolean success;
 		private List<Teacher> teacherList;
+	}
+	
+	@Data
+	@AllArgsConstructor
+	public static class CartToCatalogResponse {
+		Long id;
+		Boolean success;
+		private List<Cart> cartList;
+		private List<Catalog> catalogList;
 	}
 }
