@@ -1,5 +1,6 @@
 package kr.pe.fourj.service;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,22 +30,48 @@ public class CourseService {
 		return save.getIdx();
 	}
 	
-	public void updateCourse(CourseDTO.Update dto) throws NotFoundException {
-		Course course = findOne(dto.getIdx());
+	public void updateCourse(Long courseIdx, CourseDTO.Update dto) throws NotFoundException {
+		Course course = findOne(courseIdx);
 		
+		course.setTitle(dto.getTitle());
 		course.setSchedule(dto.getSchedule());
 		course.setOpenDate(dto.getOpenDate());
 		course.setCloseDate(dto.getCloseDate());
+		course.setStatus(calculateStatus(dto.getOpenDate(), dto.getCloseDate()));
 		course.setType(dto.getType());
-		course.setStatus(dto.getStatus());
 		course.setTuition(dto.getTuition());
 		course.setTarget(dto.getTarget());
 		
 		courseRepository.save(course);
 	}
 	
-	public void deleteCourse(CourseDTO.Delete dto) throws NotFoundException {
-		Course course = findOne(dto.getIdx());
+	public String calculateStatus(Date openDate, Date closeDate) {
+		Date now = new Date();
+		System.out.println("현재 시간 : " + now);
+		String status = null;
+
+		if(now.getTime() <= openDate.getTime()) {
+			status = "미개강";
+		}else if(now.getTime() >= openDate.getTime() && now.getTime() <= closeDate.getTime()) {
+			status = "진행중";
+		}else {
+			status = "마감";
+		}
+		
+		return status;
+	}
+
+	public boolean checkStatus(Course course) {
+		Date now = new Date();
+		boolean check = false;
+		if(!course.getStatus().equals("마감") && now.getTime() <= course.getCloseDate().getTime()) {
+			check = true;
+		}
+		return check;
+	}
+	
+	public void deleteCourse(Long courseIdx, CourseDTO.Delete dto) throws NotFoundException {
+		Course course = findOne(courseIdx);
 		courseRepository.deleteById(course.getIdx());
 	}
 	
@@ -58,7 +85,8 @@ public class CourseService {
 		return courseRepository.findAll();
 	}
 	
-	public List<Course> findAllByTitle(String title) {
-		return courseRepository.findCourseListByTitleContaining(title);
+	public List<Course> findAllByTitleContaining(CourseDTO.Get dto) {
+		return courseRepository.findCourseListByTitleContaining(dto.getTitle());
 	}
+	
 }

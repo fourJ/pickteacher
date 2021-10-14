@@ -6,7 +6,6 @@ public class CartDTO {
 	
 	@Data
 	public static class Create {
-		private Long studentIdx;
 		private Long courseIdx;
 	}
 	
@@ -17,7 +16,6 @@ public class CartDTO {
 	
 	@Data
 	public static class Get {
-		private Long studentIdx;
 		private Long courseIdx;
 	}
 }

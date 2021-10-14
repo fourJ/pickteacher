@@ -59,7 +59,7 @@ public class TeacherController {
 		boolean result = false;
 		Teacher teacher = teacherService.findTeacherById(dto.getId());
 		if(teacher != null) {
-			if(teacher.getPw().equals(dto.getPw())) {
+			if(teacher.getPw().equals(dto.getPw()) && request.getSession().getAttribute("teacher") == null) {
 				request.getSession().setAttribute("teacher", teacher);
 
 				Object object = request.getSession().getAttribute("teacher");
@@ -69,7 +69,11 @@ public class TeacherController {
 
 				result = true;
 				System.out.println(entity.getId() + " " + entity.getPw() + " " + "로그인 성공!");
+			}else {
+				System.out.println("로그인 실패! : 패스워드를 다시 확인해주세요. 중복 로그인은 불가합니다.");
 			}
+		}else {
+			System.out.println("로그인 실패! : 등록되지 않은 회원입니다.");
 		}
 
 		return new ResponseDTO.Login(result);
@@ -90,6 +94,8 @@ public class TeacherController {
 			System.out.println(entity.getId() + " " + entity.getPw() + " " + "로그아웃 성공!");
 			request.getSession().removeAttribute("teacher");
 			result = true;
+		}else {
+			System.out.println("로그아웃 실패! : 로그인이 되어있지 않은 상태에서는 로그아웃이 불가합니다.");
 		}
 
 		return new ResponseDTO.Logout(result);
@@ -106,11 +112,13 @@ public class TeacherController {
 			Teacher entity = (Teacher)object;
 			
 			try {
-				teacherService.updateTeacher(entity, dto);
+				teacherService.updateTeacher(entity.getIdx(), dto);
 				result = true;
 			} catch (NotFoundException e) {
 				e.printStackTrace();
 			}		
+		}else {
+			System.out.println("로그인 정보가 없습니다. 로그인이 필요한 기능입니다.");
 		}
 		
 		return new ResponseDTO.Update(result);
@@ -127,12 +135,14 @@ public class TeacherController {
 			Teacher entity = (Teacher)object;
 			
 			try {
-				teacherService.deleteTeacher(entity);
-				request.getSession().removeAttribute("teacher"); //???선생님 삭제 후 바로 로그아웃 되도록..?
+				teacherService.deleteTeacher(entity.getIdx());
+				request.getSession().removeAttribute("teacher"); //선생님 삭제 후 바로 로그아웃 되도록
 				result = true;
 			} catch (NotFoundException e) {
 				e.printStackTrace();
 			}		
+		}else {
+			System.out.println("로그인 정보가 없습니다. 로그인이 필요한 기능입니다.");
 		}
 		
 		return new ResponseDTO.Delete(result);

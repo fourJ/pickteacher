@@ -1,6 +1,5 @@
 package kr.pe.fourj.controller;
 
-import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -41,29 +40,27 @@ public class CourseController {
 			Object object = request.getSession().getAttribute("teacher");
 			Teacher entity = (Teacher)object;
 
-			Date now = new Date();
-			System.out.println("현재 시간 : " + now);
-			String status = "";
-
-			if(now.getTime() <= dto.getOpenDate().getTime()) {
-				status = "미개강";
-			}else if(now.getTime() >= dto.getOpenDate().getTime() && now.getTime() <= dto.getCloseDate().getTime()) {
-				status = "진행중";
-			}else {
-				status = "마감";
-			}
-
+			String status = courseService.calculateStatus(dto.getOpenDate(), dto.getCloseDate());
+			
 			try {
-				saveId = courseService.saveCourse(new Course(entity, 
-															 dto.getTitle(), dto.getSubject(), 
-															 dto.getSchedule(), dto.getType(), 
-															 dto.getOpenDate(), dto.getCloseDate(), 
-															 status, dto.getHeadCount(), 
-															 dto.getTuition(), dto.getTarget()));
-				result = true;
-			} catch (ArgumentNullException e) {
-				e.printStackTrace();
+				Teacher teacher = teacherService.findOne(entity.getIdx());
+				
+				try {
+					saveId = courseService.saveCourse(new Course(teacher, 
+																 dto.getTitle(), dto.getSubject(), 
+																 dto.getSchedule(), dto.getType(), 
+																 dto.getOpenDate(), dto.getCloseDate(), 
+																 status, dto.getHeadCount(), 
+																 dto.getTuition(), dto.getTarget()));
+					result = true;
+				} catch (ArgumentNullException e) {
+					e.printStackTrace();
+				}
+			} catch (NotFoundException e1) {
+				e1.printStackTrace();
 			}
+		}else {
+			System.out.println("로그인 정보가 없습니다. 로그인이 필요한 기능입니다.");
 		}
 		
 		return new ResponseDTO.Create(saveId, result);
@@ -79,19 +76,21 @@ public class CourseController {
 			Object object = request.getSession().getAttribute("teacher");
 			Teacher entity = (Teacher)object;
 			
-			List<Course> courseList = entity.getCourseList();
-			
-			for(Course c : courseList) {
-				if(c.getIdx() == dto.getIdx()) {
-					try {
-						courseService.updateCourse(dto);
-						result = true;
-					} catch (NotFoundException e) {
-						e.printStackTrace();
-					}
-					break;
+			try {
+				Teacher teacher = teacherService.findOne(entity.getIdx());
+				Course course = courseService.findOne(dto.getIdx());
+				
+				if(course.getTeacherIdx().getIdx() == teacher.getIdx()) {
+					courseService.updateCourse(course.getIdx(), dto);
+					result = true;
+				}else {
+					System.out.println("본인의 강의만 수정할 수 있습니다.");
 				}
+			} catch (NotFoundException e1) {
+				e1.printStackTrace();
 			}
+		}else {
+			System.out.println("로그인 정보가 없습니다. 로그인이 필요한 기능입니다.");
 		}
 
 		return new ResponseDTO.Update(result);
@@ -107,19 +106,21 @@ public class CourseController {
 			Object object = request.getSession().getAttribute("teacher");
 			Teacher entity = (Teacher)object;
 			
-			List<Course> courseList = entity.getCourseList();
-			
-			for(Course c : courseList) {
-				if(c.getIdx() == dto.getIdx()) {
-					try {
-						courseService.deleteCourse(dto);
-						result = true;
-					} catch (NotFoundException e) {
-						e.printStackTrace();
-					}
-					break;
+			try {
+				Teacher teacher = teacherService.findOne(entity.getIdx());
+				Course course = courseService.findOne(dto.getIdx());
+				
+				if(course.getTeacherIdx().getIdx() == teacher.getIdx()) {
+					courseService.deleteCourse(course.getIdx(), dto);
+					result = true;
+				}else {
+					System.out.println("본인의 강의만 삭제할 수 있습니다.");
 				}
+			} catch (NotFoundException e1) {
+				e1.printStackTrace();
 			}
+		}else {
+			System.out.println("로그인 정보가 없습니다. 로그인이 필요한 기능입니다.");
 		}
 		
 		return new ResponseDTO.Delete(result);
@@ -154,28 +155,35 @@ public class CourseController {
 	}
 	
 	//특정 강의 제목으로 강의 리스트 검색
-	@GetMapping("/course/title")
-	public ResponseDTO.CourseListResponse findAllCourseByTitle(@RequestBody CourseDTO.Get dto) {
-		System.out.println("-- 특정 강의 제목으로 강의 리스트 검색 시도 --");
+	@GetMapping("/course/titlecontaining")
+	public ResponseDTO.CourseListResponse findAllCourseByTitleContaining(@RequestBody CourseDTO.Get dto) {
+		System.out.println("-- 강의 제목이 " + dto.getTitle() + "인 강의 리스트 검색 시도 --");
 		
-		List<Course> courseList = courseService.findAllByTitle(dto.getTitle());
+		List<Course> courseList = courseService.findAllByTitleContaining(dto);
 
 		return new ResponseDTO.CourseListResponse(true, courseList);
 	}
 
-	//특정 선생님의 강의 리스트 검색
+	//특정 선생님(자신)의 강의 리스트 검색
 	@GetMapping("/course/teacherIdx")
-	public ResponseDTO.CourseListResponse findAllByTeacherIdx(@RequestBody CourseDTO.Get dto) {
+	public ResponseDTO.CourseListResponse findAllByTeacherIdx(HttpServletRequest request) {
 		System.out.println("-- 특정 선생님의 강의 리스트 검색 시도 --");
 		
 		boolean result = false;
 		List<Course> courseList = null;
-		try {
-			Teacher teacher = teacherService.findOne(dto.getTeacherIdx());
-			courseList = teacher.getCourseList();
-			result = true;
-		} catch (NotFoundException e) {
-			e.printStackTrace();
+		if(request.getSession().getAttribute("teacher") != null) {
+			Object object = request.getSession().getAttribute("teacher");
+			Teacher entity = (Teacher)object;
+			
+			try {
+				Teacher teacher = teacherService.findOne(entity.getIdx());
+				courseList = teacher.getCourseList();
+				result = true;
+			} catch (NotFoundException e) {
+				e.printStackTrace();
+			}
+		}else {
+			System.out.println("로그인 정보가 없습니다. 로그인이 필요한 기능입니다.");
 		}
 		
 		return new ResponseDTO.CourseListResponse(result, courseList);

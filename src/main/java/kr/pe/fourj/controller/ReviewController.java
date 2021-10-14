@@ -22,12 +22,15 @@ import kr.pe.fourj.exception.Exception.ArgumentNullException;
 import kr.pe.fourj.exception.Exception.NotFoundException;
 import kr.pe.fourj.service.CourseService;
 import kr.pe.fourj.service.ReviewService;
+import kr.pe.fourj.service.StudentService;
 
 @RestController
 public class ReviewController {
 	
 	@Autowired
 	private ReviewService reviewService;
+	@Autowired
+	private StudentService studentService;
 	@Autowired
 	private CourseService courseService;
 	
@@ -43,18 +46,25 @@ public class ReviewController {
 			Student entity = (Student)object;
 			
 			try {
+				Student student = studentService.findOne(entity.getIdx());
 				Course course = courseService.findOne(dto.getCourseIdx());
 				LocalDateTime dateTime = LocalDateTime.now();
-
-				try {
-					saveId = reviewService.saveReview(new Review(entity, course, dto.getContent(), dateTime, dto.getStar()));
-					result = true;
-				} catch (ArgumentNullException e) {
-					e.printStackTrace();
+				
+				if(reviewService.isNotAlreadyReview(student, course)) {
+					try {
+						saveId = reviewService.saveReview(new Review(student, course, dto.getContent(), dateTime, dto.getStar()));
+						result = true;
+					} catch (ArgumentNullException e) {
+						e.printStackTrace();
+					}
+				}else {
+					System.out.println("동일한 강의에는 최대 한번만 리뷰를 작성할 수 있습니다.");
 				}
 			} catch (NotFoundException e) {
 				e.printStackTrace();
 			}
+		}else {
+			System.out.println("로그인 정보가 없습니다. 로그인이 필요한 기능입니다.");
 		}
 
 		return new ResponseDTO.Create(saveId, result);
@@ -69,20 +79,22 @@ public class ReviewController {
 		if(request.getSession().getAttribute("student") != null) {
 			Object object = request.getSession().getAttribute("student");
 			Student entity = (Student)object;
-			
-			List<Review> reviewList = entity.getReviewList();
-			
-			for(Review r : reviewList) {
-				if(r.getIdx() == dto.getIdx()) {
-					try {
-						reviewService.updateReview(dto);
-						result = true;
-					} catch (NotFoundException e) {
-						e.printStackTrace();
-					}
-					break;
+
+			try {
+				Student student = studentService.findOne(entity.getIdx());
+				Course course = courseService.findOne(dto.getCourseIdx());
+				
+				if(!reviewService.isNotAlreadyReview(student, course)) {
+					reviewService.updateReview(student, course, dto);
+					result = true;
+				}else {
+						System.out.println("본인이 작성한 리뷰만 수정할 수 있습니다. 존재하는 리뷰인지 확인하세요.");
 				}
+			} catch (NotFoundException e) {
+				e.printStackTrace();
 			}
+		}else {
+			System.out.println("로그인 정보가 없습니다. 로그인이 필요한 기능입니다.");
 		}
 		
 		return new ResponseDTO.Update(result);
@@ -98,24 +110,27 @@ public class ReviewController {
 			Object object = request.getSession().getAttribute("student");
 			Student entity = (Student)object;
 			
-			List<Review> reviewList = entity.getReviewList();
-			
-			for(Review r : reviewList) {
-				if(r.getIdx() == dto.getIdx()) {
-					try {
-						reviewService.deleteReview(dto);
+				try {
+					Student student = studentService.findOne(entity.getIdx());
+					Course course = courseService.findOne(dto.getCourseIdx());
+					
+					if(!reviewService.isNotAlreadyReview(student, course)) {
+						reviewService.deleteReview(student, course);
 						result = true;
-					} catch (NotFoundException e) {
-						e.printStackTrace();
+					}else {
+							System.out.println("본인이 작성한 리뷰만 삭제할 수 있습니다. 존재하는 리뷰인지 확인하세요.");
 					}
-					break;
+				} catch (NotFoundException e) {
+					e.printStackTrace();
 				}
-			}
+		}else {
+			System.out.println("로그인 정보가 없습니다. 로그인이 필요한 기능입니다.");
 		}
 		
 		return new ResponseDTO.Delete(result);
 	}
 
+	//???idx로 하는 검색이 쓰일까요???
 	//후기 단일 검색
 	@GetMapping("/review")
 	public ResponseDTO.ReviewResponse findOne(@RequestBody ReviewDTO.Get dto) {
@@ -145,7 +160,7 @@ public class ReviewController {
 	
 	//특정 학생(자신)이 작성한 후기 리스트 검색
 	@GetMapping("/review/studentidx")
-	public ResponseDTO.ReviewListResponse findAllByStudentIdx(HttpServletRequest request, @RequestBody ReviewDTO.Get dto) {
+	public ResponseDTO.ReviewListResponse findAllByStudentIdx(HttpServletRequest request) {
 		System.out.println("-- 특정 학생이 작성한 후기 리스트 검색 시도 --");
 		
 		boolean result = false;
@@ -153,8 +168,16 @@ public class ReviewController {
 		if(request.getSession().getAttribute("student") != null) {
 			Object object = request.getSession().getAttribute("student");
 			Student entity = (Student)object;
-			reviewList = entity.getReviewList();
-			result = true;
+			
+			try {
+				Student student = studentService.findOne(entity.getIdx());
+				reviewList = student.getReviewList();
+				result = true;
+			} catch (NotFoundException e) {
+				e.printStackTrace();
+			}
+		}else {
+			System.out.println("로그인 정보가 없습니다. 로그인이 필요한 기능입니다.");
 		}
 		
 		return new ResponseDTO.ReviewListResponse(result, reviewList);

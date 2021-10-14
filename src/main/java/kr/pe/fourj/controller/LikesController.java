@@ -20,12 +20,15 @@ import kr.pe.fourj.exception.Exception.ArgumentNullException;
 import kr.pe.fourj.exception.Exception.NotFoundException;
 import kr.pe.fourj.service.CourseService;
 import kr.pe.fourj.service.LikesService;
+import kr.pe.fourj.service.StudentService;
 
 @RestController
 public class LikesController {
 	
 	@Autowired
 	private LikesService likesService;
+	@Autowired
+	private StudentService studentService;
 	@Autowired
 	private CourseService courseService;
 	
@@ -42,19 +45,24 @@ public class LikesController {
 			Student entity = (Student)object;
 
 			try {
+				Student student = studentService.findOne(entity.getIdx());
 				Course course = courseService.findOne(dto.getCourseIdx());
 
-				if(likesService.isNotAlreadyLikes(entity, course)) {
+				if(likesService.isNotAlreadyLikes(student, course)) {
 					try {
-						saveId = likesService.saveLikes(new Likes(entity, course));
+						saveId = likesService.saveLikes(new Likes(student, course));
 						result = true;
 					} catch (ArgumentNullException e) {
 						e.printStackTrace();
 					}
-				}	
+				}else {
+					System.out.println("동일한 강의에는 최대 한번만 좋아요를 누를 수 있습니다.");
+				}
 			} catch (NotFoundException e) {
 				e.printStackTrace();
 			}
+		}else {
+			System.out.println("로그인 정보가 없습니다. 로그인이 필요한 기능입니다.");
 		}
 		
 		return new ResponseDTO.Create(saveId, result);
@@ -71,18 +79,25 @@ public class LikesController {
 			Student entity = (Student)object;
 			
 			try {
+				Student student = studentService.findOne(entity.getIdx());
 				Course course = courseService.findOne(dto.getCourseIdx());
-				likesService.deleteLikes(entity, course);
-				result = true;
+				try {
+					likesService.deleteLikes(student, course);
+					result = true;
+				} catch (ArgumentNullException e) {
+					e.printStackTrace();
+				}
 			} catch (NotFoundException e) {
 				e.printStackTrace();
 			}
+		}else {
+			System.out.println("로그인 정보가 없습니다. 로그인이 필요한 기능입니다.");
 		}
 		
 		return new ResponseDTO.Delete(result);
 	}
 	
-	//???쓰일까요???
+	//???idx로 하는 검색이 쓰일까요???
 	//좋아요 단일 검색
 	@GetMapping("/likes")
 	public ResponseDTO.LikesResponse findOne(@RequestBody LikesDTO.Get dto) {
@@ -121,8 +136,16 @@ public class LikesController {
 		if(request.getSession().getAttribute("student") != null) {
 			Object object = request.getSession().getAttribute("student");
 			Student entity = (Student)object;
-			likesList = entity.getLikesList();
-			result = true;
+			
+			try {
+				Student student = studentService.findOne(entity.getIdx());
+				likesList = student.getLikesList();
+				result = true;
+			} catch (NotFoundException e) {
+				e.printStackTrace();
+			}
+		}else {
+			System.out.println("로그인 정보가 없습니다. 로그인이 필요한 기능입니다.");
 		}
 		
 		return new ResponseDTO.LikesListResponse(result, likesList);

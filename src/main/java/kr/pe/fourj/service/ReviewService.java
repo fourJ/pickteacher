@@ -6,7 +6,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import kr.pe.fourj.domain.Course;
 import kr.pe.fourj.domain.Review;
+import kr.pe.fourj.domain.Student;
 import kr.pe.fourj.dto.ReviewDTO;
 import kr.pe.fourj.exception.Exception;
 import kr.pe.fourj.exception.Exception.ArgumentNullException;
@@ -30,8 +32,16 @@ public class ReviewService {
 		return save.getIdx();
 	}
 	
-	public void updateReview(ReviewDTO.Update dto) throws NotFoundException {
-		Review review = findOne(dto.getIdx());
+	public boolean isNotAlreadyReview(Student student, Course course) {
+		boolean flag = false;
+        Review review = reviewRepository.findByStudentIdxAndCourseIdx(student, course);
+        flag = (review == null)? true : false; 
+        
+        return flag;
+    }
+	
+	public void updateReview(Student student, Course course, ReviewDTO.Update dto) throws NotFoundException {
+		Review review = reviewRepository.findByStudentIdxAndCourseIdx(student, course);
 		LocalDateTime dateTime = LocalDateTime.now();
 
 		review.setContent(dto.getContent());
@@ -41,8 +51,8 @@ public class ReviewService {
 		reviewRepository.save(review);
 	}
 	
-	public void deleteReview(ReviewDTO.Delete dto) throws NotFoundException {
-		Review review = findOne(dto.getIdx());
+	public void deleteReview(Student student, Course course) throws NotFoundException {
+		Review review = reviewRepository.findByStudentIdxAndCourseIdx(student, course);
 		reviewRepository.deleteById(review.getIdx());
 	}
 	

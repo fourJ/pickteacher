@@ -21,12 +21,15 @@ import kr.pe.fourj.exception.Exception.ArgumentNullException;
 import kr.pe.fourj.exception.Exception.NotFoundException;
 import kr.pe.fourj.service.CatalogService;
 import kr.pe.fourj.service.CourseService;
+import kr.pe.fourj.service.StudentService;
 
 @RestController
 public class CatalogController {
 	
 	@Autowired
 	private CatalogService catalogService;
+	@Autowired
+	private StudentService studentService;
 	@Autowired
 	private CourseService courseService;
 	
@@ -42,20 +45,25 @@ public class CatalogController {
 			Student entity = (Student)object;
 			
 			try {
+				Student student = studentService.findOne(entity.getIdx());
 				Course course = courseService.findOne(dto.getCourseIdx());
 				LocalDateTime dateTime = LocalDateTime.now();
 				
-				if(catalogService.isNotAlreadyCatalog(entity, course)) {
+				if(catalogService.isNotAlreadyCatalog(student, course) && courseService.checkStatus(course) && course.getHeadCount() > catalogService.findAllByCourseIdx(course).size()) {
 					try {
-						saveId = catalogService.saveCatalog(new Catalog(entity, course, dateTime));
+						saveId = catalogService.saveCatalog(new Catalog(student, course, dateTime));
 						result = true;
 					} catch (ArgumentNullException e) {
 						e.printStackTrace();
 					}
+				}else {
+					System.out.println("동일한 강의를 이미 수강신청 하셨거나, 마감일이 지났거나, 정원이 다 찼습니다.");
 				}
 			} catch (NotFoundException e) {
 				e.printStackTrace();
 			}
+		}else {
+			System.out.println("로그인 정보가 없습니다. 로그인이 필요한 기능입니다.");
 		}
 		
 		return new ResponseDTO.Create(saveId, result);
@@ -72,12 +80,19 @@ public class CatalogController {
 			Student entity = (Student)object;
 			
 			try {
+				Student student = studentService.findOne(entity.getIdx());
 				Course course = courseService.findOne(dto.getCourseIdx());
-				catalogService.deleteCatalog(entity, course);
-				result = true;
+				try {
+					catalogService.deleteCatalog(student, course);
+					result = true;
+				} catch (ArgumentNullException e) {
+					e.printStackTrace();
+				}
 			} catch (NotFoundException e) {
 				e.printStackTrace();
 			}
+		}else {
+			System.out.println("로그인 정보가 없습니다. 로그인이 필요한 기능입니다.");
 		}
 		
 		return new ResponseDTO.Delete(result);
@@ -86,7 +101,7 @@ public class CatalogController {
 	//???쓰일까요???
 	//수강 내역 단일 검색
 	@GetMapping("/catalog")
-	public ResponseDTO.CatalogResponse findOneCatalog(@RequestBody CatalogDTO.Get dto) {
+	public ResponseDTO.CatalogResponse findOne(@RequestBody CatalogDTO.Get dto) {
 		System.out.println("-- 수강 내역 단일 검색 시도 --");
 		
 		boolean result = false;
@@ -104,7 +119,7 @@ public class CatalogController {
 	//???쓰일까요???
 	//수강 내역 전체 검색
 	@GetMapping("/catalogall")
-	public ResponseDTO.CatalogListResponse findAllCatalog() {
+	public ResponseDTO.CatalogListResponse findAll() {
 		System.out.println("-- 수강 내역 전체 검색 시도 --");
 		
 		List<Catalog> catalogList = catalogService.findAll();
@@ -114,7 +129,7 @@ public class CatalogController {
 	
 	//특정 학생(자신) id로 수강 내역 검색
 	@GetMapping("/catalog/studentidx")
-	public ResponseDTO.CatalogListResponse findAllByStudentIdx(HttpServletRequest request, @RequestBody CatalogDTO.Get dto) {
+	public ResponseDTO.CatalogListResponse findAllByStudentIdx(HttpServletRequest request) {
 		System.out.println("-- 특정 학생이 수강한 내역 검색 시도 --");
 		
 		boolean result = false;
@@ -122,8 +137,16 @@ public class CatalogController {
 		if(request.getSession().getAttribute("student") != null) {
 			Object object = request.getSession().getAttribute("student");
 			Student entity = (Student)object;
-			catalogList = entity.getCatalogList();
-			result = true;
+			
+			try {
+				Student student = studentService.findOne(entity.getIdx());
+				catalogList = student.getCatalogList();
+				result = true;
+			} catch (NotFoundException e) {
+				e.printStackTrace();
+			}
+		}else {
+			System.out.println("로그인 정보가 없습니다. 로그인이 필요한 기능입니다.");
 		}
 		
 		return new ResponseDTO.CatalogListResponse(result, catalogList);
