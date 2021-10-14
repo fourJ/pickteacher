@@ -1,366 +1,402 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-        <meta name="description" content="" />
-        <meta name="author" content="" />
-        <title>Pick Teacher</title>
-        <!-- Favicon-->
-        <link rel="icon" type="image/x-icon" href="assets/pick.ico" />
-        <!-- Font Awesome icons (free version)-->
-        <script src="https://use.fontawesome.com/releases/v5.15.3/js/all.js" crossorigin="anonymous"></script>
-        <!-- Simple line icons-->
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.5.5/css/simple-line-icons.min.css" rel="stylesheet" />
-        <!-- Google fonts-->
-        <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css" />
-        <!-- Core theme CSS (includes Bootstrap)-->
-        <link href="css/styles.css" rel="stylesheet" />
 
-        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-        <style>
-        .mySlides {display:none}
-        .w3-left, .w3-right, .w3-badge {cursor:pointer}
-        .w3-badge {height:13px;width:13px;padding:0}
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>Pick Teacher</title>
+    <!-- Favicon-->
+    <link rel="icon" type="image/x-icon" href="assets/pick.ico" />
+    <!-- Font Awesome icons (free version)-->
+    <script src="https://use.fontawesome.com/releases/v5.15.3/js/all.js" crossorigin="anonymous"></script>
+    <!-- Simple line icons-->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.5.5/css/simple-line-icons.min.css"
+        rel="stylesheet" />
+    <!-- Google fonts-->
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic"
+        rel="stylesheet" type="text/css" />
+    <!-- Vue.js -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <!-- stylesheet -->
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css" />
+    <link rel="stylesheet" href="css/styles.css" />
 
-        
-@import url(https://fonts.googleapis.com/css?family=Crafty+Girls);
+    <style>
+        .mySlides {
+            display: none
+        }
 
-.menu-nav{
-  font-family: 'Crafty Girls', cursive;
-  font-size:3rem;
-  line-height:300px;
-  vertical-align:middle;
-  margin-right:30px;
-  border-radius:20px;
-  transition: 2s ease 0s; 
-  cursor:pointer;
-}
-.menu-nav:nth-child(1){
-  content:"hello";
-  box-shadow: inset 0px -5px 0px #B73327;
-}
-.menu-nav:nth-child(1):hover{
-  box-shadow:inset 0px -300px 0px #B73327;
-}
-.menu-nav:nth-child(2){
-  box-shadow:inset 0px 5px 0px #2F3A68;
-}
-.menu-nav:nth-child(2):hover{
-  box-shadow:inset 0px 300px 0px #2F3A68;
-}
-.menu-nav:nth-child(3){
-  box-shadow:inset 0px -5px 0px #8AAABF;
-}
-.menu-nav:nth-child(3):hover{
-  box-shadow:inset 0px -300px 0px #8AAABF;
-}
-.menu-nav:nth-child(4){
-  box-shadow:inset 0px 5px 0px #E4D18C;
-}
-.menu-nav:nth-child(4):hover{
-  box-shadow:inset 0px 300px 0px #E4D18C;
-}
-.menu-nav:nth-child(5){
-  box-shadow:inset 0px -5px 0px #639465;
-}
-.menu-nav:nth-child(5):hover{
-  box-shadow:inset 0px -300px 0px #639465;
-}
-        </style>
-    </head>
-    <body id="page-top">
-        <!-- Navigation-->
-        <a class="menu-toggle rounded" href="#"><i class="fas fa-bars"></i></a>
-        <nav id="sidebar-wrapper">
-            <ul class="sidebar-nav">
-                <li class="sidebar-brand"><a href="#page-top">Pick Teacher</a></li>
-                <li class="sidebar-nav-item"><a href="#page-top">메인</a></li>
-                <li class="sidebar-nav-item"><a href="#about">배너</a></li>
-                <li class="sidebar-nav-item"><a href="/search/search_teacher.html">선생님 찾기</a></li>
-                <li class="sidebar-nav-item"><a href="/search/search_course.html">강의 찾기</a></li>
-                <li class="sidebar-nav-item"><a href="/reviewcommunity/reivewall.html">후기 커뮤니티</a></li>
-                <li class="sidebar-nav-item"><a href="/mypage/mypage_student.html">마이 페이지</a></li>
-            </ul>
-        </nav>
-        
-        
-        <!-- Header-->
-        <header class="masthead d-flex align-items-center">
-            <div class="container px-4 px-lg-5 text-center">
-              <a class="menu-nav">&#160;Home&#160;</a>
-                <a class="menu-nav">&#160;Forums&#160;</a>
-                <a class="menu-nav" href="/login/login.html">&#160;LogIn&#160;</a>
-                <a class="menu-nav" href="/login/teachersignup.html">&#160;SignIn&#160;</a>
-              
-              <h1 class="mb-1">Pick Teacher</h1>
-              <h3 class="mb-5">나만의 선생님을 고르세요:)</h3>
-              <a class="btn btn-primary btn-xl" href="#about">배너 보기</a>
-              </div>
-          </header>
-        
-        
-        <!-- About-->
-        <section class="content-section bg-light" id="about">
+        .w3-left,
+        .w3-right,
+        .w3-badge {
+            cursor: pointer
+        }
+
+        .w3-badge {
+            height: 13px;
+            width: 13px;
+            padding: 0
+        }
 
 
+        @import url(https://fonts.googleapis.com/css?family=Crafty+Girls);
 
-            <!-- w3 배너 https://www.w3schools.com/w3css/tryit.asp?filename=tryw3css_slideshow_dots2 -->
-            <div class="w3-content w3-display-container" style="max-width: 80%;">
-                <div class="mySlides w3-container w3-red" style="height: 200px; text-align: center;">
-                    <h1 ><b>이미지 태그 넣어도 됨1</b></h1>
-                    <h1>(◍˃̶ᗜ˂̶◍)ﾉ”</h1>
-                </div>
-                <div class="mySlides w3-container w3-orange" style="height: 200px; text-align: center;">
-                    <h1 ><b>이미지 태그 넣어도 됨2</b></h1>
-                    <h1>ヾ( ´｡ •ㅅ• ｡` )ﾉ”</h1>
-                </div>
-                <div class="mySlides w3-container w3-yellow" style="height: 200px; text-align: center;">
-                    <h1 ><b>이미지 태그 넣어도 됨3</b></h1>
-                    <h1>ヾ(๑╹ヮ╹๑)ﾉ”</h1>
-                </div>
-                <div class="mySlides w3-container w3-green" style="height: 200px; text-align: center;">
-                    <h1 ><b>이미지 태그 넣어도 됨4</b></h1>
-                    <h1>ヾ(๑╹ꇴ◠๑)ﾉ”</h1>
-                </div>
-                <div class="mySlides w3-container w3-blue" style="height: 200px; text-align: center;">
-                    <h1 ><b>이미지 태그 넣어도 됨5</b></h1>
-                    <h1>ヾ(๑ㆁᗜㆁ๑)ﾉ”</h1>
-                </div>
-                <!-- 
+        .menu-nav {
+            font-family: 'Crafty Girls', cursive;
+            font-size: 3rem;
+            line-height: 300px;
+            vertical-align: middle;
+            margin-right: 30px;
+            border-radius: 20px;
+            transition: 2s ease 0s;
+            cursor: pointer;
+        }
+
+        .menu-nav:nth-child(1) {
+            content: "hello";
+            box-shadow: inset 0px -5px 0px #B73327;
+        }
+
+        .menu-nav:nth-child(1):hover {
+            box-shadow: inset 0px -300px 0px #B73327;
+        }
+
+        .menu-nav:nth-child(2) {
+            box-shadow: inset 0px 5px 0px #2F3A68;
+        }
+
+        .menu-nav:nth-child(2):hover {
+            box-shadow: inset 0px 300px 0px #2F3A68;
+        }
+
+        .menu-nav:nth-child(3) {
+            box-shadow: inset 0px -5px 0px #8AAABF;
+        }
+
+        .menu-nav:nth-child(3):hover {
+            box-shadow: inset 0px -300px 0px #8AAABF;
+        }
+
+        .menu-nav:nth-child(4) {
+            box-shadow: inset 0px 5px 0px #E4D18C;
+        }
+
+        .menu-nav:nth-child(4):hover {
+            box-shadow: inset 0px 300px 0px #E4D18C;
+        }
+
+        .menu-nav:nth-child(5) {
+            box-shadow: inset 0px -5px 0px #639465;
+        }
+
+        .menu-nav:nth-child(5):hover {
+            box-shadow: inset 0px -300px 0px #639465;
+        }
+    </style>
+</head>
+
+<body id="page-top">
+    <!-- Navigation-->
+    <a class="menu-toggle rounded" href="#"><i class="fas fa-bars"></i></a>
+    <nav id="sidebar-wrapper">
+        <ul class="sidebar-nav">
+            <li class="sidebar-brand"><a href="#page-top">Pick Teacher</a></li>
+            <li class="sidebar-nav-item"><a href="#page-top">메인</a></li>
+            <li class="sidebar-nav-item"><a href="#about">배너</a></li>
+            <li class="sidebar-nav-item"><a href="search/search_teacher.html">선생님 찾기</a></li>
+            <li class="sidebar-nav-item"><a href="search/search_course.html">강의 찾기</a></li>
+            <li class="sidebar-nav-item"><a href="reviewcommunity/reivewall.html">후기 커뮤니티</a></li>
+            <li class="sidebar-nav-item"><a href="mypage/mypage_student.html">마이 페이지</a></li>
+        </ul>
+    </nav>
+
+
+    <!-- Header-->
+    <header class="masthead d-flex align-items-center">
+        <div class="container px-4 px-lg-5 text-center">
+            <a class="menu-nav">&#160;Home&#160;</a>
+            <a class="menu-nav">&#160;Forums&#160;</a>
+            <a class="menu-nav" href="login/login.html">&#160;LogIn&#160;</a>
+            <a class="menu-nav" href="login/teachersignup.html">&#160;SignIn&#160;</a>
+
+            <h1 class="mb-1">Pick Teacher</h1>
+            <h3 class="mb-5">나만의 선생님을 고르세요:)</h3>
+            <a class="btn btn-primary btn-xl" href="#about">배너 보기</a>
+        </div>
+    </header>
+
+
+    <!-- About-->
+    <section class="content-section bg-light" id="about">
+
+
+
+        <!-- w3 배너 https://www.w3schools.com/w3css/tryit.asp?filename=tryw3css_slideshow_dots2 -->
+        <div class="w3-content w3-display-container" style="max-width: 80%;">
+            <div class="mySlides w3-container w3-red" style="height: 200px; text-align: center;">
+                <h1><b>이미지 태그 넣어도 됨1</b></h1>
+                <h1>(◍˃̶ᗜ˂̶◍)ﾉ”</h1>
+            </div>
+            <div class="mySlides w3-container w3-orange" style="height: 200px; text-align: center;">
+                <h1><b>이미지 태그 넣어도 됨2</b></h1>
+                <h1>ヾ( ´｡ •ㅅ• ｡` )ﾉ”</h1>
+            </div>
+            <div class="mySlides w3-container w3-yellow" style="height: 200px; text-align: center;">
+                <h1><b>이미지 태그 넣어도 됨3</b></h1>
+                <h1>ヾ(๑╹ヮ╹๑)ﾉ”</h1>
+            </div>
+            <div class="mySlides w3-container w3-green" style="height: 200px; text-align: center;">
+                <h1><b>이미지 태그 넣어도 됨4</b></h1>
+                <h1>ヾ(๑╹ꇴ◠๑)ﾉ”</h1>
+            </div>
+            <div class="mySlides w3-container w3-blue" style="height: 200px; text-align: center;">
+                <h1><b>이미지 태그 넣어도 됨5</b></h1>
+                <h1>ヾ(๑ㆁᗜㆁ๑)ﾉ”</h1>
+            </div>
+            <!-- 
                     이미지 태그 넣는 법
                     <img class="mySlides" src="img_nature_wide.jpg" style="width:100%">
                     <img class="mySlides" src="img_snow_wide.jpg" style="width:100%">
                     <img class="mySlides" src="img_mountains_wide.jpg" style="width:100%">
                  -->
-                 <!-- 문제 : 자동 전환과 같이 넣으면 동그라미는 안넘어감. 클릭 시에 이동은 됨-->
-                <div class="w3-center w3-container w3-section w3-large w3-text-white w3-display-bottommiddle" style="width:100%">
-                  <div class="w3-left w3-hover-text-khaki" onclick="plusDivs(-1)">&#10094;</div>
-                  <div class="w3-right w3-hover-text-khaki" onclick="plusDivs(1)">&#10095;</div>
-                  <span class="w3-badge demo w3-border w3-transparent w3-hover-white" onclick="currentDiv(1)"></span>
-                  <span class="w3-badge demo w3-border w3-transparent w3-hover-white" onclick="currentDiv(2)"></span>
-                  <span class="w3-badge demo w3-border w3-transparent w3-hover-white" onclick="currentDiv(3)"></span>
-                  <span class="w3-badge demo w3-border w3-transparent w3-hover-white" onclick="currentDiv(4)"></span>
-                  <span class="w3-badge demo w3-border w3-transparent w3-hover-white" onclick="currentDiv(5)"></span>
-                </div>
-              </div>
-              
-              <script>
-
-                // 배너 하단 좌우 전환 & 센터 동그라미 탭
-                var slideIndex = 1;
-                showDivs(slideIndex);
-                
-                function plusDivs(n) {
-                    showDivs(slideIndex += n);
-                }
-                
-                function currentDiv(n) {
-                    showDivs(slideIndex = n);
-                }
-                
-                function showDivs(n) {
-                    var i;
-                    var x = document.getElementsByClassName("mySlides");
-                    var dots = document.getElementsByClassName("demo");
-                    if (n > x.length) {slideIndex = 1}
-                    if (n < 1) {slideIndex = x.length}
-                    for (i = 0; i < x.length; i++) {
-                        x[i].style.display = "none";  
-                    }
-                    for (i = 0; i < dots.length; i++) {
-                        dots[i].className = dots[i].className.replace(" w3-white", "");
-                    }
-                    x[slideIndex-1].style.display = "block";  
-                    dots[slideIndex-1].className += " w3-white";
-                }
-
-                // 자동 전환
-                var myIndex = 0;
-                carousel();
-
-                function carousel() {
-                    var i;
-                    var x = document.getElementsByClassName("mySlides");
-                    for (i = 0; i < x.length; i++) {
-                        x[i].style.display = "none";  
-                    }
-                    myIndex++;
-                    if (myIndex > x.length) {myIndex = 1}    
-                    x[myIndex-1].style.display = "block";  
-                    setTimeout(carousel, 2000); // Change image every 2 seconds
-                }
-
-              </script>
-
-
-
-            <div class="container px-4 px-lg-5 text-center">
-                <div class="row gx-4 gx-lg-5 justify-content-center">
-                    <div class="col-lg-10">
-                        <h2>제목?</h2>
-                        <p class="lead mb-5">
-                            내용
-                            <a href="https://google.com/">사이트 이동</a>
-                            !
-                        </p>
-                        <a class="btn btn-dark btn-xl" href="#services">인기 선생님 보기</a>
-                    </div>
-                </div>
+            <!-- 문제 : 자동 전환과 같이 넣으면 동그라미는 안넘어감. 클릭 시에 이동은 됨-->
+            <div class="w3-center w3-container w3-section w3-large w3-text-white w3-display-bottommiddle"
+                style="width:100%">
+                <div class="w3-left w3-hover-text-khaki" onclick="plusDivs(-1)">&#10094;</div>
+                <div class="w3-right w3-hover-text-khaki" onclick="plusDivs(1)">&#10095;</div>
+                <span class="w3-badge demo w3-border w3-transparent w3-hover-white" onclick="currentDiv(1)"></span>
+                <span class="w3-badge demo w3-border w3-transparent w3-hover-white" onclick="currentDiv(2)"></span>
+                <span class="w3-badge demo w3-border w3-transparent w3-hover-white" onclick="currentDiv(3)"></span>
+                <span class="w3-badge demo w3-border w3-transparent w3-hover-white" onclick="currentDiv(4)"></span>
+                <span class="w3-badge demo w3-border w3-transparent w3-hover-white" onclick="currentDiv(5)"></span>
             </div>
-        </section>
-        
-        
-        <!-- Services-->
-        <section class="content-section bg-primary text-white text-center" id="services">
-
-            
-            <div class="container px-4 px-lg-5">
-                <div class="content-section-heading">
-                    <h3 class="text-secondary mb-0">Services</h3>
-                    <h2 class="mb-5">What We Offer</h2>
-                </div>
-                <div class="row gx-4 gx-lg-5">
-                    <div class="col-lg-3 col-md-6 mb-5 mb-lg-0">
-                        <span class="service-icon rounded-circle mx-auto mb-3"><i class="icon-screen-smartphone"></i></span>
-                        <h4><strong>Responsive</strong></h4>
-                        <p class="text-faded mb-0">Looks great on any screen size!</p>
-                    </div>
-                    <div class="col-lg-3 col-md-6 mb-5 mb-lg-0">
-                        <span class="service-icon rounded-circle mx-auto mb-3"><i class="icon-pencil"></i></span>
-                        <h4><strong>Redesigned</strong></h4>
-                        <p class="text-faded mb-0">Freshly redesigned for Bootstrap 5.</p>
-                    </div>
-                    <div class="col-lg-3 col-md-6 mb-5 mb-md-0">
-                        <span class="service-icon rounded-circle mx-auto mb-3"><i class="icon-like"></i></span>
-                        <h4><strong>Favorited</strong></h4>
-                        <p class="text-faded mb-0">
-                            Millions of users
-                            <i class="fas fa-heart"></i>
-                            Start Bootstrap!
-                        </p>
-                    </div>
-                    <div class="col-lg-3 col-md-6">
-                        <span class="service-icon rounded-circle mx-auto mb-3"><i class="icon-mustache"></i></span>
-                        <h4><strong>Question</strong></h4>
-                        <p class="text-faded mb-0">I mustache you a question...</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-        
-        
-        <!-- Callout-->
-        <section class="callout">
-            <div class="container px-4 px-lg-5 text-center">
-                <h2 class="mx-auto mb-5">
-                    Welcome to
-                    <em>your</em>
-                    next website!
-                </h2>
-                <a class="btn btn-primary btn-xl" href="https://startbootstrap.com/theme/stylish-portfolio/">Download Now!</a>
-            </div>
-        </section>
-        
-        
-        <!-- Portfolio-->
-        <section class="content-section" id="portfolio">
-            <div class="container px-4 px-lg-5">
-                <div class="content-section-heading text-center">
-                    <h3 class="text-secondary mb-0">Portfolio</h3>
-                    <h2 class="mb-5">Recent Projects</h2>
-                </div>
-                <div class="row gx-0">
-                    <div class="col-lg-6">
-                        <a class="portfolio-item" href="#!">
-                            <div class="caption">
-                                <div class="caption-content">
-                                    <div class="h2">Stationary</div>
-                                    <p class="mb-0">A yellow pencil with envelopes on a clean, blue backdrop!</p>
-                                </div>
-                            </div>
-                            <img class="img-fluid" src="assets/img/portfolio-1.jpg" alt="..." />
-                        </a>
-                    </div>
-                    <div class="col-lg-6">
-                        <a class="portfolio-item" href="#!">
-                            <div class="caption">
-                                <div class="caption-content">
-                                    <div class="h2">Ice Cream</div>
-                                    <p class="mb-0">A dark blue background with a colored pencil, a clip, and a tiny ice cream cone!</p>
-                                </div>
-                            </div>
-                            <img class="img-fluid" src="assets/img/portfolio-2.jpg" alt="..." />
-                        </a>
-                    </div>
-                    <div class="col-lg-6">
-                        <a class="portfolio-item" href="#!">
-                            <div class="caption">
-                                <div class="caption-content">
-                                    <div class="h2">Strawberries</div>
-                                    <p class="mb-0">Strawberries are such a tasty snack, especially with a little sugar on top!</p>
-                                </div>
-                            </div>
-                            <img class="img-fluid" src="assets/img/portfolio-3.jpg" alt="..." />
-                        </a>
-                    </div>
-                    <div class="col-lg-6">
-                        <a class="portfolio-item" href="#!">
-                            <div class="caption">
-                                <div class="caption-content">
-                                    <div class="h2">Workspace</div>
-                                    <p class="mb-0">A yellow workspace with some scissors, pencils, and other objects.</p>
-                                </div>
-                            </div>
-                            <img class="img-fluid" src="assets/img/portfolio-4.jpg" alt="..." />
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </section>
-        
-        
-        <!-- Call to Action-->
-        <section class="content-section bg-primary text-white">
-            <div class="container px-4 px-lg-5 text-center">
-                <h2 class="mb-4">The buttons below are impossible to resist...</h2>
-                <a class="btn btn-xl btn-light me-4" href="#!">Click Me!</a>
-                <a class="btn btn-xl btn-dark" href="#!">Look at Me!</a>
-            </div>
-        </section>
-        
-        
-        <!-- Map-->
-        <div class="map" id="contact">
-            <iframe src="https://maps.google.com/maps?f=q&amp;source=s_q&amp;hl=en&amp;geocode=&amp;q=Twitter,+Inc.,+Market+Street,+San+Francisco,+CA&amp;aq=0&amp;oq=twitter&amp;sll=28.659344,-81.187888&amp;sspn=0.128789,0.264187&amp;ie=UTF8&amp;hq=Twitter,+Inc.,+Market+Street,+San+Francisco,+CA&amp;t=m&amp;z=15&amp;iwloc=A&amp;output=embed"></iframe>
-            <br />
-            <small><a href="https://maps.google.com/maps?f=q&amp;source=embed&amp;hl=en&amp;geocode=&amp;q=Twitter,+Inc.,+Market+Street,+San+Francisco,+CA&amp;aq=0&amp;oq=twitter&amp;sll=28.659344,-81.187888&amp;sspn=0.128789,0.264187&amp;ie=UTF8&amp;hq=Twitter,+Inc.,+Market+Street,+San+Francisco,+CA&amp;t=m&amp;z=15&amp;iwloc=A"></a></small>
         </div>
-        
-        
-        <!-- Footer-->
-        <footer class="footer text-center">
-            <div class="container px-4 px-lg-5">
-                <ul class="list-inline mb-5">
-                    <li class="list-inline-item">
-                        <a class="social-link rounded-circle text-white mr-3" href="#!"><i class="icon-social-facebook"></i></a>
-                    </li>
-                    <li class="list-inline-item">
-                        <a class="social-link rounded-circle text-white mr-3" href="#!"><i class="icon-social-twitter"></i></a>
-                    </li>
-                    <li class="list-inline-item">
-                        <a class="social-link rounded-circle text-white" href="#!"><i class="icon-social-github"></i></a>
-                    </li>
-                </ul>
-                <p class="text-muted small mb-0">Copyright &copy; Your Website 2021</p>
+
+        <script>
+
+            // 배너 하단 좌우 전환 & 센터 동그라미 탭
+            var slideIndex = 1;
+            showDivs(slideIndex);
+
+            function plusDivs(n) {
+                showDivs(slideIndex += n);
+            }
+
+            function currentDiv(n) {
+                showDivs(slideIndex = n);
+            }
+
+            function showDivs(n) {
+                var i;
+                var x = document.getElementsByClassName("mySlides");
+                var dots = document.getElementsByClassName("demo");
+                if (n > x.length) { slideIndex = 1 }
+                if (n < 1) { slideIndex = x.length }
+                for (i = 0; i < x.length; i++) {
+                    x[i].style.display = "none";
+                }
+                for (i = 0; i < dots.length; i++) {
+                    dots[i].className = dots[i].className.replace(" w3-white", "");
+                }
+                x[slideIndex - 1].style.display = "block";
+                dots[slideIndex - 1].className += " w3-white";
+            }
+
+            // 자동 전환
+            var myIndex = 0;
+            carousel();
+
+            function carousel() {
+                var i;
+                var x = document.getElementsByClassName("mySlides");
+                for (i = 0; i < x.length; i++) {
+                    x[i].style.display = "none";
+                }
+                myIndex++;
+                if (myIndex > x.length) { myIndex = 1 }
+                x[myIndex - 1].style.display = "block";
+                setTimeout(carousel, 2000); // Change image every 2 seconds
+            }
+
+        </script>
+
+
+
+        <div class="container px-4 px-lg-5 text-center">
+            <div class="row gx-4 gx-lg-5 justify-content-center">
+                <div class="col-lg-10">
+                    <h2>제목?</h2>
+                    <p class="lead mb-5">
+                        내용
+                        <a href="https://google.com/">사이트 이동</a>
+                        !
+                    </p>
+                    <a class="btn btn-dark btn-xl" href="#services">인기 선생님 보기</a>
+                </div>
             </div>
-        </footer>
-        <!-- Scroll to Top Button-->
-        <a class="scroll-to-top rounded" href="#page-top"><i class="fas fa-angle-up"></i></a>
-        <!-- Bootstrap core JS-->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
-        <!-- Core theme JS-->
-        <script src="js/scripts.js"></script>
-    </body>
+        </div>
+    </section>
+
+
+    <!-- Services-->
+    <section class="content-section bg-primary text-white text-center" id="services">
+
+
+        <div class="container px-4 px-lg-5">
+            <div class="content-section-heading">
+                <h3 class="text-secondary mb-0">Services</h3>
+                <h2 class="mb-5">What We Offer</h2>
+            </div>
+            <div class="row gx-4 gx-lg-5">
+                <div class="col-lg-3 col-md-6 mb-5 mb-lg-0">
+                    <span class="service-icon rounded-circle mx-auto mb-3"><i class="icon-screen-smartphone"></i></span>
+                    <h4><strong>Responsive</strong></h4>
+                    <p class="text-faded mb-0">Looks great on any screen size!</p>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-5 mb-lg-0">
+                    <span class="service-icon rounded-circle mx-auto mb-3"><i class="icon-pencil"></i></span>
+                    <h4><strong>Redesigned</strong></h4>
+                    <p class="text-faded mb-0">Freshly redesigned for Bootstrap 5.</p>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-5 mb-md-0">
+                    <span class="service-icon rounded-circle mx-auto mb-3"><i class="icon-like"></i></span>
+                    <h4><strong>Favorited</strong></h4>
+                    <p class="text-faded mb-0">
+                        Millions of users
+                        <i class="fas fa-heart"></i>
+                        Start Bootstrap!
+                    </p>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <span class="service-icon rounded-circle mx-auto mb-3"><i class="icon-mustache"></i></span>
+                    <h4><strong>Question</strong></h4>
+                    <p class="text-faded mb-0">I mustache you a question...</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Callout-->
+    <section class="callout">
+        <div class="container px-4 px-lg-5 text-center">
+            <h2 class="mx-auto mb-5">
+                Welcome to
+                <em>your</em>
+                next website!
+            </h2>
+            <a class="btn btn-primary btn-xl" href="https://startbootstrap.com/theme/stylish-portfolio/">Download
+                Now!</a>
+        </div>
+    </section>
+
+
+    <!-- Portfolio-->
+    <section class="content-section" id="portfolio">
+        <div class="container px-4 px-lg-5">
+            <div class="content-section-heading text-center">
+                <h3 class="text-secondary mb-0">Portfolio</h3>
+                <h2 class="mb-5">Recent Projects</h2>
+            </div>
+            <div class="row gx-0">
+                <div class="col-lg-6">
+                    <a class="portfolio-item" href="#!">
+                        <div class="caption">
+                            <div class="caption-content">
+                                <div class="h2">Stationary</div>
+                                <p class="mb-0">A yellow pencil with envelopes on a clean, blue backdrop!</p>
+                            </div>
+                        </div>
+                        <img class="img-fluid" src="assets/img/portfolio-1.jpg" alt="..." />
+                    </a>
+                </div>
+                <div class="col-lg-6">
+                    <a class="portfolio-item" href="#!">
+                        <div class="caption">
+                            <div class="caption-content">
+                                <div class="h2">Ice Cream</div>
+                                <p class="mb-0">A dark blue background with a colored pencil, a clip, and a tiny ice
+                                    cream cone!</p>
+                            </div>
+                        </div>
+                        <img class="img-fluid" src="assets/img/portfolio-2.jpg" alt="..." />
+                    </a>
+                </div>
+                <div class="col-lg-6">
+                    <a class="portfolio-item" href="#!">
+                        <div class="caption">
+                            <div class="caption-content">
+                                <div class="h2">Strawberries</div>
+                                <p class="mb-0">Strawberries are such a tasty snack, especially with a little sugar on
+                                    top!</p>
+                            </div>
+                        </div>
+                        <img class="img-fluid" src="assets/img/portfolio-3.jpg" alt="..." />
+                    </a>
+                </div>
+                <div class="col-lg-6">
+                    <a class="portfolio-item" href="#!">
+                        <div class="caption">
+                            <div class="caption-content">
+                                <div class="h2">Workspace</div>
+                                <p class="mb-0">A yellow workspace with some scissors, pencils, and other objects.</p>
+                            </div>
+                        </div>
+                        <img class="img-fluid" src="assets/img/portfolio-4.jpg" alt="..." />
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Call to Action-->
+    <section class="content-section bg-primary text-white">
+        <div class="container px-4 px-lg-5 text-center">
+            <h2 class="mb-4">The buttons below are impossible to resist...</h2>
+            <a class="btn btn-xl btn-light me-4" href="#!">Click Me!</a>
+            <a class="btn btn-xl btn-dark" href="#!">Look at Me!</a>
+        </div>
+    </section>
+
+
+    <!-- Map-->
+    <div class="map" id="contact">
+        <iframe
+            src="https://maps.google.com/maps?f=q&amp;source=s_q&amp;hl=en&amp;geocode=&amp;q=Twitter,+Inc.,+Market+Street,+San+Francisco,+CA&amp;aq=0&amp;oq=twitter&amp;sll=28.659344,-81.187888&amp;sspn=0.128789,0.264187&amp;ie=UTF8&amp;hq=Twitter,+Inc.,+Market+Street,+San+Francisco,+CA&amp;t=m&amp;z=15&amp;iwloc=A&amp;output=embed"></iframe>
+        <br />
+        <small><a
+                href="https://maps.google.com/maps?f=q&amp;source=embed&amp;hl=en&amp;geocode=&amp;q=Twitter,+Inc.,+Market+Street,+San+Francisco,+CA&amp;aq=0&amp;oq=twitter&amp;sll=28.659344,-81.187888&amp;sspn=0.128789,0.264187&amp;ie=UTF8&amp;hq=Twitter,+Inc.,+Market+Street,+San+Francisco,+CA&amp;t=m&amp;z=15&amp;iwloc=A"></a></small>
+    </div>
+
+
+    <!-- Footer-->
+    <footer class="footer text-center">
+        <div class="container px-4 px-lg-5">
+            <ul class="list-inline mb-5">
+                <li class="list-inline-item">
+                    <a class="social-link rounded-circle text-white mr-3" href="#!"><i
+                            class="icon-social-facebook"></i></a>
+                </li>
+                <li class="list-inline-item">
+                    <a class="social-link rounded-circle text-white mr-3" href="#!"><i
+                            class="icon-social-twitter"></i></a>
+                </li>
+                <li class="list-inline-item">
+                    <a class="social-link rounded-circle text-white" href="#!"><i class="icon-social-github"></i></a>
+                </li>
+            </ul>
+            <p class="text-muted small mb-0">Copyright &copy; Your Website 2021</p>
+        </div>
+    </footer>
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top"><i class="fas fa-angle-up"></i></a>
+    <!-- Bootstrap core JS-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Core theme JS-->
+    <script src="js/scripts.js"></script>
+</body>
+
 </html>

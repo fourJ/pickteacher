@@ -1,65 +1,88 @@
 <!DOCTYPE html>
 <html>
+
 <head>
+  <meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+	<meta name="description" content="" />
+	<meta name="author" content="" />
+	<title>Pick Teacher</title>
+	<!-- Favicon-->
+	<link rel="icon" type="image/x-icon" href="/src/main/resources/static/assets/pick.ico" />
+	<!-- Font Awesome icons (free version)-->
+	<script src="https://use.fontawesome.com/releases/v5.15.3/js/all.js" crossorigin="anonymous"></script>
+	<!-- Simple line icons-->
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.5.5/css/simple-line-icons.min.css"
+		rel="stylesheet" />
+	<!-- Google fonts-->
+	<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic"
+		rel="stylesheet" type="text/css" />
+	<!-- Vue.js -->
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<!-- stylesheet -->
+	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css" />
+	<link rel="stylesheet" href="../css/styles.css" />
 
-<link rel="stylesheet" href="/css/styles.css">
+  <style>
+    .w3header {
+      padding: 0
+    }
 
-<style> 
-.w3header {padding:0}
+    input[type=text] {
+      width: 20%;
+      padding: 12px 20px;
+      margin: 8px 0;
+      box-sizing: border-box;
+      border: 3px solid #ccc;
+      -webkit-transition: 0.5s;
+      transition: 0.5s;
+      outline: none;
+    }
 
-input[type=text] {
-  width: 20%;
-  padding: 12px 20px;
-  margin: 8px 0;
-  box-sizing: border-box;
-  border: 3px solid #ccc;
-  -webkit-transition: 0.5s;
-  transition: 0.5s;
-  outline: none;
-}
+    input[type=text]:focus {
+      border: 3px solid #555;
+    }
 
-input[type=text]:focus {
-  border: 3px solid #555;
-}
+    input[type=text],
+    select {
+      width: 100%;
+      padding: 12px 20px;
+      margin: 8px 0;
+      display: inline-block;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
 
-input[type=text], select {
-  width: 100%;
-  padding: 12px 20px;
-  margin: 8px 0;
-  display: inline-block;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  box-sizing: border-box;
-}
+    input[type=submit] {
+      width: 5%;
+      background-color: #4CAF50;
+      color: white;
+      padding: 2px 4px;
+      margin: 8px 0;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
 
-input[type=submit] {
-  width: 5%;
-  background-color: #4CAF50;
-  color: white;
-  padding: 2px 4px;
-  margin: 8px 0;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
+    input[type=submit]:hover {
+      background-color: #45a049;
+    }
 
-input[type=submit]:hover {
-  background-color: #45a049;
-}
-
-/* div {
+    /* div {
   border-radius: 5px;
   background-color: #f2f2f2;
   padding: 20px;
 } */
-</style>
+  </style>
 </head>
+
 <body>
 
-<div class="w3header">
+  <div class="w3header">
     <a href="/index.html" class="logo">Pick Teacher</a>
-</div>
-<div class="w3header" style="background-color: #1D809F; margin-bottom: 30px;">
+  </div>
+  <div class="w3header" style="background-color: #1D809F; margin-bottom: 30px;">
     <a href="mypage_test.html" class="logo">ReivewList</a>
     <div class="w3header-right">
       <a href="reviewmyall.html">내가 쓴 글</a>
@@ -68,44 +91,43 @@ input[type=submit]:hover {
       <a href="student_likes.html">찜한 강의</a>
       <a href="http://127.0.0.1:5500/index.html">로그아웃</a>
     </div>
-</div>
+  </div>
 
-<h2>후기작성 페이지</h2>
-<div>
+  <h2>후기작성 페이지</h2>
+  <div>
     <form action="/action_page.php">
-      
-      <label for="subject" >Subject</label>
+
+      <label for="subject">Subject</label>
       <select id="subject" name="subject">
         <option value="국어">국어</option>
         <option value="영어">영어</option>
         <option value="수학">수학</option>
       </select>
-    
+
       <input type="submit" value="Submit"><br><br>
-    
+
       <form action="/action_page.php">
-      
-      <label for="subjectTitle">SubjectTitle</label>
-      <select id="subjectTitle" name="subjectTitle">
-        <option value="고1국어">고1국어</option>
-        <option value="고2수학">고2수학</option>
-        <option value="고3영어">고3영어</option>
-      </select>
-    
-      <input type="submit" value="Submit"><br><br>
-    </form>
+
+        <label for="subjectTitle">SubjectTitle</label>
+        <select id="subjectTitle" name="subjectTitle">
+          <option value="고1국어">고1국어</option>
+          <option value="고2수학">고2수학</option>
+          <option value="고3영어">고3영어</option>
+        </select>
+
+        <input type="submit" value="Submit"><br><br>
+      </form>
 
 
   </div>
 
-<form>
+  <form>
     <br>
-  <label for="lname" >contents</label>
-  <input type="text" id="lname" name="lname" value="Doe" style="height: 100;">
-  <button><a href="reivewall.html">완료</a></button>
-</form>
+    <label for="lname">contents</label>
+    <input type="text" id="lname" name="lname" value="Doe" style="height: 100;">
+    <button><a href="reivewall.html">완료</a></button>
+  </form>
 
 </body>
+
 </html>
-
-
