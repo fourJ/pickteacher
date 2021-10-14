@@ -49,7 +49,7 @@ public class CatalogController {
 				Course course = courseService.findOne(dto.getCourseIdx());
 				LocalDateTime dateTime = LocalDateTime.now();
 				
-				if(catalogService.isNotAlreadyCatalog(student, course)) {
+				if(catalogService.isNotAlreadyCatalog(student, course) && courseService.checkStatus(course) && course.getHeadCount() > catalogService.findAllByCourseIdx(course).size()) {
 					try {
 						saveId = catalogService.saveCatalog(new Catalog(student, course, dateTime));
 						result = true;
@@ -57,7 +57,7 @@ public class CatalogController {
 						e.printStackTrace();
 					}
 				}else {
-					System.out.println("동일한 강의를 이미 수강신청 하셨습니다.");
+					System.out.println("동일한 강의를 이미 수강신청 하셨거나, 마감일이 지났거나, 정원이 다 찼습니다.");
 				}
 			} catch (NotFoundException e) {
 				e.printStackTrace();
