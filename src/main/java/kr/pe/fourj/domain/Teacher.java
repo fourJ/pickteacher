@@ -1,6 +1,7 @@
 package kr.pe.fourj.domain;
 
-import java.util.Date;
+import java.time.LocalDate;
+
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -12,14 +13,16 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 
-import lombok.AllArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@AllArgsConstructor
+@RequiredArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
@@ -59,8 +62,17 @@ public class Teacher {
 	
 	@NonNull
 	@Column(name="enroll_date")
-	private Date enrollDate;
+	private LocalDate enrollDate;
 
 	@OneToMany(mappedBy="teacherIdx", cascade=CascadeType.ALL)
+	@JsonBackReference
 	private List<Course> courseList;
+
+	@Override
+	public String toString() {
+		return "[아이디 : " + id + ", 이름 : " + name + ", 성별 : " + gender + 
+				", 주소 : " + address + ", 핸드폰 번호 : " + phone + ", 경력 : " + 
+				career + ", 전공 : " + major + ", 학교 : " + school + ", 등록일 : " + enrollDate + "]";
+	}
+	
 }
