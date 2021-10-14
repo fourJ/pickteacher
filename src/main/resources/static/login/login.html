@@ -1,0 +1,94 @@
+<html>
+
+<head>
+    <!-- Material Design Lite CSS -->
+    <link rel="stylesheet" href="https://storage.googleapis.com/code.getmdl.io/1.0.0/material.indigo-pink.min.css">
+    <!-- Font Awesome CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+    <!-- Material Design icon font -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+</head>
+
+<style>
+    .util-center {
+        margin: auto;
+    }
+
+    .util-max-512px {
+        max-width: 512px;
+    }
+
+    .util-spacing-h--40px {
+        margin-top: 40px;
+        margin-bottom: 40px
+    }
+
+    .util-no-decoration {
+        text-decoration: none;
+    }
+</style>
+
+<body class="mdl-color--blue-grey-50">
+
+    <div class="w3header">
+        <a href="/index.html" class="logo">Pick Teacher</a>
+    </div>
+    <div class="w3header" style="background-color: #1D809F; margin-bottom: 30px;">
+        <a href="mypage_test.html" class="logo">My Page</a>
+        <div class="w3header-right">
+            <a href="student_info.html">내 정보</a>
+            <a href="student_catalog.html">수강 내역</a>
+            <a href="student_cart.html">장바구니</a>
+            <a href="student_likes.html">찜한 강의</a>
+            <a href="#">탈퇴</a>
+        </div>
+    </div>
+
+
+    <!-- LOGIN FORM -->
+    <div class="mdl-grid">
+
+        <div class="mdl-card mdl-shadow--16dp util-center util-spacing-h--40px">
+            <div class="mdl-card__title mdl-color--orange-800">
+                <h2 class="mdl-card__title-text mdl-color-text--white">User Login</h2>
+            </div>
+            <div class="mdl-card__supporting-text mdl-grid">
+
+                <b class="mdl-color-text--accent">Error message goes here</b>
+
+
+                <form method="POST" action="">
+                    <input type="hidden" name="action" value="login" />
+
+                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-cell mdl-cell--12-col">
+                        <label class="mdl-textfield__label mdl-color-text--grey"
+                            for="textfield_username">Username</label>
+                        <input class="mdl-textfield__input" type="text" id="textfield_username" name="username" />
+                    </div>
+
+                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-cell mdl-cell--12-col">
+                        <label class="mdl-textfield__label mdl-color-text--grey"
+                            for="textfield_password">Password</label>
+                        <input class="mdl-textfield__input" type="password" id="textfield_password" name="password" />
+                    </div>
+
+                    <div class="mdl-cell mdl-cell--12-col send-button" align="center">
+
+                        <button type="submit"
+                            class="mdl-button mdl-js-ripple-effect mdl-js-button mdl-button--raised mdl-button--colored mdl-color--primary">
+                            Log In
+                        </button>
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Material Design Lite JavaScript -->
+    <script src="https://storage.googleapis.com/code.getmdl.io/1.0.0/material.min.js"></script>
+
+</body>
+
+</html>
