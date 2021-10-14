@@ -36,9 +36,13 @@ public class CartService {
         return flag;
     }
 	
-	public void deleteCart(Student student, Course course) throws NotFoundException {
+	public void deleteCart(Student student, Course course) throws NotFoundException, ArgumentNullException {
 		Cart cart = cartRepository.findByStudentIdxAndCourseIdx(student, course);
-		cartRepository.deleteById(cart.getIdx());
+		if(cart != null) {
+			cartRepository.deleteById(cart.getIdx());
+		}else {
+			throw new Exception.ArgumentNullException("Cart with " + student.getId() + " and " + course.getTitle() + " is not valid");
+		}
 	}
 	
 	public Cart findOne(Long cartIdx) throws NotFoundException {

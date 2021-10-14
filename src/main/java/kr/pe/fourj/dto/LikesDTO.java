@@ -6,7 +6,6 @@ public class LikesDTO {
 
 	@Data
 	public static class Create {
-		private Long studentIdx;
 		private Long courseIdx;
 	}
 	

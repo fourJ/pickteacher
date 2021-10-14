@@ -41,8 +41,8 @@ public class ReviewService {
 		reviewRepository.save(review);
 	}
 	
-	public void deleteReview(ReviewDTO.Delete dto) throws NotFoundException {
-		Review review = findOne(dto.getIdx());
+	public void deleteReview(Long reviewIdx) throws NotFoundException {
+		Review review = findOne(reviewIdx);
 		reviewRepository.deleteById(review.getIdx());
 	}
 	

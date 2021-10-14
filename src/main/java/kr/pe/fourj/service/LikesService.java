@@ -38,9 +38,13 @@ public class LikesService {
         return flag;
     }
 	
-	public void deleteLikes(Student student, Course course) {
+	public void deleteLikes(Student student, Course course) throws ArgumentNullException {
 		Likes likes = likesRepository.findByStudentIdxAndCourseIdx(student, course);
-		likesRepository.deleteById(likes.getIdx());
+		if(likes != null) {
+			likesRepository.deleteById(likes.getIdx());			
+		}else {
+			throw new Exception.ArgumentNullException("Likes with [" + student.getId() + "] and [" + course.getTitle() + "] is not valid");
+		}
 	}
 	
 	public Likes findOne(Long likesIdx) throws NotFoundException {
