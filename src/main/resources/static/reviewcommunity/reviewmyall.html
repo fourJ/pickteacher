@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <link href="/css/styles.css" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/styles.css">
+  
+<style> 
+input[type=text] {
+  width: 20%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  box-sizing: border-box;
+  border: 3px solid #ccc;
+  -webkit-transition: 0.5s;
+  transition: 0.5s;
+  outline: none;
+}
+
+input[type=text]:focus {
+  border: 3px solid #555;
+}
+
+input[type=text], select {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+input[type=submit] {
+  width: 6%;
+  background-color: #4CAF50;
+  color: white;
+  padding: 2px 6px;
+  margin: 4px 0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+input[type=submit]:hover {
+  background-color: #45a049;
+}
+
+.w3header {padding:0}
+
+/* div {
+  border-radius: 5px;
+  background-color: #f2f2f2;
+  padding: 20px;
+} */
+th,
+  td {
+      text-align: left;
+      padding: 5px;
+  }
+
+  tr:nth-child(even) {
+      background-color: #f2f2f2;
+  }
+
+  th {
+      background-color: #04aa6d;
+      color: white;
+  }
+</style>
+</head>
+<body>
+
+  <div class="w3header">
+    <a href="/index.html" class="logo">Pick Teacher</a>
+</div>
+<div class="w3header" style="background-color: #1D809F; margin-bottom: 30px;">
+    <a href="mypage_test.html" class="logo">My ReivewList</a>
+    <div class="w3header-right">
+        <<a href="reviewmyall.html">내가 쓴 글</a>
+        <a href="reivewall.html">전체 후기</a>
+        <a href="student_cart.html">장바구니</a>
+        <a href="student_likes.html">찜한 강의</a>
+        <a href="http://127.0.0.1:5500/index.html">로그아웃</a>
+    </div>
+</div>
+
+<!-- <div>
+    <form action="/action_page.php">
+      
+      <label for="country">Subject</label>
+      <select id="country" name="country">
+        <option value="australia">국어1</option>
+        <option value="canada">영어1</option>
+        <option value="usa">과학1</option>
+      </select>
+    
+      <input type="submit" value="Submit">
+    </form>
+  </div> -->
+
+  <div class="map" id="review">
+    <table style="width: 100%;" >
+        <tr>
+            <th>작성자</th>
+            <th>강의제목</th>
+            <th>강의과목</th>
+            <th>작성시간</th>
+            <th>후기내용</th>
+            <th>별점</th>
+            <th>수정</th> 
+            <th>삭제</th>
+        </tr>
+            
+        <tr>
+            <td>김지명</td>
+            <td>고1수학</td>
+            <td>국어1</td>
+            <td>2021-10-12T00:00:00</td>
+            <td>강의 쉽고 너무 재미있어요!</td>
+            <td>☆☆☆☆☆</td> 
+            <td><span class="close" @click="deleteBook(b.seq)">&#x00D7;</span></td>
+            <td><a href="reviewupdatepage.html">수정</a></td>           </tr> 
+
+        <tr>
+            <td>김지명</td>
+            <td>고2수학</td>
+            <td>국어1</td>
+            <td>2021-10-12T00:00:00</td>
+            <td>강의 쉽고 너무 재미있어요!</td>
+            <td>☆☆☆☆☆</td> 
+            <td><span class="close" @click="deleteBook(b.seq)">&#x00D7;</span></td>
+            <td><a href="reviewupdatepage.html">수정</a></td>        </tr> 
+
+        
+        
+    </table>
+</div>
+</html>
+
