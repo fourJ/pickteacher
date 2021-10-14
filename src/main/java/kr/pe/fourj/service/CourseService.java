@@ -30,14 +30,14 @@ public class CourseService {
 		return save.getIdx();
 	}
 	
-	public void updateCourse(CourseDTO.Update dto) throws NotFoundException {
-		Course course = findOne(dto.getIdx());
+	public void updateCourse(Long courseIdx, CourseDTO.Update dto) throws NotFoundException {
+		Course course = findOne(courseIdx);
 		
 		course.setTitle(dto.getTitle());
 		course.setSchedule(dto.getSchedule());
 		course.setOpenDate(dto.getOpenDate());
 		course.setCloseDate(dto.getCloseDate());
-		course.setStatus(checkStatus(dto.getOpenDate(), dto.getCloseDate()));
+		course.setStatus(calculateStatus(dto.getOpenDate(), dto.getCloseDate()));
 		course.setType(dto.getType());
 		course.setTuition(dto.getTuition());
 		course.setTarget(dto.getTarget());
@@ -45,7 +45,7 @@ public class CourseService {
 		courseRepository.save(course);
 	}
 	
-	public String checkStatus(Date openDate, Date closeDate) {
+	public String calculateStatus(Date openDate, Date closeDate) {
 		Date now = new Date();
 		System.out.println("현재 시간 : " + now);
 		String status = null;
@@ -60,9 +60,18 @@ public class CourseService {
 		
 		return status;
 	}
+
+	public boolean checkStatus(Course course) {
+		Date now = new Date();
+		boolean check = false;
+		if(!course.getStatus().equals("마감") && now.getTime() <= course.getCloseDate().getTime()) {
+			check = true;
+		}
+		return check;
+	}
 	
-	public void deleteCourse(CourseDTO.Delete dto) throws NotFoundException {
-		Course course = findOne(dto.getIdx());
+	public void deleteCourse(Long courseIdx, CourseDTO.Delete dto) throws NotFoundException {
+		Course course = findOne(courseIdx);
 		courseRepository.deleteById(course.getIdx());
 	}
 	

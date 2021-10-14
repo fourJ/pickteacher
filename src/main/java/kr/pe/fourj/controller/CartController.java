@@ -52,7 +52,7 @@ public class CartController {
 				Student student = studentService.findOne(entity.getIdx());
 				Course course = courseService.findOne(dto.getCourseIdx());
 				
-				if(cartService.isNotAlreadyCart(student, course)) {
+				if(cartService.isNotAlreadyCart(student, course) && courseService.checkStatus(course) && course.getHeadCount() > catalogService.findAllByCourseIdx(course).size()) {
 					try {
 						saveId = cartService.saveCart(new Cart(student, course));
 						result = true;
@@ -60,7 +60,7 @@ public class CartController {
 						e.printStackTrace();
 					}
 				}else {
-					System.out.println("동일한 강의를 이미 장바구니에 추가하셨습니다.");
+					System.out.println("동일한 강의를 이미 수강신청 하셨거나, 마감일이 지났거나, 정원이 다 찼습니다.");
 				}
 			} catch (NotFoundException e) {
 				e.printStackTrace();
@@ -87,9 +87,9 @@ public class CartController {
 				Course course = courseService.findOne(dto.getCourseIdx());
 				try {
 					cartService.deleteCart(student, course);
+					result = true;
 				} catch (ArgumentNullException e) {
 					e.printStackTrace();
-					result = true;
 				}
 			} catch (NotFoundException e) {
 				e.printStackTrace();
@@ -142,14 +142,22 @@ public class CartController {
 				Course course = courseService.findOne(dto.getCourseIdx());		
 				LocalDateTime dateTime = LocalDateTime.now();
 				
-				try {
-					saveId = catalogService.saveCatalog(new Catalog(student, course, dateTime));
-					cartService.deleteCart(student, course);
-					result = true;
-				} catch (ArgumentNullException e) {
-					e.printStackTrace();
+				if(catalogService.isNotAlreadyCatalog(student, course) && courseService.checkStatus(course) && course.getHeadCount() > catalogService.findAllByCourseIdx(course).size()) {
+					try {
+						boolean checkCart = cartService.isNotAlreadyCart(student, course);
+						if(!checkCart) {
+							saveId = catalogService.saveCatalog(new Catalog(student, course, dateTime));
+							cartService.deleteCart(student, course);
+							result = true;							
+						}else {
+							System.out.println("해당 강의가 장바구니에 없습니다.");
+						}
+					} catch (ArgumentNullException e) {
+						e.printStackTrace();
+					}
+				} else {
+					System.out.println("동일한 강의를 이미 수강신청 하셨거나, 마감일이 지났거나, 정원이 다 찼습니다.");
 				}
-				
 			} catch (NotFoundException e) {
 				e.printStackTrace();
 			}

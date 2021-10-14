@@ -49,12 +49,16 @@ public class ReviewController {
 				Student student = studentService.findOne(entity.getIdx());
 				Course course = courseService.findOne(dto.getCourseIdx());
 				LocalDateTime dateTime = LocalDateTime.now();
-
-				try {
-					saveId = reviewService.saveReview(new Review(student, course, dto.getContent(), dateTime, dto.getStar()));
-					result = true;
-				} catch (ArgumentNullException e) {
-					e.printStackTrace();
+				
+				if(reviewService.isNotAlreadyReview(student, course)) {
+					try {
+						saveId = reviewService.saveReview(new Review(student, course, dto.getContent(), dateTime, dto.getStar()));
+						result = true;
+					} catch (ArgumentNullException e) {
+						e.printStackTrace();
+					}
+				}else {
+					System.out.println("동일한 강의에는 최대 한번만 리뷰를 작성할 수 있습니다.");
 				}
 			} catch (NotFoundException e) {
 				e.printStackTrace();
@@ -78,23 +82,16 @@ public class ReviewController {
 
 			try {
 				Student student = studentService.findOne(entity.getIdx());
-				List<Review> reviewList = student.getReviewList();
+				Course course = courseService.findOne(dto.getCourseIdx());
 				
-				for(Review r : reviewList) {
-					if(r.getIdx() == dto.getIdx()) {
-						try {
-							reviewService.updateReview(dto);
-							result = true;
-						} catch (NotFoundException e) {
-							e.printStackTrace();
-						}
-						break;
-					}else {
-						System.out.println("본인이 작성한 후기만 수정할 수 있습니다.");
-					}
+				if(!reviewService.isNotAlreadyReview(student, course)) {
+					reviewService.updateReview(student, course, dto);
+					result = true;
+				}else {
+						System.out.println("본인이 작성한 리뷰만 수정할 수 있습니다. 존재하는 리뷰인지 확인하세요.");
 				}
-			} catch (NotFoundException e1) {
-				e1.printStackTrace();
+			} catch (NotFoundException e) {
+				e.printStackTrace();
 			}
 		}else {
 			System.out.println("로그인 정보가 없습니다. 로그인이 필요한 기능입니다.");
@@ -113,26 +110,19 @@ public class ReviewController {
 			Object object = request.getSession().getAttribute("student");
 			Student entity = (Student)object;
 			
-			try {
-				Student student = studentService.findOne(entity.getIdx());
-				List<Review> reviewList = student.getReviewList();
-				
-				for(Review r : reviewList) {
-					if(r.getIdx() == dto.getIdx()) {
-						try {
-							reviewService.deleteReview(r.getIdx()); //다른거는 dto.getIdx() 넣음 이거만안돼ㅠ
-							result = true;
-						} catch (NotFoundException e) {
-							e.printStackTrace();
-						}
-						break;
+				try {
+					Student student = studentService.findOne(entity.getIdx());
+					Course course = courseService.findOne(dto.getCourseIdx());
+					
+					if(!reviewService.isNotAlreadyReview(student, course)) {
+						reviewService.deleteReview(student, course);
+						result = true;
 					}else {
-						System.out.println("본인이 작성한 후기만 삭제할 수 있습니다.");
+							System.out.println("본인이 작성한 리뷰만 삭제할 수 있습니다. 존재하는 리뷰인지 확인하세요.");
 					}
+				} catch (NotFoundException e) {
+					e.printStackTrace();
 				}
-			} catch (NotFoundException e1) {
-				e1.printStackTrace();
-			}
 		}else {
 			System.out.println("로그인 정보가 없습니다. 로그인이 필요한 기능입니다.");
 		}

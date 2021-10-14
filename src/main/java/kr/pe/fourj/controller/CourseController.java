@@ -40,7 +40,7 @@ public class CourseController {
 			Object object = request.getSession().getAttribute("teacher");
 			Teacher entity = (Teacher)object;
 
-			String status = courseService.checkStatus(dto.getOpenDate(), dto.getCloseDate());
+			String status = courseService.calculateStatus(dto.getOpenDate(), dto.getCloseDate());
 			
 			try {
 				Teacher teacher = teacherService.findOne(entity.getIdx());
@@ -78,20 +78,13 @@ public class CourseController {
 			
 			try {
 				Teacher teacher = teacherService.findOne(entity.getIdx());
-				List<Course> courseList = teacher.getCourseList();
+				Course course = courseService.findOne(dto.getIdx());
 				
-				for(Course c : courseList) {
-					if(c.getIdx() == dto.getIdx()) {
-						try {
-							courseService.updateCourse(dto);
-							result = true;
-						} catch (NotFoundException e) {
-							e.printStackTrace();
-						}
-						break;
-					}else {
-						System.out.println("본인의 강의만 수정할 수 있습니다.");
-					}
+				if(course.getTeacherIdx().getIdx() == teacher.getIdx()) {
+					courseService.updateCourse(course.getIdx(), dto);
+					result = true;
+				}else {
+					System.out.println("본인의 강의만 수정할 수 있습니다.");
 				}
 			} catch (NotFoundException e1) {
 				e1.printStackTrace();
@@ -115,20 +108,13 @@ public class CourseController {
 			
 			try {
 				Teacher teacher = teacherService.findOne(entity.getIdx());
-				List<Course> courseList = teacher.getCourseList();
+				Course course = courseService.findOne(dto.getIdx());
 				
-				for(Course c : courseList) {
-					if(c.getIdx() == dto.getIdx()) {
-						try {
-							courseService.deleteCourse(dto); //얘도 안됐네? delete를 안했네? 왜?
-							result = true;
-						} catch (NotFoundException e) {
-							e.printStackTrace();
-						}
-						break;
-					}else {
-						System.out.println("본인의 강의만 삭제할 수 있습니다.");
-					}
+				if(course.getTeacherIdx().getIdx() == teacher.getIdx()) {
+					courseService.deleteCourse(course.getIdx(), dto);
+					result = true;
+				}else {
+					System.out.println("본인의 강의만 삭제할 수 있습니다.");
 				}
 			} catch (NotFoundException e1) {
 				e1.printStackTrace();
