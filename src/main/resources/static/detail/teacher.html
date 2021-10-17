@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1, shrink-to-fit=no"
+        />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>Pick Teacher</title>
+        <!-- Favicon-->
+        <link
+            rel="icon"
+            type="image/x-icon"
+            href="/src/main/resources/static/assets/pick.ico"
+        />
+        <!-- Font Awesome icons (free version)-->
+        <script
+            src="https://use.fontawesome.com/releases/v5.15.3/js/all.js"
+            crossorigin="anonymous"
+        ></script>
+        <!-- Simple line icons-->
+        <link
+            href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.5.5/css/simple-line-icons.min.css"
+            rel="stylesheet"
+        />
+        <!-- Google fonts-->
+        <link
+            href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic"
+            rel="stylesheet"
+            type="text/css"
+        />
+        <!-- Vue.js -->
+        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+        <!-- stylesheet -->
+        <link
+            rel="stylesheet"
+            href="https://www.w3schools.com/w3css/4/w3.css"
+        />
+        <link rel="stylesheet" href="../css/styles.css" />
+        <link rel="stylesheet" href="css/info.css" />
+        <style>
+            .mySlides {
+                display: none;
+            }
+
+            .w3-left,
+            .w3-right,
+            .w3-badge {
+                cursor: pointer;
+            }
+
+            .w3-badge {
+                height: 13px;
+                width: 13px;
+                padding: 0;
+            }
+
+            .w3header {
+                padding: 0;
+            }
+        </style>
+    </head>
+
+    <body>
+        <!-- Header -->
+        <div class="w3header">
+            <a href="/index.html" class="logo">Pick Teacher</a>
+            <div class="w3header-right">
+                <a href="../login/studentlogin.html">로그인</a>
+                <a href="../login/studentsignup.html">회원 가입</a>
+            </div>
+        </div>
+        <div
+            class="w3header"
+            style="background-color: #1d809f; margin-bottom: 30px"
+        >
+            <a href="mypage_student.html" class="logo">My Page</a>
+        </div>
+
+        <div id="app" style="margin: 50px">
+            <h3>선생님 상세페이지</h3>
+            <hr />
+
+            <div>
+                <span>{{teacher.name}}</span>
+                <span>{{teacher.gender}}</span>
+                <span>{{teacher.address}}</span>
+                <span>{{teacher.phone}}</span>
+                <span>{{teacher.career}}</span>
+                <span>{{teacher.major}}</span>
+                <span>{{teacher.school}}</span>
+            </div>
+
+            <br />
+
+            <button @click="getCourse">강의 리스트 보기</button>
+
+            <div v-if="courseSuccess" v-for="c in courseList">
+                <span>{{c.idx}}</span>
+                <span>{{c.title}}</span>
+                <span>{{c.subject}}</span>
+                <span>{{c.schedule}}</span>
+                <span>{{c.status}}</span>
+                <span>{{c.openDate}}</span>
+                <span>{{c.closeDate}}</span>
+                <span>{{c.target}}</span>
+                <span>{{c.type}}</span>
+                <span>{{c.tuition}}</span>
+                <span>{{c.headCount}}</span>
+                <a v-bind:href="detailPage + c.idx">상세보기</a>
+                <br />
+            </div>
+            <!-- <div v-if="courseList.length"> -->
+
+            </div>
+
+            <hr />
+        </div>
+
+        <script>
+            new Vue({
+                el: "#app",
+                data: {
+                    teacherIdx: window.location.search.substring(
+                        window.location.search.indexOf("=") + 1
+                    ),
+
+                    teacherSuccess: "",
+                    teacher: [],
+
+                    courseSuccess: "",
+                    courseList: [],
+
+                    detailPage: "http://localhost/getCourseDetail/",
+                },
+                created: function () {
+                    axios({
+                        method: "get",
+                        url: "http://localhost/teacher",
+                        params: {
+                            idx: this.teacherIdx,
+                        },
+                    })
+                        .then((resData) => {
+                            this.teacherSuccess = resData.data.success;
+                            this.teacher = resData.data.teacher;
+                        })
+                        .catch((errorData) => {
+                            return console.log(errorData);
+                        });
+                },
+                methods: {
+                    getCourse: function () {
+                        axios({
+                            method: "get",
+                            url: "http://localhost/course/teacheridx",
+                            params: {
+                                idx: this.teacher.idx,
+                            },
+                        })
+                            .then((resData) => {
+                                this.courseSuccess = resData.data.success;
+                                this.courseList = resData.data.courseList;
+                            })
+                            .catch((errorData) => {
+                                return console.log(errorData);
+                            });
+                    },
+                },
+            });
+        </script>
+    </body>
+</html>

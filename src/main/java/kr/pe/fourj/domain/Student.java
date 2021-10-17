@@ -1,6 +1,6 @@
 package kr.pe.fourj.domain;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -42,7 +42,7 @@ public class Student {
 	private String name;
 	
 	@NonNull
-	private Date birth;
+	private LocalDate birth;
 	
 
 	@NonNull
@@ -53,7 +53,7 @@ public class Student {
 	private String nickName;
 	
 	@NonNull
-	private Integer gender;
+	private String gender;
 	
 	@NonNull
 	private String address;

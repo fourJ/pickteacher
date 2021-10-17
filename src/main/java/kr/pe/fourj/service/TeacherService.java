@@ -69,6 +69,10 @@ public class TeacherService {
 		return teacherRepository.findByGender(dto.getGender());
 	}
 	
+	public List<Teacher> findAllByCareer(TeacherDTO.Get dto) {
+		return teacherRepository.findByCareer(dto.getCareer());
+	}
+	
 	public List<Teacher> findAllBySchool(TeacherDTO.Get dto) {
 		return teacherRepository.findBySchool(dto.getSchool());
 	}

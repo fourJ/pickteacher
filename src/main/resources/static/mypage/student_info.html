@@ -8,7 +8,7 @@
     <meta name="author" content="" />
     <title>Pick Teacher</title>
     <!-- Favicon-->
-    <link rel="icon" type="image/x-icon" href="/src/main/resources/static/assets/pick.ico" />
+    <link rel="icon" type="image/x-icon" href="../assets/pick.ico" />
     <!-- Font Awesome icons (free version)-->
     <script src="https://use.fontawesome.com/releases/v5.15.3/js/all.js" crossorigin="anonymous"></script>
     <!-- Simple line icons-->
@@ -19,6 +19,8 @@
         rel="stylesheet" type="text/css" />
     <!-- Vue.js -->
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <!-- axios -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <!-- stylesheet -->
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css" />
     <link rel="stylesheet" href="../css/styles.css" />
@@ -58,72 +60,132 @@
     <div class="w3header" style="background-color: #1D809F; margin-bottom: 30px;">
         <a href="mypage_student.html" class="logo">My Page</a>
         <div class="w3header-right">
-            <a href="student_info.html">내 정보</a>
+          <a @click="studentinfo">내 정보</a>
             <a href="student_catalog.html">수강 내역</a>
             <a href="student_cart.html">장바구니</a>
             <a href="student_likes.html">찜한 강의</a>
-            <a href="#">탈퇴</a>
         </div>
     </div>
 
 
 
-    <div id="app" style="margin: 50px;">
-        <h3>{{name}}님 정보</h3>
+    <div class="w3-container" id="app" style="margin: 50px;">
+
+        <h3>내 정보</h3>
         <hr>
-        <div class="container px-4">
-            <p>아이디 : {{id}}</p>
-            <p>닉네임 : {{nickName}}</p>
-            <p>이름 : {{name}}</p>
-            <p>생년월일 : {{birth}}</p>
-            <p>나이 : {{age}}</p>
-            <p>SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy년 MM월 dd일");</p>
-            <p>성별 : {{gender}}</p>
-            <p>거주지 : {{address}}</p>
-            <p>전화번호 : {{phone}}</p>
+
+        <div v-if="success">
+            <div class="container px-4" v-show="success">
+                <form>
+                    <p><b>아이디</b></p> 
+                    <input type="text" style="background-color: #dedede; cursor: no-drop" v-model="datas.id" readonly />
+                    <p><b>닉네임</b></p>
+                    <input type="text" v-model="nickName" required />
+                    <p for="pw1"><b>비밀번호</b></p>
+                    <input type="password" placeholder="새로운 비밀번호를 입력하세요" name="pw1" required v-model="pw" />
+                    <p for="pw2"><b>비밀번호 확인</b></p>
+                    <input type="password" placeholder="비밀번호를 한 번 더 입력하세요" name="pw2" required />
+                    <p><b>이름</b></p>
+                    <input type="text" v-model="name" name="name" required />
+                    <p><b>성별</b></p>
+                    <input type="text" style="background-color: #dedede; cursor: no-drop" v-model="datas.gender" readonly />
+                    <p><b>생년월일</b></p>
+                    <input type="text" style="background-color: #dedede; cursor: no-drop" v-model="datas.birth" readonly />
+                    <p><b>나이</b></p>
+                    <input type="text" style="background-color: #dedede; cursor: no-drop" v-model="datas.age" readonly />
+                    <p><b>전화번호</b></p>
+                    <input type="text" v-model="phone" required>
+                    <p><b>거주지</b></p>
+                    <input type="text" v-model="address" required />
+                </form>
+
+                <span>
+                    <a class="w3button" @click="updatestudent">수정하기</a>
+                    <a class="w3button" @click="deletestudent">탈퇴하기</a>
+                </span>
+            </div>
         </div>
     </div>
 
-    <div>
-        <input type="button" value="수정하기" onclick="update();">
-    </div>
 
 
-    <script>
-        const app = new Vue({
+    <script type="text/javascript">
+        new Vue({
             el: "#app",
             data: {
-                "idx": "1",
-                "id": "js0989",
-                "pw": "비밀~",
-                "name": "김지명",
-                "birth": "1996-10-31T15:00:00.000+00:00",
-                "age": "26",
-                "nickName": "수지",
-                "gender": "1",
-                "address": "한국",
-                "phone": "010-8748-9878"
-            }
+                success: false,
+                datas: [],
+                name: "",
+                pw: "",
+                nickName: "",
+                address: "",
+                phone: ""
+            },
+            created: function () {
+                axios({
+                    method: "get",
+                    url: "http://localhost/student",
+                })
+                .then((resData) => {
+                    this.success = resData.data.success;
+                    console.log(resData.data);
+
+                    this.datas = resData.data.student;
+                    console.log(this.datas);
+                })
+                .catch(errorData => {
+                    alert(errorData);
+                    console.log(errorData);
+                });
+            },
+            methods: {
+                updatestudent: function() {
+                    axios({
+                        method: "put",
+                        url: "http://localhost/student",
+                        data: {
+                            name: this.name,
+                            pw: this.pw,
+                            nickName: this.nickName,
+                            address: this.address,
+                            phone: this.phone
+                        }
+                    })
+                    .then((resData) => {
+                        this.success = resData.data.success;
+                        console.log(resData.data.success);
+                        alert("수정했습니다!");
+                        window.location.href = "http://localhost/mypage/student_info.html";
+                    })
+                    .catch((errorData) => {
+                        alert(errorData.response.data.message);
+                    })
+                },
+
+                deletestudent: function(idx) {
+                    axios({
+                        method: "delete",
+                        url: "http://localhost/student",
+                    })
+                    .then((resData) => {
+                        this.success = resData.data.success;
+                        console.log(resData.data.success);
+                        alert("삭제했습니다!");
+                        window.location.href = "http://localhost/index.html";
+                    })
+                    .catch((errorData) => {
+                        alert(errorData.response.data.message);
+                    }) 
+                },
+            },
         });
-    </script>
-    <script type="text/javascript">
-        // var password = prompt('비밀번호를 입력해주세요');
-        // if (password == '1') {
-        //     alert('수정하기');
-        // } else {
-        //     alert('비밀번호가 일치하지 않습니다.');
-        // }
 
-
-        function update() {
-            var pw = prompt("비밀번호를 입력하세요:)");
-            if (pw == "1111") {
-                location = "student_update.html"
-            } else {
-                alert("비밀번호를 재입력하세요!");
-            }
-        };
     </script>
+
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top"><i class="fas fa-angle-up"></i></a>
+    <!-- Bootstrap core JS-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

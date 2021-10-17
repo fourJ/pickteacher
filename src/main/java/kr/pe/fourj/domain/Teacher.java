@@ -43,7 +43,7 @@ public class Teacher {
 	private String name;
 	
 	@NonNull
-	private Integer gender;
+	private String gender;
 	
 	@NonNull
 	private String address;

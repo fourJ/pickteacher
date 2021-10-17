@@ -1,6 +1,6 @@
 package kr.pe.fourj.controller;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -47,11 +47,11 @@ public class CatalogController {
 			try {
 				Student student = studentService.findOne(entity.getIdx());
 				Course course = courseService.findOne(dto.getCourseIdx());
-				LocalDateTime dateTime = LocalDateTime.now();
+				LocalDate date = LocalDate.now();
 				
 				if(catalogService.isNotAlreadyCatalog(student, course) && courseService.checkStatus(course) && course.getHeadCount() > catalogService.findAllByCourseIdx(course).size()) {
 					try {
-						saveId = catalogService.saveCatalog(new Catalog(student, course, dateTime));
+						saveId = catalogService.saveCatalog(new Catalog(student, course, date));
 						result = true;
 					} catch (ArgumentNullException e) {
 						e.printStackTrace();
@@ -152,10 +152,9 @@ public class CatalogController {
 		return new ResponseDTO.CatalogListResponse(result, catalogList);
 	}
 	
-	//???idx로 하는 검색이 쓰일까요???
 	//특정 강의 id로 수강 내역 검색
 	@GetMapping("/catalog/courseidx")
-	public ResponseDTO.CatalogListResponse findAllByCourseIdx(@RequestBody CatalogDTO.Get dto) {
+	public ResponseDTO.CatalogListResponse findAllByCourseIdx(CatalogDTO.Get dto) {
 		System.out.println("-- 특정 강의 이름으로 수강 내역 검색 시도 --");
 		
 		boolean result = false;

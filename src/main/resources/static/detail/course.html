@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1, shrink-to-fit=no"
+        />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>Pick Teacher</title>
+        <!-- Favicon-->
+        <link
+            rel="icon"
+            type="image/x-icon"
+            href="/src/main/resources/static/assets/pick.ico"
+        />
+        <!-- Font Awesome icons (free version)-->
+        <script
+            src="https://use.fontawesome.com/releases/v5.15.3/js/all.js"
+            crossorigin="anonymous"
+        ></script>
+        <!-- Simple line icons-->
+        <link
+            href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.5.5/css/simple-line-icons.min.css"
+            rel="stylesheet"
+        />
+        <!-- Google fonts-->
+        <link
+            href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic"
+            rel="stylesheet"
+            type="text/css"
+        />
+        <!-- Vue.js -->
+        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+        <!-- stylesheet -->
+        <link
+            rel="stylesheet"
+            href="https://www.w3schools.com/w3css/4/w3.css"
+        />
+        <link rel="stylesheet" href="../css/styles.css" />
+        <link rel="stylesheet" href="css/info.css" />
+        <style>
+            .mySlides {
+                display: none;
+            }
+
+            .w3-left,
+            .w3-right,
+            .w3-badge {
+                cursor: pointer;
+            }
+
+            .w3-badge {
+                height: 13px;
+                width: 13px;
+                padding: 0;
+            }
+
+            .w3header {
+                padding: 0;
+            }
+        </style>
+    </head>
+
+    <body>
+        <!-- Header -->
+        <div class="w3header">
+            <a href="/index.html" class="logo">Pick Teacher</a>
+            <div class="w3header-right">
+                <a href="../login/studentlogin.html">로그인</a>
+                <a href="../login/studentsignup.html">회원 가입</a>
+            </div>
+        </div>
+        <div
+            class="w3header"
+            style="background-color: #1d809f; margin-bottom: 30px"
+        >
+            <a href="mypage_student.html" class="logo">My Page</a>
+        </div>
+
+        <div id="app" style="margin: 50px">
+            <h3>강의 상세페이지</h3>
+            <hr />
+
+            <div>
+                <span>{{course.title}}</span>
+                <span>{{course.subject}}</span>
+                <span>{{course.schedule}}</span>
+                <span>{{course.status}}</span>
+                <span>{{course.openDate}}</span>
+                <span>{{course.closeDate}}</span>
+                <span>{{course.target}}</span>
+                <span>{{course.type}}</span>
+                <span>{{course.tuition}}</span><br />
+
+                <div>
+                    <span>현재 수강 현황 : </span>
+                    <span>{{catalogSize}}</span>
+                    <span> / </span>
+                    <span>{{course.headCount}}</span>
+                </div>
+            </div>
+
+            <hr />
+        </div>
+
+        <script>
+            new Vue({
+                el: "#app",
+                data: {
+                    courseIdx: window.location.search.substring(
+                        window.location.search.indexOf("=") + 1
+                    ),
+
+                    courseSuccess: "",
+                    course: [],
+
+                    catalogSuccess: "",
+                    catalogList: [],
+                    catalogSize: "",
+                },
+                created: function () {
+                    axios({
+                        method: "get",
+                        url: "http://localhost/course",
+                        params: {
+                            idx: this.courseIdx,
+                        },
+                    })
+                        .then((resData) => {
+                            this.courseSuccess = resData.data.success;
+                            this.course = resData.data.course;
+                        })
+                        .catch((errorData) => {
+                            return console.log(errorData);
+                        });
+                },
+                mounted: function () {
+                    axios({
+                        method: "get",
+                        url: "http://localhost/catalog/courseidx",
+                        params: {
+                            courseIdx: this.courseIdx,
+                        },
+                    })
+                        .then((resData) => {
+                            this.catalogSuccess = resData.data.success;
+                            this.catalogList = resData.data.catalogList;
+                            this.catalogSize = resData.data.catalogList.length;
+                        })
+                        .catch((errorData) => {
+                            return console.log(errorData);
+                        });
+                },
+            });
+        </script>
+    </body>
+</html>

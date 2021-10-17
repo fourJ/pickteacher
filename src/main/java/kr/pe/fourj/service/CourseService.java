@@ -1,6 +1,6 @@
 package kr.pe.fourj.service;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,14 +45,12 @@ public class CourseService {
 		courseRepository.save(course);
 	}
 	
-	public String calculateStatus(Date openDate, Date closeDate) {
-		Date now = new Date();
-		System.out.println("현재 시간 : " + now);
-		String status = null;
-
-		if(now.getTime() <= openDate.getTime()) {
+	public String calculateStatus(LocalDate openDate, LocalDate closeDate) {
+		String status;
+		
+		if(LocalDate.now().isBefore(openDate)) {
 			status = "미개강";
-		}else if(now.getTime() >= openDate.getTime() && now.getTime() <= closeDate.getTime()) {
+		}else if(LocalDate.now().isAfter(openDate) && LocalDate.now().isBefore(closeDate)) {
 			status = "진행중";
 		}else {
 			status = "마감";
@@ -62,9 +60,8 @@ public class CourseService {
 	}
 
 	public boolean checkStatus(Course course) {
-		Date now = new Date();
 		boolean check = false;
-		if(!course.getStatus().equals("마감") && now.getTime() <= course.getCloseDate().getTime()) {
+		if(!course.getStatus().equals("마감") && LocalDate.now().isBefore(course.getCloseDate())) {
 			check = true;
 		}
 		return check;
@@ -87,6 +84,26 @@ public class CourseService {
 	
 	public List<Course> findAllByTitleContaining(CourseDTO.Get dto) {
 		return courseRepository.findCourseListByTitleContaining(dto.getTitle());
+	}
+	
+	public List<Course> findAllBySubject(CourseDTO.Get dto) {
+		return courseRepository.findCourseListBySubject(dto.getSubject());
+	}
+	
+	public List<Course> findAllByTarget(CourseDTO.Get dto) {
+		return courseRepository.findCourseListByTarget(dto.getTarget());
+	}
+	
+	public List<Course> findAllBySchedule(CourseDTO.Get dto) {
+		return courseRepository.findCourseListBySchedule(dto.getSchedule());
+	}
+	
+	public List<Course> findAllByType(CourseDTO.Get dto) {
+		return courseRepository.findCourseListByType(dto.getType());
+	}
+	
+	public List<Course> findAllByTuition(CourseDTO.Get dto) {
+		return courseRepository.findCourseListByTuition(dto.getTuition());
 	}
 	
 }

@@ -8,11 +8,14 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.view.RedirectView;
 
 import kr.pe.fourj.domain.Teacher;
 import kr.pe.fourj.dto.ResponseDTO;
@@ -101,6 +104,13 @@ public class TeacherController {
 		return new ResponseDTO.Logout(result);
 	}
 
+	//선생님 찾기에서 상세페이지로 이동
+	@GetMapping("getTeacherDetail/{idx}")
+	public RedirectView getCourseDetail(@PathVariable Long idx, RedirectAttributes attr) {
+		attr.addAttribute("teacherIdx", idx);
+		return new RedirectView("/detail/teacher.html");
+	}
+
 	//선생님 수정
 	@PutMapping("/teacher")
 	public ResponseDTO.Update updateTeacher(HttpServletRequest request, @RequestBody TeacherDTO.Update dto) {
@@ -151,7 +161,7 @@ public class TeacherController {
 	//???idx로 하는 검색이 쓰일까요???
 	//선생님 단일 검색
 	@GetMapping("/teacher")
-	public ResponseDTO.TeacherResponse findOne(@RequestBody TeacherDTO.Get dto) {
+	public ResponseDTO.TeacherResponse findOne(TeacherDTO.Get dto) {
 		System.out.println("-- 선생님 단일 검색 시도 --");
 		
 		boolean result = false;
@@ -188,7 +198,7 @@ public class TeacherController {
 	
 	//이름 일부로 검색
 	@GetMapping("/teacher/namecontaining")
-	public ResponseDTO.TeacherListResponse findAllByNameContaining(@RequestBody TeacherDTO.Get dto) {
+	public ResponseDTO.TeacherListResponse findAllByNameContaining(TeacherDTO.Get dto) {
 		System.out.println("-- 이름에 " + dto.getName() + " 들어간 선생님 검색 시도 --");
 		
 		List<Teacher> teacherList = teacherService.findAllByNameContaining(dto);
@@ -198,11 +208,21 @@ public class TeacherController {
 	
 	//성별로 검색
 	@GetMapping("/teacher/gender")
-	public ResponseDTO.TeacherListResponse findAllByGender(@RequestBody TeacherDTO.Get dto) {
+	public ResponseDTO.TeacherListResponse findAllByGender(TeacherDTO.Get dto) {
 		System.out.println("-- 성별로 선생님 검색 시도 --");
 		
 		List<Teacher> teacherList = teacherService.findAllByGender(dto);
 		
+		return new ResponseDTO.TeacherListResponse(true, teacherList);
+	}
+
+	//경력으로 검색
+	@GetMapping("/teacher/career")
+	public ResponseDTO.TeacherListResponse findAllByCareer(TeacherDTO.Get dto) {
+		System.out.println("-- 경력으로 선생님 검색 시도 --");
+
+		List<Teacher> teacherList = teacherService.findAllByCareer(dto);
+
 		return new ResponseDTO.TeacherListResponse(true, teacherList);
 	}
 	

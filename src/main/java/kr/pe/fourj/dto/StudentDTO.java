@@ -1,6 +1,6 @@
 package kr.pe.fourj.dto;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import lombok.Data;
 import lombok.NonNull;
@@ -12,9 +12,9 @@ public class StudentDTO {
 		private String id;
 		private String pw;
 		private String name;
-		private Date birth;
+		private LocalDate birth;
 		private String nickName;
-		private Integer gender;
+		private String gender;
 		private String address;
 		private String phone;
 	}

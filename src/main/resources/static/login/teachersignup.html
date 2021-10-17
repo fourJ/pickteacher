@@ -1,192 +1,456 @@
 <html>
+    <head>
+        <meta charset="utf-8" />
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1, shrink-to-fit=no"
+        />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>Pick Teacher</title>
+        <!-- Favicon-->
+        <link rel="icon" type="image/x-icon" href="../assets/pick.ico" />
+        <!-- Font Awesome icons (free version)-->
+        <script
+            src="https://use.fontawesome.com/releases/v5.15.3/js/all.js"
+            crossorigin="anonymous"
+        ></script>
+        <!-- Simple line icons-->
+        <link
+            href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.5.5/css/simple-line-icons.min.css"
+            rel="stylesheet"
+        />
+        <!-- Google fonts-->
+        <link
+            href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic"
+            rel="stylesheet"
+            type="text/css"
+        />
+        <!-- Vue.js -->
+        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+        <!-- stylesheet -->
+        <link
+            rel="stylesheet"
+            href="https://www.w3schools.com/w3css/4/w3.css"
+        />
+        <link rel="stylesheet" href="../css/styles.css" />
 
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <meta name="description" content="" />
-    <meta name="author" content="" />
-    <title>Pick Teacher</title>
-    <!-- Favicon-->
-    <link rel="icon" type="image/x-icon" href="/src/main/resources/static/assets/pick.ico" />
-    <!-- Font Awesome icons (free version)-->
-    <script src="https://use.fontawesome.com/releases/v5.15.3/js/all.js" crossorigin="anonymous"></script>
-    <!-- Simple line icons-->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.5.5/css/simple-line-icons.min.css"
-        rel="stylesheet" />
-    <!-- Google fonts-->
-    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic"
-        rel="stylesheet" type="text/css" />
-    <!-- Vue.js -->
-    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-    <!-- stylesheet -->
-    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css" />
-    <link rel="stylesheet" href="../css/styles.css" />
+        <!-- Material Design Lite CSS -->
+        <link rel="stylesheet" href="../login/css/google.css" />
+        <!-- Font Awesome CSS -->
+        <link
+            href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css"
+            rel="stylesheet"
+        />
+        <!-- Material Design icon font -->
+        <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/icon?family=Material+Icons"
+        />
+        <link rel="stylesheet" href="/css/styles.css" />
+    </head>
 
-    <!-- Material Design Lite CSS -->
-    <link rel="stylesheet" href="https://storage.googleapis.com/code.getmdl.io/1.0.0/material.indigo-pink.min.css">
-    <!-- Font Awesome CSS -->
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
-    <!-- Material Design icon font -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link rel="stylesheet" href="/css/styles.css">
-</head>
+    <style>
+        .util-center {
+            margin: auto;
+        }
 
-<style>
-    .util-center {
-        margin: auto;
-    }
+        .util-max-512px {
+            max-width: 512px;
+        }
 
-    .util-max-512px {
-        max-width: 512px;
-    }
+        .util-spacing-h--40px {
+            margin-top: 40px;
+            margin-bottom: 40px;
+        }
 
-    .util-spacing-h--40px {
-        margin-top: 40px;
-        margin-bottom: 40px
-    }
+        .util-no-decoration {
+            text-decoration: none;
+        }
+    </style>
 
-    .util-no-decoration {
-        text-decoration: none;
-    }
-</style>
-
-<body class="mdl-color--blue-grey-50">
-
-    <div class="w3header">
-        <a href="/index.html" class="logo">Pick Teacher</a>
-        <div class="w3header-right">
-            <a href="#로그인페이지">로그인</a>
-            <a href="#회원가입페이지">회원가입</a>
-        </div>
-        <!-- 로그인했을 때 보여야하는 내용은 다르게! -->
-    </div>
-    <div class="w3header" style="background-color: #1d809f; margin-bottom: 30px">
-        <a href="mypage_test.html" class="logo">강의 찾기</a>
-    </div>
-
-    <!-- REGISTER FORM -->
-    <div class="mdl-grid">
-        <div class="mdl-card mdl-shadow--16dp util-center util-spacing-h--40px">
-            <div class="mdl-card__title mdl-color--teal-500">
-                <h2 class="mdl-card__title-text mdl-color-text--white">Create a New Account</h2>
-            </div>
-            <div class="mdl-card__supporting-text mdl-grid">
-
-                <b class="mdl-color-text--accent">Error message goes here</b>
-
-
-                <form method="POST" action="http://localhost/teacher/">
-                    <input type="hidden" name="action" value="register" />
-
-                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-cell mdl-cell--12-col">
-                        <label class="mdl-textfield__label mdl-color-text--grey" for="textfield_new_username">ID</label>
-                        <input class="mdl-textfield__input" type="text" id="textfield_new_username" name="username"
-                            pattern="^[a-z0-9_-]{3,15}$" />
-                        <span class="mdl-textfield__error">3-15 characters with only lowercase letters, digits,
-                            underscore, and hyphen</span>
-                    </div>
-
-                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-cell mdl-cell--12-col">
-                        <label class="mdl-textfield__label mdl-color-text--grey"
-                            for="textfield_new_password">Password</label>
-                        <input class="mdl-textfield__input" type="password" id="textfield_new_password" name="password"
-                            pattern="((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%]).{6,20})" />
-                        <span class="mdl-textfield__error">
-                            6-20 characters with at least a digit, lowercase and uppercase letters,
-                            and special symbol in @#$%
-                        </span>
-                    </div>
-
-                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-cell mdl-cell--12-col">
-                        <label class="mdl-textfield__label mdl-color-text--grey"
-                            for="textfield_password_confirm">Password Confirm</label>
-                        <input class="mdl-textfield__input" type="password" id="textfield_password_confirm"
-                            name="password_confirm" />
-                    </div>
-
-                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-cell mdl-cell--12-col">
-                        <label class="mdl-textfield__label mdl-color-text--grey"
-                            for="textfield_new_username">Name</label>
-                        <input class="mdl-textfield__input" type="text" id="textfield_new_username" name="name" />
-                    </div>
-
-                    <!-- Gender -->
-                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-cell mdl-cell--12-col">
-                        <label class="mdl-textfield__label mdl-color-text--grey"
-                            for="textfield_new_username">Gender</label>
-                        <input class="mdl-textfield__input" type="text" id="textfield_new_username" name="gender"
-                            list="genderList" />
-                        <datalist id="genderList">
-                            <option value="여자"></option>
-                            <option value="남자"></option>
-                        </datalist>
-                    </div>
-
-                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-cell mdl-cell--12-col">
-                        <label class="mdl-textfield__label mdl-color-text--grey"
-                            for="textfield_new_username">Address</label>
-                        <input class="mdl-textfield__input" type="text" id="textfield_new_username" name="address" />
-                    </div>
-
-                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-cell mdl-cell--12-col">
-                        <label class="mdl-textfield__label mdl-color-text--grey"
-                            for="textfield_new_username">Phone</label>
-                        <input class="mdl-textfield__input" type="tel" id="textfield_new_username" name="phone"
-                            pattern="^[0-9_-]{3,15}$" />
-                        <span class="mdl-textfield__error">3-15 characters with only digits, underscore, and
-                            hyphen</span>
-                    </div>
-
-                    <!-- Career -->
-                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-cell mdl-cell--12-col">
-                        <label class="mdl-textfield__label mdl-color-text--grey"
-                            for="textfield_new_username">Career</label>
-                        <input class="mdl-textfield__input" type="text" id="textfield_new_username" name="career"
-                            list="careerList" />
-                        <datalist id="careerList">
-                            <option value="신입"></option>
-                            <option value="1-5년"></option>
-                            <option value="6-10년"></option>
-                            <option value="10년이상"></option>
-                        </datalist>
-                    </div>
-
-                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-cell mdl-cell--12-col">
-                        <label class="mdl-textfield__label mdl-color-text--grey"
-                            for="textfield_new_username">Major</label>
-                        <input class="mdl-textfield__input" type="text" id="textfield_new_username" name="major"
-                            list="majorList" />
-                        <datalist id="majorList">
-                            <option value="컴퓨터공학과"></option>
-                            <option value="영어영문과"></option>
-                            <option value="경영학과"></option>
-                            <option value="사회체육과"></option>
-                        </datalist>
-                    </div>
-
-                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-cell mdl-cell--12-col">
-                        <label class="mdl-textfield__label mdl-color-text--grey"
-                            for="textfield_new_username">School</label>
-                        <input class="mdl-textfield__input" type="text" id="textfield_new_username" name="name"
-                            pattern="^[a-z0-9_-]{3,15}$" />
-                    </div>
-
-                    <div class="mdl-cell mdl-cell--12-col send-button" align="center">
-                        <button
-                            class="mdl-button mdl-js-ripple-effect mdl-js-button mdl-button--raised mdl-button--colored"
-                            id="signin">
-                            Register
-                        </button>
-                    </div>
-                </form>
+    <body class="mdl-color--blue-grey-50">
+        <div class="w3header">
+            <a href="/index.html" class="logo">Pick Teacher</a>
+            <div class="w3header-right">
+                <a href="http://localhost/login/teacherlogin.html">로그인</a>
             </div>
         </div>
-    </div>
+        <div
+            class="w3header"
+            style="background-color: #1d809f; margin-bottom: 30px"
+        >
+            <a href="mypage_test.html" class="logo">강의 찾기</a>
+        </div>
 
-    <!-- Material Design Lite JavaScript -->
-    <script src="https://storage.googleapis.com/code.getmdl.io/1.0.0/material.min.js"></script>
-    <script src="/js/scripts.js"></script>
+        <!-- REGISTER FORM -->
+        <div class="mdl-grid" id="signup">
+            <div
+                class="
+                    mdl-card
+                    mdl-shadow--16dp
+                    util-center
+                    util-spacing-h--40px
+                "
+            >
+                <div class="mdl-card__title mdl-color--teal-500">
+                    <h2 class="mdl-card__title-text mdl-color-text--white">
+                        픽티처의 선생님이 되고 싶어요 🙋‍♀️
+                    </h2>
+                </div>
+                <div class="mdl-card__supporting-text mdl-grid">
+                    <b class="mdl-color-text--accent"
+                        >Error message goes here</b
+                    >
 
-</body>
+                    <form>
+                        <input type="hidden" name="action" value="register" />
 
+                        <div
+                            class="
+                                mdl-textfield mdl-js-textfield
+                                mdl-textfield--floating-label
+                                mdl-cell mdl-cell--12-col
+                            "
+                        >
+                            <label
+                                class="
+                                    mdl-textfield__label
+                                    mdl-color-text--grey
+                                "
+                                for="textfield_new_username"
+                                >ID</label
+                            >
+                            <input
+                                class="mdl-textfield__input"
+                                type="text"
+                                required=""
+                                v-model="id"
+                                pattern="^[a-z0-9_-]{3,15}$"
+                            />
+                            <span class="mdl-textfield__error"
+                                >3-15 characters with only lowercase letters,
+                                digits, underscore, and hyphen</span
+                            >
+                        </div>
+
+                        <div
+                            class="
+                                mdl-textfield mdl-js-textfield
+                                mdl-textfield--floating-label
+                                mdl-cell mdl-cell--12-col
+                            "
+                        >
+                            <label
+                                class="
+                                    mdl-textfield__label
+                                    mdl-color-text--grey
+                                "
+                                for="textfield_new_password"
+                                >Password</label
+                            >
+                            <input
+                                class="mdl-textfield__input"
+                                type="password"
+                                required=""
+                                v-model="pw"
+                                pattern="^[a-zA-Z0-9]+$"
+                            />
+                            <span class="mdl-textfield__error">
+                                6-20 characters with at least a digit, lowercase
+                                and uppercase letters, and special symbol in
+                                @#$%
+                            </span>
+                        </div>
+
+                        <div
+                            class="
+                                mdl-textfield mdl-js-textfield
+                                mdl-textfield--floating-label
+                                mdl-cell mdl-cell--12-col
+                            "
+                        >
+                            <label
+                                class="
+                                    mdl-textfield__label
+                                    mdl-color-text--grey
+                                "
+                                for="textfield_password_confirm"
+                                >Password Confirm</label
+                            >
+                            <input
+                                class="mdl-textfield__input"
+                                type="password"
+                                id="textfield_password_confirm"
+                                required=""
+                                name="password_confirm"
+                            />
+                        </div>
+
+                        <div
+                            class="
+                                mdl-textfield mdl-js-textfield
+                                mdl-textfield--floating-label
+                                mdl-cell mdl-cell--12-col
+                            "
+                        >
+                            <label
+                                class="
+                                    mdl-textfield__label
+                                    mdl-color-text--grey
+                                "
+                                for="textfield_new_username"
+                                >Name</label
+                            >
+                            <input
+                                class="mdl-textfield__input"
+                                type="text"
+                                required=""
+                                v-model="name"
+                            />
+                        </div>
+
+                        <!-- Gender -->
+                        <div
+                            class="
+                                mdl-textfield mdl-js-textfield
+                                mdl-textfield--floating-label
+                                mdl-cell mdl-cell--12-col
+                            "
+                        >
+                            <label
+                                class="
+                                    mdl-textfield__label
+                                    mdl-color-text--grey
+                                "
+                                for="textfield_new_username"
+                                >Gender</label
+                            >
+                            <input
+                                class="mdl-textfield__input"
+                                type="text"
+                                list="genderList"
+                            />
+                            <select id="genderList" v-model="gender">
+                                <option value="1">여자</option>
+                                <option value="0">남자</option>
+                            </select>
+                        </div>
+
+                        <div
+                            class="
+                                mdl-textfield mdl-js-textfield
+                                mdl-textfield--floating-label
+                                mdl-cell mdl-cell--12-col
+                            "
+                        >
+                            <label
+                                class="
+                                    mdl-textfield__label
+                                    mdl-color-text--grey
+                                "
+                                for="textfield_new_username"
+                                >Address</label
+                            >
+                            <input
+                                class="mdl-textfield__input"
+                                type="text"
+                                required=""
+                                v-model="address"
+                            />
+                        </div>
+
+                        <div
+                            class="
+                                mdl-textfield mdl-js-textfield
+                                mdl-textfield--floating-label
+                                mdl-cell mdl-cell--12-col
+                            "
+                        >
+                            <label
+                                class="
+                                    mdl-textfield__label
+                                    mdl-color-text--grey
+                                "
+                                for="textfield_new_username"
+                                >Phone</label
+                            >
+                            <input
+                                class="mdl-textfield__input"
+                                type="tel"
+                                required=""
+                                v-model="phone"
+                                pattern="^[0-9_-]{3,15}$"
+                            />
+                            <span class="mdl-textfield__error"
+                                >3-15 characters with only digits, underscore,
+                                and hyphen</span
+                            >
+                        </div>
+
+                        <!-- Career -->
+                        <div
+                            class="
+                                mdl-textfield mdl-js-textfield
+                                mdl-textfield--floating-label
+                                mdl-cell mdl-cell--12-col
+                            "
+                        >
+                            <label
+                                class="
+                                    mdl-textfield__label
+                                    mdl-color-text--grey
+                                "
+                                for="textfield_new_username"
+                                >Career</label
+                            >
+                            <input
+                                class="mdl-textfield__input"
+                                type="text"
+                                required=""
+                                v-model="career"
+                                list="careerList"
+                            />
+                            <datalist id="careerList">
+                                <option value="신입"></option>
+                                <option value="1-5년"></option>
+                                <option value="6-10년"></option>
+                                <option value="10년이상"></option>
+                            </datalist>
+                        </div>
+
+                        <div
+                            class="
+                                mdl-textfield mdl-js-textfield
+                                mdl-textfield--floating-label
+                                mdl-cell mdl-cell--12-col
+                            "
+                        >
+                            <label
+                                class="
+                                    mdl-textfield__label
+                                    mdl-color-text--grey
+                                "
+                                for="textfield_new_username"
+                                >Major</label
+                            >
+                            <input
+                                class="mdl-textfield__input"
+                                type="text"
+                                required=""
+                                v-model="major"
+                                list="majorList"
+                            />
+                            <datalist id="majorList">
+                                <option value="컴퓨터공학과"></option>
+                                <option value="영어영문과"></option>
+                                <option value="경영학과"></option>
+                                <option value="사회체육과"></option>
+                            </datalist>
+                        </div>
+
+                        <div
+                            class="
+                                mdl-textfield mdl-js-textfield
+                                mdl-textfield--floating-label
+                                mdl-cell mdl-cell--12-col
+                            "
+                        >
+                            <label
+                                class="
+                                    mdl-textfield__label
+                                    mdl-color-text--grey
+                                "
+                                for="textfield_new_username"
+                                >School</label
+                            >
+                            <input
+                                class="mdl-textfield__input"
+                                type="text"
+                                required=""
+                                v-model="school"
+                                pattern="^[a-z0-9_-]{3,15}$"
+                                v-on:keyup.enter="login"
+                            />
+                        </div>
+
+                        <div
+                            class="mdl-cell mdl-cell--12-col send-button"
+                            align="center"
+                        >
+                            <button
+                                class="
+                                    mdl-button
+                                    mdl-js-ripple-effect
+                                    mdl-js-button
+                                    mdl-button--raised mdl-button--colored
+                                "
+                                @click="signup"
+                            >
+                                Register
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            new Vue({
+                el: "#signup",
+                data: {
+                    id: "",
+                    pw: "",
+                    name: "",
+                    gender: "",
+                    address: "",
+                    phone: "",
+                    career: "",
+                    major: "",
+                    school: "",
+                    signupsuccess: "",
+                },
+                methods: {
+                    signup: function () {
+                        axios({
+                            method: "post",
+                            url: "http://localhost/teacher",
+                            data: {
+                                id: this.id,
+                                pw: this.pw,
+                                name: this.name,
+                                gender: this.gender,
+                                address: this.address,
+                                phone: this.phone,
+                                career: this.career,
+                                major: this.major,
+                                school: this.school,
+                            },
+                        })
+                            .then((resData) => {
+                                this.signupsuccess = true;
+                                console.log(resData.data.success);
+                                this.signupsuccess = resData.data.success;
+                                console.log(resData.data);
+                                if (this.signupsuccess) {
+                                    window.location.href =
+                                        "http://localhost/index.html";
+                                } else {
+                                    alert("입력한 정보를 다시 확인해주세요.");
+                                }
+                            })
+                            .catch((error) => {
+                                alert(error);
+                                console.log(error);
+                            });
+                    },
+                },
+            });
+        </script>
+
+        <!-- Material Design Lite JavaScript -->
+        <script src="https://storage.googleapis.com/code.getmdl.io/1.0.0/material.min.js"></script>
+        <!-- <script src="/js/scripts.js"></script> -->
+    </body>
 </html>

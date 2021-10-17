@@ -1,9 +1,8 @@
 package kr.pe.fourj.controller;
 
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import kr.pe.fourj.domain.Catalog;
@@ -48,12 +48,12 @@ public class StudentController {
 
 		boolean result = false;
 		Long saveId = null;
-
-		Calendar current = new GregorianCalendar();
-		Calendar birth = new GregorianCalendar();
-		birth.setTime(dto.getBirth());
-		current.setTime(new Date());
-		int age = current.get(Calendar.YEAR) - birth.get(Calendar.YEAR) + 1;
+		
+		LocalDate now = LocalDate.now();
+		LocalDate birth = dto.getBirth();
+		
+		Period period = Period.between(birth, now);
+		int age = period.getYears() + 1;
 
 
 		if (studentService.findStudentById(dto.getId()) == null) {
@@ -72,7 +72,7 @@ public class StudentController {
 	}
 	
 	//학생 로그인
-	@RequestMapping("/student/login")
+	@RequestMapping(value="/student/login", method=RequestMethod.POST) 
 	public ResponseDTO.Login login(HttpServletRequest request, @RequestBody StudentDTO.Login dto) {
 
 		boolean result = false;
@@ -167,22 +167,26 @@ public class StudentController {
 
 		return new ResponseDTO.Delete(result);
 	}
-	
-	//???idx로 하는 검색이 쓰일까요???
+
 	//학생 단일 검색
 	@GetMapping("/student")
-	public ResponseDTO.StudentResponse findOne(@RequestBody StudentDTO.Get dto) {
+	public ResponseDTO.StudentResponse findOne(HttpServletRequest request) {
 		System.out.println("-- 학생 단일 검색 시도 --");
-
 		boolean result = false;
 		Student student = null;
-		try {
-			student = studentService.findOne(dto.getIdx());
-			result = true;
-		} catch (NotFoundException e) {
-			e.printStackTrace();
-		}
+		if(request.getSession().getAttribute("student") != null) {
+			Object object = request.getSession().getAttribute("student");
+			Student entity = (Student)object;
 
+			try {
+				student = studentService.findOne(entity.getIdx());
+				result = true;
+			} catch (NotFoundException e) {
+				e.printStackTrace();
+			}
+		}else {
+			System.out.println("로그인 정보가 없습니다. 로그인이 필요한 기능입니다.");
+		}
 		return new ResponseDTO.StudentResponse(result, student);
 	}
 

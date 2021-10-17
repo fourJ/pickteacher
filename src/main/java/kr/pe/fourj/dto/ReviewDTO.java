@@ -15,7 +15,7 @@ public class ReviewDTO {
 	
 	@Data
 	public static class Update {
-		private Long courseIdx;
+		private Long idx;
 		private String content;
 		private Integer star;
 	}

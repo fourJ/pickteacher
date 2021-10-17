@@ -1,16 +1,18 @@
 package kr.pe.fourj.controller;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.view.RedirectView;
 
 import kr.pe.fourj.domain.Cart;
 import kr.pe.fourj.domain.Catalog;
@@ -73,18 +75,18 @@ public class CartController {
 	}
 	
 	//카트 삭제
-	@DeleteMapping("/cart")
-	public ResponseDTO.Delete deleteCart(HttpServletRequest request, @RequestBody CartDTO.Delete dto) {
+	@GetMapping("/cart/{courseIdx}")
+	public RedirectView deleteCart(HttpServletRequest request, @PathVariable Long courseIdx, CartDTO.Delete dto) {
 		System.out.println("-- 카트 삭제 시도 --");
 		
 		boolean result = false;
-		if(request.getSession().getAttribute("student") != null) { 
+		if(request.getSession().getAttribute("student") != null) {
 			Object object = request.getSession().getAttribute("student");
 			Student entity = (Student)object;
 			
 			try {
 				Student student = studentService.findOne(entity.getIdx());
-				Course course = courseService.findOne(dto.getCourseIdx());
+				Course course = courseService.findOne(courseIdx);
 				try {
 					cartService.deleteCart(student, course);
 					result = true;
@@ -98,7 +100,7 @@ public class CartController {
 			System.out.println("로그인 정보가 없습니다. 로그인이 필요한 기능입니다.");
 		}
 		
-		return new ResponseDTO.Delete(result);
+		return new RedirectView("/mypage/student_cart.html");
 	}
 
 	//특정 학생(자신)의 카트 리스트 검색
@@ -127,28 +129,24 @@ public class CartController {
 	}
 	
 	//수강 신청시 수강 내역으로 연동
-	@PostMapping("/cart/send")
-	public ResponseDTO.CartToCatalogResponse sendCatalog(HttpServletRequest request, @RequestBody CartDTO.Get dto) {
-		System.out.println("-- 수강 내역으로 보내기 시도 --");
-		
-		boolean result = false;
-		Long saveId = null;
+	@GetMapping("sendCatalog/{courseIdx}")
+	public RedirectView sendCatalog(HttpServletRequest request, @PathVariable Long courseIdx, RedirectAttributes attr) {
+
 		if(request.getSession().getAttribute("student") != null) {
 			Object object = request.getSession().getAttribute("student");
 			Student entity = (Student)object;
-			
+
 			try {
 				Student student = studentService.findOne(entity.getIdx());
-				Course course = courseService.findOne(dto.getCourseIdx());		
-				LocalDateTime dateTime = LocalDateTime.now();
-				
-				if(catalogService.isNotAlreadyCatalog(student, course) && courseService.checkStatus(course) && course.getHeadCount() > catalogService.findAllByCourseIdx(course).size()) {
+				Course course = courseService.findOne(courseIdx);		
+				LocalDate date = LocalDate.now();
+
+				if(courseService.checkStatus(course) && course.getHeadCount() > catalogService.findAllByCourseIdx(course).size()) {
 					try {
 						boolean checkCart = cartService.isNotAlreadyCart(student, course);
 						if(!checkCart) {
-							saveId = catalogService.saveCatalog(new Catalog(student, course, dateTime));
+							catalogService.saveCatalog(new Catalog(student, course, date));
 							cartService.deleteCart(student, course);
-							result = true;							
 						}else {
 							System.out.println("해당 강의가 장바구니에 없습니다.");
 						}
@@ -164,10 +162,7 @@ public class CartController {
 		}else {
 			System.out.println("로그인 정보가 없습니다. 로그인이 필요한 기능입니다.");
 		}
-		
-		return new ResponseDTO.CartToCatalogResponse(saveId, result);
-	}
-	
-	
 
+		return new RedirectView("/mypage/student_catalog.html");
+	}
 }

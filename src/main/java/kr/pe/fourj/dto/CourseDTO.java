@@ -1,6 +1,6 @@
 package kr.pe.fourj.dto;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import lombok.Data;
 
@@ -13,8 +13,8 @@ public class CourseDTO {
 		private String subject;
 		private String schedule;
 		private String type;
-		private Date openDate;
-		private Date closeDate;
+		private LocalDate openDate;
+		private LocalDate closeDate;
 		private Integer headCount;
 		private Integer tuition;
 		private String target;
@@ -25,8 +25,8 @@ public class CourseDTO {
 		private Long idx;
 		private String title;
 		private String schedule;
-		private Date openDate;
-		private Date closeDate;
+		private LocalDate openDate;
+		private LocalDate closeDate;
 		private String type;
 		private Integer tuition;
 		private String target;
@@ -42,5 +42,10 @@ public class CourseDTO {
 		private Long idx;
 		private Long teacherIdx;
 		private String title;
+		private String subject;
+		private String target;
+		private String schedule;
+		private String type;
+		private Integer tuition;
 	}
 }

@@ -7,15 +7,19 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.view.RedirectView;
 
 import kr.pe.fourj.domain.Course;
 import kr.pe.fourj.domain.Teacher;
 import kr.pe.fourj.dto.CourseDTO;
 import kr.pe.fourj.dto.ResponseDTO;
+import kr.pe.fourj.dto.TeacherDTO;
 import kr.pe.fourj.exception.Exception.ArgumentNullException;
 import kr.pe.fourj.exception.Exception.NotFoundException;
 import kr.pe.fourj.service.CourseService;
@@ -64,6 +68,13 @@ public class CourseController {
 		}
 		
 		return new ResponseDTO.Create(saveId, result);
+	}
+	
+	//강의 찾기에서 상세페이지로 이동
+	@GetMapping("getCourseDetail/{idx}")
+	public RedirectView getCourseDetail(@PathVariable Long idx, RedirectAttributes attr) {
+		attr.addAttribute("courseIdx", idx);
+		return new RedirectView("/detail/course.html");
 	}
 
 	//강의 수정
@@ -126,10 +137,9 @@ public class CourseController {
 		return new ResponseDTO.Delete(result);
 	}
 	
-	//???idx로 하는 검색이 쓰일까요???
 	//강의 단일 검색
 	@GetMapping("/course")
-	public ResponseDTO.CourseResponse findOne(@RequestBody CourseDTO.Get dto) {
+	public ResponseDTO.CourseResponse findOne(CourseDTO.Get dto) {
 		System.out.println("-- 강의 단일 검색 시도 --");
 		
 		boolean result = false;
@@ -156,7 +166,7 @@ public class CourseController {
 	
 	//특정 강의 제목으로 강의 리스트 검색
 	@GetMapping("/course/titlecontaining")
-	public ResponseDTO.CourseListResponse findAllCourseByTitleContaining(@RequestBody CourseDTO.Get dto) {
+	public ResponseDTO.CourseListResponse findAllByTitleContaining(CourseDTO.Get dto) {
 		System.out.println("-- 강의 제목이 " + dto.getTitle() + "인 강의 리스트 검색 시도 --");
 		
 		List<Course> courseList = courseService.findAllByTitleContaining(dto);
@@ -165,9 +175,9 @@ public class CourseController {
 	}
 
 	//특정 선생님(자신)의 강의 리스트 검색
-	@GetMapping("/course/teacherIdx")
-	public ResponseDTO.CourseListResponse findAllByTeacherIdx(HttpServletRequest request) {
-		System.out.println("-- 특정 선생님의 강의 리스트 검색 시도 --");
+	@GetMapping("/course/myidx")
+	public ResponseDTO.CourseListResponse findAllByMyIdx(HttpServletRequest request) {
+		System.out.println("-- 나의 강의 리스트 검색 시도 --");
 		
 		boolean result = false;
 		List<Course> courseList = null;
@@ -188,5 +198,72 @@ public class CourseController {
 		
 		return new ResponseDTO.CourseListResponse(result, courseList);
 	}
+	
+	//특정 선생님의 강의 리스트 검색
+	@GetMapping("/course/teacheridx")
+	public ResponseDTO.CourseListResponse findAllByTeacherIdx(TeacherDTO.Get dto) {
+		System.out.println("-- 특정 선생님의 강의 리스트 검색 시도 --");
 
+		boolean result = false;
+		List<Course> courseList = null;
+		try {
+			Teacher teacher = teacherService.findOne(dto.getIdx());
+			courseList = teacher.getCourseList();
+			result = true;
+		} catch (NotFoundException e) {
+			e.printStackTrace();
+		}
+
+		return new ResponseDTO.CourseListResponse(result, courseList);
+	}
+
+	//과목으로 강의 리스트 검색
+	@GetMapping("/course/subject")
+	public ResponseDTO.CourseListResponse findAllBySubject(CourseDTO.Get dto) {
+		System.out.println("-- 특정 과목 강의 리스트 검색 시도 --");
+
+		List<Course> courseList = courseService.findAllBySubject(dto);
+
+		return new ResponseDTO.CourseListResponse(true, courseList);
+	}
+	
+	//타겟(대상학년)으로 강의 리스트 검색
+	@GetMapping("/course/target")
+	public ResponseDTO.CourseListResponse findAllByTarget(CourseDTO.Get dto) {
+		System.out.println("-- 특정 타겟으로 강의 리스트 검색 시도 --");
+
+		List<Course> courseList = courseService.findAllByTarget(dto);
+
+		return new ResponseDTO.CourseListResponse(true, courseList);
+	}
+	
+	//스케줄(요일)로 강의 리스트 검색
+	@GetMapping("/course/schedule")
+	public ResponseDTO.CourseListResponse findAllBySchedule(CourseDTO.Get dto) {
+		System.out.println("-- 특정 타겟으로 강의 리스트 검색 시도 --");
+
+		List<Course> courseList = courseService.findAllBySchedule(dto);
+
+		return new ResponseDTO.CourseListResponse(true, courseList);
+	}
+	
+	//타입(진행방식)으로 강의 리스트 검색
+	@GetMapping("/course/type")
+	public ResponseDTO.CourseListResponse findAllByType(CourseDTO.Get dto) {
+		System.out.println("-- 특정 타겟으로 강의 리스트 검색 시도 --");
+
+		List<Course> courseList = courseService.findAllByType(dto);
+
+		return new ResponseDTO.CourseListResponse(true, courseList);
+	}
+	
+	//가격으로 강의 리스트 검색(입력된 금액 이하 강의 찾기)
+	@GetMapping("/course/tuition")
+	public ResponseDTO.CourseListResponse findAllByTuition(CourseDTO.Get dto) {
+		System.out.println("-- 특정 타겟으로 강의 리스트 검색 시도 --");
+
+		List<Course> courseList = courseService.findAllByTuition(dto);
+
+		return new ResponseDTO.CourseListResponse(true, courseList);
+	}
 }
