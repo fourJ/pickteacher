@@ -71,7 +71,7 @@ public class TeacherController {
 
 	//선생님 수정
 	@PutMapping("/teacher")
-	public ResponseDTO.Update updateTeacher(@RequestBody TeacherDTO.Update dto) {
+	public ResponseDTO.Update updateTeacher(TeacherDTO.Update dto) {
 		System.out.println("-- 선생님 수정 시도 --");
 		
 		boolean result = false;
