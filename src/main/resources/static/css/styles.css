@@ -11617,3 +11617,202 @@ footer.footer .social-link:hover {
   font-size: 2.25rem;
   box-shadow: 0 3px 3px 0 rgba(0, 0, 0, 0.1);
 }
+
+/* index css */
+.mySlides {
+  display: none;
+}
+
+.w3-left,
+.w3-right,
+.w3-badge {
+  cursor: pointer;
+}
+
+.w3-badge {
+  height: 13px;
+  width: 13px;
+  padding: 0;
+}
+
+@import url(https://fonts.googleapis.com/css?family=Crafty+Girls);
+
+.menu-nav {
+  font-family: "Crafty Girls", cursive;
+  font-size: 3rem;
+  line-height: 300px;
+  vertical-align: middle;
+  margin-right: 30px;
+  border-radius: 20px;
+  transition: 2s ease 0s;
+  cursor: pointer;
+}
+
+.menu-nav:nth-child(1) {
+  content: "hello";
+  box-shadow: inset 0px -5px 0px #b73327;
+}
+
+.menu-nav:nth-child(1):hover {
+  box-shadow: inset 0px -300px 0px #b73327;
+}
+
+.menu-nav:nth-child(2) {
+  box-shadow: inset 0px 5px 0px #2f3a68;
+}
+
+.menu-nav:nth-child(2):hover {
+  box-shadow: inset 0px 300px 0px #2f3a68;
+}
+
+.menu-nav:nth-child(3) {
+  box-shadow: inset 0px -5px 0px #8aaabf;
+}
+
+.menu-nav:nth-child(3):hover {
+  box-shadow: inset 0px -300px 0px #8aaabf;
+}
+
+.menu-nav:nth-child(4) {
+  box-shadow: inset 0px 5px 0px #e4d18c;
+}
+
+.menu-nav:nth-child(4):hover {
+  box-shadow: inset 0px 300px 0px #e4d18c;
+}
+
+.menu-nav:nth-child(5) {
+  box-shadow: inset 0px -5px 0px #639465;
+}
+
+.menu-nav:nth-child(5):hover {
+  box-shadow: inset 0px -300px 0px #639465;
+}
+
+
+#m1.modal-overlay {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  backdrop-filter: blur(1.5px);
+  -webkit-backdrop-filter: blur(1.5px);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+#m1 .modal-window {
+  background: rgba( 69, 139, 197, 0.70 );
+  box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+  backdrop-filter: blur( 13.5px );
+  -webkit-backdrop-filter: blur( 13.5px );
+  border-radius: 10px;
+  border: 1px solid rgba( 255, 255, 255, 0.18 );
+  width: 350px;
+  height: 150px;
+  position: relative;
+  top: -100px;
+  padding: 10px;
+}
+#m1 .title {
+  padding-left: 10px;
+  display: inline;
+  text-shadow: 1px 1px 2px gray;
+  color: white;
+  
+}
+#m1 .title h2 {
+  display: inline;
+}
+#m1 .close-area {
+  display: inline;
+  float: right;
+  padding-right: 10px;
+  cursor: pointer;
+  text-shadow: 1px 1px 2px gray;
+  color: white;
+}
+
+#m1 .content {
+  margin-top: 20px;
+  padding: 0px 10px;
+  text-shadow: 1px 1px 2px gray;
+  color: white;
+}
+
+#m1 .btn {
+  margin-top: 20px;
+  padding: 0px 10px;
+  text-shadow: 1px 1px 2px gray;
+  color: white;
+}
+
+
+#m2.modal-overlay {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  backdrop-filter: blur(1.5px);
+  -webkit-backdrop-filter: blur(1.5px);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+#m2 .modal-window {
+  background: rgba( 69, 139, 197, 0.70 );
+  box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+  backdrop-filter: blur( 13.5px );
+  -webkit-backdrop-filter: blur( 13.5px );
+  border-radius: 10px;
+  border: 1px solid rgba( 255, 255, 255, 0.18 );
+  width: 350px;
+  height: 150px;
+  position: relative;
+  top: -100px;
+  padding: 10px;
+}
+#m2 .title {
+  padding-left: 10px;
+  display: inline;
+  text-shadow: 1px 1px 2px gray;
+  color: white;
+  
+}
+#m2 .title h2 {
+  display: inline;
+}
+#m2 .close-area {
+  display: inline;
+  float: right;
+  padding-right: 10px;
+  cursor: pointer;
+  text-shadow: 1px 1px 2px gray;
+  color: white;
+}
+
+#m2 .content {
+  margin-top: 20px;
+  padding: 0px 10px;
+  text-shadow: 1px 1px 2px gray;
+  color: white;
+}
+
+#m2 .btn {
+  margin-top: 20px;
+  padding: 0px 10px;
+  text-shadow: 1px 1px 2px gray;
+  color: white;
+}

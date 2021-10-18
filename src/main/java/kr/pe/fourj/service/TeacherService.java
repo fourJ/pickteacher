@@ -32,8 +32,10 @@ public class TeacherService {
 	public void updateTeacher(TeacherDTO.Update dto) throws NotFoundException {
 		Teacher teacher = findOne(dto.getIdx());
 		
+		teacher.setPw(dto.getPw());
 		teacher.setAddress(dto.getAddress());
 		teacher.setPhone(dto.getPhone());
+		teacher.setCareer(dto.getCareer());
 		
 		teacherRepository.save(teacher);
 	}	

@@ -42,6 +42,7 @@
         />
         <link rel="stylesheet" href="../css/styles.css" />
         <link rel="stylesheet" href="css/info.css" />
+        
         <style>
             .mySlides {
                 display: none;
@@ -270,25 +271,25 @@
                                 return console.log(errorData);
                             });
                     },
-                    deleteCourse: function (idx) {
-                        axios({
-                            method: "delete",
-                            url: "http://localhost/course",
-                            params: {
-                                idx: idx
-                            },
+                deleteCourse: function (idx) {
+                      axios({
+                        method: "delete",
+                        url: "http://localhost/course",
+                        params: {
+                          idx: idx
+                        },
+                      })
+                        .then((resData) => {
+                          console.log("삭제성공");
+                          alert("삭제성공");
+                          window.location.reload();
+                          location.href = "teacher_courseList.html";
                         })
-                            .then((resData) => {
-                                console.log("삭제성공");
-                                alert("삭제성공");
-                                window.location.reload();
-                                location.href = "teacher_courseList.html";
-                            })
-                            .catch((errorData) => {
-                                return console.log(errorData);
-                            });
+                        .catch((errorData) => {
+                          return console.log(errorData);
+                        });
                     }
-                },
+                  },
                 mounted: function () {
                 axios({
                   method: "get",

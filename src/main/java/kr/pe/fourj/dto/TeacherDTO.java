@@ -21,8 +21,10 @@ public class TeacherDTO {
 	@Data
 	public static class Update {
 		private Long idx;
+		private String pw;
 		private String address;
 		private String phone;
+		private String career;
 	}
 	
 	@Data
