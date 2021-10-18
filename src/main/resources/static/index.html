@@ -37,75 +37,7 @@
         <link rel="stylesheet" href="css/styles.css" />
 
         <style>
-            .mySlides {
-                display: none;
-            }
-
-            .w3-left,
-            .w3-right,
-            .w3-badge {
-                cursor: pointer;
-            }
-
-            .w3-badge {
-                height: 13px;
-                width: 13px;
-                padding: 0;
-            }
-
-            @import url(https://fonts.googleapis.com/css?family=Crafty+Girls);
-
-            .menu-nav {
-                font-family: "Crafty Girls", cursive;
-                font-size: 3rem;
-                line-height: 300px;
-                vertical-align: middle;
-                margin-right: 30px;
-                border-radius: 20px;
-                transition: 2s ease 0s;
-                cursor: pointer;
-            }
-
-            .menu-nav:nth-child(1) {
-                content: "hello";
-                box-shadow: inset 0px -5px 0px #b73327;
-            }
-
-            .menu-nav:nth-child(1):hover {
-                box-shadow: inset 0px -300px 0px #b73327;
-            }
-
-            .menu-nav:nth-child(2) {
-                box-shadow: inset 0px 5px 0px #2f3a68;
-            }
-
-            .menu-nav:nth-child(2):hover {
-                box-shadow: inset 0px 300px 0px #2f3a68;
-            }
-
-            .menu-nav:nth-child(3) {
-                box-shadow: inset 0px -5px 0px #8aaabf;
-            }
-
-            .menu-nav:nth-child(3):hover {
-                box-shadow: inset 0px -300px 0px #8aaabf;
-            }
-
-            .menu-nav:nth-child(4) {
-                box-shadow: inset 0px 5px 0px #e4d18c;
-            }
-
-            .menu-nav:nth-child(4):hover {
-                box-shadow: inset 0px 300px 0px #e4d18c;
-            }
-
-            .menu-nav:nth-child(5) {
-                box-shadow: inset 0px -5px 0px #639465;
-            }
-
-            .menu-nav:nth-child(5):hover {
-                box-shadow: inset 0px -300px 0px #639465;
-            }
+            
         </style>
     </head>
 
@@ -137,39 +69,43 @@
         <!-- Header-->
         <header class="masthead d-flex align-items-center">
             <div class="container px-4 px-lg-5 text-center">
-                <a class="menu-nav" id="login" onclick="handleOnClick1()"
+                <a class="menu-nav" id="login" onclick="login()"
                     >&#160;LogIn&#160;</a
                 >
-                <a class="menu-nav" id="signup" onclick="handleOnClick2()"
+                <a class="menu-nav" id="signup" onclick="signup()"
                     >&#160;SignUp&#160;</a
                 >
-                <script>
-                    function handleOnClick1(url) {
-                        if (window.confirm("잠깐!! 🤭 학생 회원이신가요?")) {
-                            window.location.href = "login/studentlogin.html";
-                        } else {
-                            location.href = "login/teacherlogin.html";
-                        }
-                    }
+                
+                <!-- 로그인 모달 -->
+                  <div id="m1" class="modal-overlay">
+                    <div class="modal-window">
+                      <div class="title">
+                        <h2>Welcome</h2>
+                      </div>
+                      <div class="close-area">💨</div>
+                      <div class="content">
+                        
+                        <button class="btn" id="studentLog">학생 🙆‍♀️</button>
+                        <button class="btn" id="teacherLog">선생님 👩‍🏫</button>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <!-- 회원가입 모달 -->
+                  <div id="m2" class="modal-overlay">
+                    <div class="modal-window">
+                      <div class="title">
+                        <h2>Welcome</h2>
+                      </div>
+                      <div class="close-area">💨</div>
+                      <div class="content">
+                        
+                        <button class="btn" id="studentsignup">학생 🙆‍♀️</button>
+                        <button class="btn" id="teachersignup">선생님 👩‍🏫</button>
+                      </div>
+                    </div>
+                  </div>
 
-                    function handleOnClick2(url) {
-                        if (window.confirm("잠깐!! 🤭 학생 회원이신가요?")) {
-                            window.location.href = "login/studentsignup.html";
-                        } else {
-                            location.href = "login/teachersignup.html";
-                        }
-                    }
-
-                    function mypage(url) {
-                      if(sessionStorage.getItem("studentIdx") != null) {
-                        window.location.href = "mypage/mypage_student.html";
-                      }else if(sessionStorage.getItem("teacherIdx") != null) {
-                        window.location.href = "mypage/mypage_teacher.html";
-                      }else {
-                        alert("로그인은 하셨나요? 🤔");
-                      }
-                    }
-                </script>
                 <h1 class="mb-1">Pick Teacher</h1>
                 <h3 class="mb-5">나만의 선생님을 고르세요:)</h3>
                 <a class="btn btn-primary btn-xl" href="#about">배너 보기</a>
@@ -360,171 +296,6 @@
             </div>
         </section>
 
-        <!-- Services-->
-        <section
-            class="content-section bg-primary text-white text-center"
-            id="services"
-        >
-            <div class="container px-4 px-lg-5">
-                <div class="content-section-heading">
-                    <h3 class="text-secondary mb-0">Services</h3>
-                    <h2 class="mb-5">What We Offer</h2>
-                </div>
-                <div class="row gx-4 gx-lg-5">
-                    <div class="col-lg-3 col-md-6 mb-5 mb-lg-0">
-                        <span class="service-icon rounded-circle mx-auto mb-3"
-                            ><i class="icon-screen-smartphone"></i
-                        ></span>
-                        <h4><strong>Responsive</strong></h4>
-                        <p class="text-faded mb-0">
-                            Looks great on any screen size!
-                        </p>
-                    </div>
-                    <div class="col-lg-3 col-md-6 mb-5 mb-lg-0">
-                        <span class="service-icon rounded-circle mx-auto mb-3"
-                            ><i class="icon-pencil"></i
-                        ></span>
-                        <h4><strong>Redesigned</strong></h4>
-                        <p class="text-faded mb-0">
-                            Freshly redesigned for Bootstrap 5.
-                        </p>
-                    </div>
-                    <div class="col-lg-3 col-md-6 mb-5 mb-md-0">
-                        <span class="service-icon rounded-circle mx-auto mb-3"
-                            ><i class="icon-like"></i
-                        ></span>
-                        <h4><strong>Favorited</strong></h4>
-                        <p class="text-faded mb-0">
-                            Millions of users
-                            <i class="fas fa-heart"></i>
-                            Start Bootstrap!
-                        </p>
-                    </div>
-                    <div class="col-lg-3 col-md-6">
-                        <span class="service-icon rounded-circle mx-auto mb-3"
-                            ><i class="icon-mustache"></i
-                        ></span>
-                        <h4><strong>Question</strong></h4>
-                        <p class="text-faded mb-0">
-                            I mustache you a question...
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Callout-->
-        <section class="callout">
-            <div class="container px-4 px-lg-5 text-center">
-                <h2 class="mx-auto mb-5">
-                    Welcome to
-                    <em>your</em>
-                    next website!
-                </h2>
-                <a
-                    class="btn btn-primary btn-xl"
-                    href="https://startbootstrap.com/theme/stylish-portfolio/"
-                    >Download Now!</a
-                >
-            </div>
-        </section>
-
-        <!-- Portfolio-->
-        <section class="content-section" id="portfolio">
-            <div class="container px-4 px-lg-5">
-                <div class="content-section-heading text-center">
-                    <h3 class="text-secondary mb-0">Portfolio</h3>
-                    <h2 class="mb-5">Recent Projects</h2>
-                </div>
-                <div class="row gx-0">
-                    <div class="col-lg-6">
-                        <a class="portfolio-item" href="#!">
-                            <div class="caption">
-                                <div class="caption-content">
-                                    <div class="h2">Stationary</div>
-                                    <p class="mb-0">
-                                        A yellow pencil with envelopes on a
-                                        clean, blue backdrop!
-                                    </p>
-                                </div>
-                            </div>
-                            <img
-                                class="img-fluid"
-                                src="assets/img/portfolio-1.jpg"
-                                alt="..."
-                            />
-                        </a>
-                    </div>
-                    <div class="col-lg-6">
-                        <a class="portfolio-item" href="#!">
-                            <div class="caption">
-                                <div class="caption-content">
-                                    <div class="h2">Ice Cream</div>
-                                    <p class="mb-0">
-                                        A dark blue background with a colored
-                                        pencil, a clip, and a tiny ice cream
-                                        cone!
-                                    </p>
-                                </div>
-                            </div>
-                            <img
-                                class="img-fluid"
-                                src="assets/img/portfolio-2.jpg"
-                                alt="..."
-                            />
-                        </a>
-                    </div>
-                    <div class="col-lg-6">
-                        <a class="portfolio-item" href="#!">
-                            <div class="caption">
-                                <div class="caption-content">
-                                    <div class="h2">Strawberries</div>
-                                    <p class="mb-0">
-                                        Strawberries are such a tasty snack,
-                                        especially with a little sugar on top!
-                                    </p>
-                                </div>
-                            </div>
-                            <img
-                                class="img-fluid"
-                                src="assets/img/portfolio-3.jpg"
-                                alt="..."
-                            />
-                        </a>
-                    </div>
-                    <div class="col-lg-6">
-                        <a class="portfolio-item" href="#!">
-                            <div class="caption">
-                                <div class="caption-content">
-                                    <div class="h2">Workspace</div>
-                                    <p class="mb-0">
-                                        A yellow workspace with some scissors,
-                                        pencils, and other objects.
-                                    </p>
-                                </div>
-                            </div>
-                            <img
-                                class="img-fluid"
-                                src="assets/img/portfolio-4.jpg"
-                                alt="..."
-                            />
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Call to Action-->
-        <section class="content-section bg-primary text-white">
-            <div class="container px-4 px-lg-5 text-center">
-                <h2 class="mb-4">
-                    The buttons below are impossible to resist...
-                </h2>
-                <a class="btn btn-xl btn-light me-4" href="#!">Click Me!</a>
-                <a class="btn btn-xl btn-dark" href="#!">Look at Me!</a>
-            </div>
-        </section>
-
         <!-- Map-->
         <div class="map" id="contact">
             <iframe
@@ -565,7 +336,7 @@
                     </li>
                 </ul>
                 <p class="text-muted small mb-0">
-                    Copyright &copy; Your Website 2021
+                    fourJ - Jee, Ji, Jin, Ju
                 </p>
             </div>
         </footer>

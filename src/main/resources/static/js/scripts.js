@@ -78,3 +78,72 @@ function fadeIn(el, display) {
         }
     })();
 };
+
+const studentLog = document.querySelector("#studentLog");
+const teacherLog = document.querySelector("#teacherLog");
+const studentsignup = document.querySelector("#studentsignup");
+const teachersignup = document.querySelector("#teachersignup");
+
+studentLog.addEventListener("click", function() {
+window.location.href = "login/studentlogin.html";
+})
+
+teacherLog.addEventListener("click", function() {
+window.location.href = "login/teacherlogin.html";
+})
+
+studentsignup.addEventListener("click", function() {
+window.location.href = "login/studentsignup.html";
+})
+
+teachersignup.addEventListener("click", function() {
+window.location.href = "login/teachersignup.html";
+})
+
+function mypage(url) {
+  if(sessionStorage.getItem("studentIdx") != null) {
+    window.location.href = "mypage/mypage_student.html";
+  }else if(sessionStorage.getItem("teacherIdx") != null) {
+    window.location.href = "mypage/mypage_teacher.html";
+  }else {
+    alert("로그인은 하셨나요? 🤔");
+  }
+}
+
+function login() {
+  const modal = document.getElementById("m1")
+  const btnModal = document.getElementById("login")
+  btnModal.addEventListener("click", e => {
+  modal.style.display = "flex"})
+
+  const closeBtn = modal.querySelector(".close-area")
+  closeBtn.addEventListener("click", e => {
+    modal.style.display = "none"
+  })
+
+  modal.addEventListener("click", e => {
+    const evTarget = e.target
+    if(evTarget.classList.contains("modal-overlay")) {
+        modal.style.display = "none"
+    }
+  })
+}
+
+function signup() {
+  const modal = document.getElementById("m2")
+  const btnModal = document.getElementById("signup")
+  btnModal.addEventListener("click", e => {
+  modal.style.display = "flex"})
+
+  const closeBtn = modal.querySelector(".close-area")
+  closeBtn.addEventListener("click", e => {
+    modal.style.display = "none"
+  })
+
+  modal.addEventListener("click", e => {
+    const evTarget = e.target
+    if(evTarget.classList.contains("modal-overlay")) {
+        modal.style.display = "none"
+    }
+  })
+}

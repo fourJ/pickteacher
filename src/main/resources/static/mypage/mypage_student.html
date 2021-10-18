@@ -152,12 +152,16 @@
                             .then((resData) => {
                                 this.success = resData.data.success;
                                 var inputpw = prompt("비밀번호를 입력하세요:)");
-                                if (inputpw == this.datas.pw) {
-                                    window.location.href =
-                                        "http://localhost/mypage/student_info.html";
-                                    console.log("성공");
-                                } else {
-                                    alert("비밀번호를 재입력하세요!");
+                                if(inputpw != null) {
+                                    if (inputpw == this.datas.pw) {
+                                        window.location.href =
+                                            "http://localhost/mypage/student_info.html";
+                                        console.log("성공");
+                                    } else {
+                                        alert("비밀번호를 재입력하세요!");
+                                    }
+                                }else {
+                                    window.location.reload();
                                 }
                             })
                             .catch((errorData) => {
