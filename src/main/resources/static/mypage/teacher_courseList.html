@@ -80,20 +80,39 @@
         </style>
     </head>
 
-    <body>
+    <body id="page-top">
         <!-- Header -->
         <div class="w3header">
             <a href="/index.html" class="logo">Pick Teacher</a>
             <div class="w3header-right">
-                <a href="../login/studentlogin.html">로그인</a>
-                <a href="../login/studentsignup.html">회원 가입</a>
+              </div>
+              <div>
+              <a class="menu-toggle rounded" href="#"><i class="fas fa-bars"></i></a>
+              <nav id="sidebar-wrapper">
+                  <ul class="sidebar-nav">
+                      <li class="sidebar-brand">
+                          <a href="#page-top">Pick Teacher</a>
+                      </li>
+                      <li class="sidebar-nav-item"><a href="#page-top">메인</a></li>
+                      <li class="sidebar-nav-item"><a href="#about">배너</a></li>
+                      <li class="sidebar-nav-item">
+                          <a href="search/search_teacher.html">선생님 찾기</a>
+                      </li>
+                      <li class="sidebar-nav-item">
+                          <a href="search/search_course.html">강의 찾기</a>
+                      </li>
+                      <li class="sidebar-nav-item">
+                          <a href="reviewcommunity/reivewall.html">후기 커뮤니티</a>
+                      </li>
+                    </ul>
+                  </nav>
             </div>
         </div>
+
         <div
             class="w3header"
-            style="background-color: #1d809f; margin-bottom: 30px"
-        >
-            <a href="mypage_student.html" class="logo">My Page</a>
+            style="background-color: #1d809f; margin-bottom: 30px">
+            <a href="mypage_teacher.html" class="logo">My Page</a>
         </div>
 
         <div id="app" style="margin: 50px">
@@ -192,12 +211,13 @@
             new Vue({
                 el: "#app",
                 data: {
-                    teacherIdx: window.location.search.substring(
-                        window.location.search.indexOf("=") + 1
-                    ),
+                    // teacherIdx: window.location.search.substring(
+                    //     window.location.search.indexOf("=") + 1
+                    // ),
 
                     teacherSuccess: "",
                     teacher: [],
+                    idx: "",
 
                     resData: false,
 
@@ -205,7 +225,6 @@
                     courseList: [],
 
                     catalogSuccess: "",
-                    catalogList: [],
                     catalogSize: "",
 
                     detailPage: "http://localhost/getCourseDetail/",
@@ -217,7 +236,7 @@
                         method: "get",
                         url: "http://localhost/teacher",
                         params: {
-                            idx: 1,
+                            idx: sessionStorage.getItem("teacherIdx")
                         },
                     })
                         .then((resData) => {
@@ -226,6 +245,8 @@
                             this.teacher = resData.data.teacher;
                             this.catalogSuccess = resData.data.success;
                             this.catalogList = resData.data.catalogList;
+                            this.idx = sessionStorage.getItem("teacherIdx");
+                            console.log(this.courseList.idx);
                             // this.catalogSize = resData.data.catalogList.length;
                         })
                         .catch((errorData) => {
@@ -238,7 +259,7 @@
                             method: "get",
                             url: "http://localhost/course/teacheridx",
                             params: {
-                                idx: this.teacher.idx,
+                                teacherIdx: this.idx
                             },
                         })
                             .then((resData) => {
@@ -254,7 +275,7 @@
                             method: "delete",
                             url: "http://localhost/course",
                             params: {
-                                courseIdx: idx,
+                                idx: idx
                             },
                         })
                             .then((resData) => {
@@ -266,8 +287,24 @@
                             .catch((errorData) => {
                                 return console.log(errorData);
                             });
-                    },
+                    }
                 },
+                mounted: function () {
+                axios({
+                  method: "get",
+                  url: "http://localhost/catalog/courseidx",
+                  params: {
+                    courseIdx: this.courseList.idx
+                  },
+                })
+                  .then((resData) => {
+                    this.catalogSuccess = resData.data.success;
+                    this.catalogSize = resData.data.catalogList.length;
+                  })
+                  .catch((errorData) => {
+                    return console.log(errorData);
+                  });
+              },
             });
         </script>
     </body>

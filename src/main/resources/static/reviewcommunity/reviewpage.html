@@ -98,8 +98,10 @@
   <div id="reviewWrite">
     
       <label for="courseIdx">Subject</label>
-      <select v-model="selected">
-          <option>수강 강의 선택</option>
+      
+          <!-- <option>수강 강의 선택</option> -->
+      <select v-model="selected">  
+          <label>수강 강의 선택</label>  
           <option v-for="c in catalogList" v-bind:value="c.courseIdx.idx">{{c.courseIdx.title}}</option>
       </select>
 
@@ -135,13 +137,17 @@
         selected: "",
         content: "",
         star: "",
-        reviewWriteSuccess: ""
+        reviewWriteSuccess: "",
+     
       },
       created:  
         function () {
                     axios({
                         method: "get",
                         url: "http://localhost/catalog/studentidx",
+                        params:{
+                          studentIdx: sessionStorage.getItem("studentIdx")
+                        }
                     })
                         .then((resData) => {
                             this.success = resData.data.success;
@@ -157,6 +163,7 @@
           method: "post",
           url: "http://localhost/review/enroll",
           data : {
+            studentIdx:sessionStorage.getItem("studentIdx"),
             courseIdx : this.selected,
             star : this.star,
             content : this.content
@@ -169,7 +176,7 @@
             window.location.reload()
             location.href="http://localhost/reviewcommunity/reviewmyall.html";
           }else{
-            alert("자신이 들은 강의만 후기를 남길 수 있습니다.");
+            alert("이미 작성한 후기입니다. 확인해주세요");
             location.href="http://localhost/reviewcommunity/reviewpage.html";
           }
         }).catch((errorData)=> {

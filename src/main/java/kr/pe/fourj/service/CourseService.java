@@ -70,6 +70,7 @@ public class CourseService {
 	
 	public void deleteCourse(CourseDTO.Delete dto) throws NotFoundException {
 		Course course = findOne(dto.getIdx());
+
 		courseRepository.deleteById(course.getIdx());
 	}
 	
