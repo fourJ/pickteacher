@@ -68,8 +68,8 @@ public class CourseService {
 		return check;
 	}
 	
-	public void deleteCourse(Long courseIdx, CourseDTO.Delete dto) throws NotFoundException {
-		Course course = findOne(courseIdx);
+	public void deleteCourse(CourseDTO.Delete dto) throws NotFoundException {
+		Course course = findOne(dto.getIdx());
 		courseRepository.deleteById(course.getIdx());
 	}
 	

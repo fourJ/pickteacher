@@ -98,5 +98,28 @@ public class LikesController {
 		
 		return new ResponseDTO.LikesListResponse(result, likesList);
 	}
+	
+	//좋아요 눌렀는지 안눌렀는지 찾아서 return
+	@GetMapping("/likes/check")
+	public ResponseDTO.LikesCheckResponse checkLikes(LikesDTO.Get dto) {
+		System.out.println("-- 특정 학생이 특정 과목 좋아요 눌렀는지 체크 시도 --");
+		
+		boolean result = false;
+		Integer check = -1;
+		try {
+			Student student = studentService.findOne(dto.getStudentIdx());
+			Course course = courseService.findOne(dto.getCourseIdx());
+			if(likesService.isNotAlreadyLikes(student, course)) {
+				check = 0; //좋아요 안 누름
+			} else {
+				check = 1; //좋아요 누름
+			}
+			result = true;
+		} catch (NotFoundException e) {
+			e.printStackTrace();
+		}
+		
+		return new ResponseDTO.LikesCheckResponse(result, check);
+	}
 
 }
