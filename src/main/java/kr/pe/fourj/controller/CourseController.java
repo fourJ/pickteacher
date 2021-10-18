@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.view.RedirectView;
 
 import kr.pe.fourj.domain.Catalog;
 import kr.pe.fourj.domain.Course;
@@ -67,7 +68,7 @@ public class CourseController {
 
 	//강의 수정
 	@PutMapping("/course")
-	public ResponseDTO.Update updateCourse(CourseDTO.Update dto) {
+	public RedirectView updateCourse(CourseDTO.Update dto) {
 		System.out.println("-- 강의 수정 시도 --");
 
 		boolean result = false;			
@@ -79,7 +80,7 @@ public class CourseController {
 			e.printStackTrace();
 		}
 
-		return new ResponseDTO.Update(result);
+		return new RedirectView("mypage/teacher_courseList.html");
 	}
 
 	//강의 삭제

@@ -160,6 +160,10 @@
         new Vue({
             el: "#app",
             data: {
+                courseIdx: window.location.search.substring(
+                    window.location.search.indexOf("=") + 1
+                ),
+
                 success: false,
                 datas: [],
                 detailPage: "http://localhost/getCourseDetail/",
@@ -176,6 +180,7 @@
                         url: "http://localhost/catalog/studentidx",
                         params: {
                             studentIdx: sessionStorage.getItem("studentIdx"),
+                            courseIdx: this.courseIdx
                         }
                     })
                         .then((resData) => {

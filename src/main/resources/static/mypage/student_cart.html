@@ -150,6 +150,7 @@
                     </td>
                     <td>
                         <a class="w3button" v-bind:href="url1 + v.courseIdx.idx + url2 + studentIdx">수강 신청</a>
+
                     </td>
                     <td>
                         <span class="w3button" @click="deleteCart(v.courseIdx.idx)">삭제하기</span>
@@ -167,6 +168,7 @@
             data: {
                 success: false,
                 datas: [],
+              
                 url1: "http://localhost/sendCatalog/",
                 url2: "/cart/",
                 resultSize: "",
@@ -187,10 +189,12 @@
                         .then((resData) => {
                             this.success = resData.data.success;
                             this.datas = resData.data.cartList;
-                            this.resultSize = this.datas.length;
+                            // this.resultSize = this.data.length;
+                            this.courseIdx = resData.datas.cartList.courseIdx.idx;
                         })
                         .catch((errorData) => {
-                            console.log(errorData.response.data.message);
+                            // console.log(errorData.response.data.message);
+                            alert(errorData)
                         });
                 } else {
                     if (window.confirm("잠깐!! 🤭 학생 회원이신가요?")) {
@@ -235,7 +239,7 @@
                     method: "get",
                     url: "http://localhost/student",
                     params: {
-                        idx: sessionStorage.getItem("studentIdx"),
+                        studentIdx: sessionStorage.getItem("studentIdx"),
                     }
                 })
                     .then((resData) => {
@@ -243,7 +247,7 @@
                         this.datas = resData.data.student;
                     })
                     .catch((errorData) => {
-                        console.log(errorData.response.data.message);
+                        // console.log(errorData.response.data.message);
                     });
             },
             methods: {

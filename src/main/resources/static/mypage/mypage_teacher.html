@@ -54,23 +54,23 @@
         </ul>
     </nav>
     <!-- Header -->
-    <!-- <header>
-        <div th:replace="../common/header.html :: headerFragment"></div>
-    </header> -->
-    <div class="w3header" id="header" v-if="success">
-        <div class="w3header">
-            <a href="/index.html" class="logo">Pick Teacher</a>
-        </div>
-        <div class="w3header" style="background-color: #1D809F; margin-bottom: 30px" v-show="success">
-            <a href="mypage_teacher.html" class="logo">My Page</a>
-            <div class="w3header-right">
-                <a @click="teacherinfo">내 정보</a>
-                <a href="teacher_courseList.html">내강의목록</a>
-                <a href="teacher_cart.html">장바구니</a>
-                <a href="teacher_likes.html">찜한 강의</a>
+    <div class="w3header" id="header">
+            <div class="w3header">
+                <a href="/index.html" class="logo">Pick Teacher</a>
             </div>
-        </div>
-    </div>
+            <div
+                class="w3header"
+                style="background-color: #1D809F; margin-bottom: 30px"
+                v-show="success"
+            >
+                <a href="mypage_teacher.html" class="logo">My Page</a>
+                <div class="w3header-right">
+                    <a href="teacher_update.html">내 정보 수정</a>
+              <a href="teacher_courseList.html">내 강의목록</a>
+                </div>
+            </div>
+    </div>  
+  
     <div class="w3-container" id="app" style="margin: 50px">
         <h1>마이페이지</h1>
         <hr />

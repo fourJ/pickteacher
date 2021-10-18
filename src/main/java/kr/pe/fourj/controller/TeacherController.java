@@ -32,7 +32,7 @@ public class TeacherController {
 		
 		boolean result = false;
 		Long saveId = null;
-		LocalDate date = LocalDate.now();		
+		LocalDate date = LocalDate.now();
 		if(teacherService.findTeacherById(dto.getId()) == null) {
 			try {
 				saveId = teacherService.saveTeacher(new Teacher(dto.getId(),dto.getPw(), 
@@ -71,7 +71,7 @@ public class TeacherController {
 
 	//선생님 수정
 	@PutMapping("/teacher")
-	public ResponseDTO.Update updateTeacher(@RequestBody TeacherDTO.Update dto) {
+	public ResponseDTO.Update updateTeacher(TeacherDTO.Update dto) {
 		System.out.println("-- 선생님 수정 시도 --");
 		
 		boolean result = false;
