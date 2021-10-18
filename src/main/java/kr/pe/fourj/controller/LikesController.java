@@ -61,22 +61,22 @@ public class LikesController {
 	
 	//좋아요 삭제
 	@DeleteMapping("/likes")
-	public ResponseDTO.Delete deleteLikes(@RequestBody LikesDTO.Delete dto) {
+	public ResponseDTO.Delete deleteLikes(LikesDTO.Delete dto) {
 		System.out.println("-- 좋아요 삭제 시도 --");
 
 		boolean result = false;			
+		try {
+			Student student = studentService.findOne(dto.getStudentIdx());
+			Course course = courseService.findOne(dto.getCourseIdx());
 			try {
-				Student student = studentService.findOne(dto.getStudentIdx());
-				Course course = courseService.findOne(dto.getCourseIdx());
-				try {
-					likesService.deleteLikes(student, course);
-					result = true;
-				} catch (ArgumentNullException e) {
-					e.printStackTrace();
-				}
-			} catch (NotFoundException e) {
+				likesService.deleteLikes(student, course);
+				result = true;
+			} catch (ArgumentNullException e) {
 				e.printStackTrace();
 			}
+		} catch (NotFoundException e) {
+			e.printStackTrace();
+		}
 		
 		return new ResponseDTO.Delete(result);
 	}
