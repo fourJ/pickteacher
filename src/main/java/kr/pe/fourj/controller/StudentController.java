@@ -90,7 +90,7 @@ public class StudentController {
 
 	//학생 수정
 	@PutMapping("/student")
-	public ResponseDTO.Update updateStudent(@RequestBody StudentDTO.Update dto) {
+	public ResponseDTO.Update updateStudent(StudentDTO.Update dto) {
 		System.out.println("-- 학생 수정 시도 --");
 
 		boolean result = false;
