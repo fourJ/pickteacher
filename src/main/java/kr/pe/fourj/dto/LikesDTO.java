@@ -19,5 +19,6 @@ public class LikesDTO {
 	@Data
 	public static class Get {
 		private Long studentIdx;
+		private Long courseIdx;
 	}
 }
