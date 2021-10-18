@@ -1,5 +1,6 @@
 package kr.pe.fourj.domain;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -36,7 +37,7 @@ public class Cart {
 	
 	@NonNull
 	@JsonManagedReference
-	@ManyToOne
+	@ManyToOne(cascade=CascadeType.REMOVE)
 	@JoinColumn(name="course_idx")
 	private Course courseIdx;
 	

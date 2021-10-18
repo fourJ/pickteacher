@@ -80,8 +80,7 @@ public class CourseController {
 
 		boolean result = false;			
 		try {
-			Course course = courseService.findOne(dto.getIdx());
-			courseService.deleteCourse(course.getIdx(), dto);
+			courseService.deleteCourse(dto);
 			result = true;
 		} catch (NotFoundException e) {
 			e.printStackTrace();
@@ -127,9 +126,9 @@ public class CourseController {
 		return new ResponseDTO.CourseListResponse(true, courseList);
 	}
 
-	//특정 선생님(자신)의 강의 리스트 검색
-	@GetMapping("/course/myidx")
-	public ResponseDTO.CourseListResponse findAllByMyIdx(CourseDTO.Get dto) {
+	//특정 선생님의 강의 리스트 검색
+	@GetMapping("/course/teacheridx")
+	public ResponseDTO.CourseListResponse findAllByTeacherIdx(CourseDTO.Get dto) {
 		System.out.println("-- 나의 강의 리스트 검색 시도 --");
 		
 		boolean result = false;

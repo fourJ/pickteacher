@@ -211,6 +211,7 @@
                                         "studentIdx",
                                         resData.data.idx
                                     );
+                                    alert("오늘도 화이팅 ❣");
                                     window.location.href =
                                         "http://localhost/index.html";
                                 } else {
@@ -235,6 +236,7 @@
                     logout: function () {
                         if (sessionStorage.getItem("studentIdx") != null) {
                             sessionStorage.clear();
+                            alert("로그아웃 성공 💨");
                         } else {
                             alert("로그아웃 실패");
                         }

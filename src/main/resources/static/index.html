@@ -129,11 +129,8 @@
                     <a href="reviewcommunity/reivewall.html">후기 커뮤니티</a>
                 </li>
                 <li class="sidebar-nav-item">
-                    <a href="mypage/mypage_student.html">학생 마이 페이지</a>
-                </li>
-                <li class="sidebar-nav-item">
-                    <a href="mypage/mypage_teacher.html">선생님 마이 페이지</a>
-                </li>
+                    <a onclick="mypage()">마이 페이지</a>
+              </li>
             </ul>
         </nav>
 
@@ -154,12 +151,23 @@
                             location.href = "login/teacherlogin.html";
                         }
                     }
+
                     function handleOnClick2(url) {
                         if (window.confirm("잠깐!! 🤭 학생 회원이신가요?")) {
                             window.location.href = "login/studentsignup.html";
                         } else {
                             location.href = "login/teachersignup.html";
                         }
+                    }
+
+                    function mypage(url) {
+                      if(sessionStorage.getItem("studentIdx") != null) {
+                        window.location.href = "mypage/mypage_student.html";
+                      }else if(sessionStorage.getItem("teacherIdx") != null) {
+                        window.location.href = "mypage/mypage_teacher.html";
+                      }else {
+                        alert("로그인은 하셨나요? 🤔");
+                      }
                     }
                 </script>
                 <h1 class="mb-1">Pick Teacher</h1>
