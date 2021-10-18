@@ -112,37 +112,39 @@
     <div class="w3-container" id="app" style="margin: 50px">
         <h3>나의 수강 내역</h3>
         <hr />
-
-        <div class="container px-4" v-if="success">
-            <table class="w3-table-all" v-show="success">
+        <div style="margin-top: 30px;" v-if="resultSize == '0'">신청한 강의가 없어요. 강의에서 수강 신청해 주세요:)</div>
+        <div v-if="success && resultSize != '0'">
+            <table class="w3-table-all" style="width: 100%" v-show="success">
                 <thead>
                     <tr class="w3-red">
-                        <th>선생님</th>
+                        <th>상태</th>
                         <th>과목</th>
                         <th>강의명</th>
                         <th>수업시간</th>
-                        <th>유형</th>
                         <th>개강일</th>
                         <th>종강일</th>
-                        <th>상태</th>
-                        <th>정원</th>
-                        <th>수강료</th>
                         <th>대상 학년</th>
+                        <th>유형</th>
+                        <th>수강료</th>
+                        <th>정원</th>
+                        <th>선생님</th>
                         <th></th>
                     </tr>
                 </thead>
                 <tr v-for="v in datas">
-                    <td>{{v.courseIdx.teacherIdx.name}}</td>
+                    <td>{{v.courseIdx.status}}</td>
                     <td>{{v.courseIdx.subject}}</td>
-                    <td>{{v.courseIdx.title}}</td>
+                    <td><a v-bind:href="courseDetailPage + v.courseIdx.idx">{{v.courseIdx.title}}</a></td>
                     <td>{{v.courseIdx.schedule}}</td>
-                    <td>{{v.courseIdx.type}}</td>
                     <td>{{v.courseIdx.openDate}}</td>
                     <td>{{v.courseIdx.closeDate}}</td>
-                    <td>{{v.courseIdx.status}}</td>
-                    <td>{{v.courseIdx.headCount}}</td>
-                    <td>{{v.courseIdx.tuition}}</td>
                     <td>{{v.courseIdx.target}}</td>
+                    <td>{{v.courseIdx.type}}</td>
+                    <td>{{v.courseIdx.tuition}}</td>
+                    <td>{{v.courseIdx.headCount}}</td>
+                    <td><a
+                            v-bind:href="teacherDetailPage + v.courseIdx.teacherIdx.idx">{{v.courseIdx.teacherIdx.name}}</a>
+                    </td>
                     <td>
                         <span>
                             <a class="w3button" v-bind:href="detailPage + v.courseIdx.idx">강의 상세</a>
@@ -150,7 +152,7 @@
                     </td>
                 </tr>
             </table>
-            <div style="margin-top: 30px;" v-if="resultSize == '0'">신청한 강의가 없어요. 강의에서 수강 신청해 주세요:)</div>
+
         </div>
     </div>
 
@@ -163,6 +165,9 @@
                 detailPage: "http://localhost/getCourseDetail/",
                 resultSize: "",
                 studentIdx: sessionStorage.getItem("studentIdx"),
+
+                courseDetailPage: "http://localhost/getCourseDetail/",
+                teacherDetailPage: "http://localhost/getTeacherDetail/"
             },
             created: function () {
                 if (this.studentIdx != null) {
@@ -170,7 +175,7 @@
                         method: "get",
                         url: "http://localhost/catalog/studentidx",
                         params: {
-                            idx: sessionStorage.getItem("studentIdx"),
+                            studentIdx: sessionStorage.getItem("studentIdx"),
                         }
                     })
                         .then((resData) => {

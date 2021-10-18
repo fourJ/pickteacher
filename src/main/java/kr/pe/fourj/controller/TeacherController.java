@@ -27,7 +27,7 @@ public class TeacherController {
 	
 	//선생님 저장
 	@PostMapping("/teacher")
-	public ResponseDTO.Create saveTeacher(@RequestBody TeacherDTO.Create dto) {
+	public ResponseDTO.Create saveTeacher(TeacherDTO.Create dto) {
 		System.out.println("-- 선생님 저장 시도 --");
 		
 		boolean result = false;

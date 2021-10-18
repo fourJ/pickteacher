@@ -64,7 +64,7 @@ public class Teacher {
 	@Column(name="enroll_date")
 	private LocalDate enrollDate;
 
-	@OneToMany(mappedBy="teacherIdx", cascade=CascadeType.REMOVE)
+	@OneToMany(mappedBy="teacherIdx", cascade=CascadeType.ALL)
 	@JsonBackReference
 	private List<Course> courseList;
 	

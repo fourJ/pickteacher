@@ -113,37 +113,43 @@
         <h3>나의 장바구니</h3>
         <hr />
 
-        <div v-if="success">
+        <div style="margin-top: 30px;" v-if="resultSize == '0'">장바구니에 담은 강의가 없어요. 강의를 담아 주세요:)</div>
+
+        <div v-if="success && resultSize != '0'">
             <table class="w3-table-all" v-show="success">
-                <tr class="w3-red">
-                    <th>선생님</th>
-                    <th>과목</th>
-                    <th>강의명</th>
-                    <th>수업시간</th>
-                    <th>유형</th>
-                    <th>개강일</th>
-                    <th>종강일</th>
-                    <th>상태</th>
-                    <th>정원</th>
-                    <th>수강료</th>
-                    <th>대상 학년</th>
-                    <th>선택</th>
-                    <th>선택</th>
-                </tr>
+                <thead>
+                    <tr class="w3-red">
+                        <th>상태</th>
+                        <th>과목</th>
+                        <th>강의명</th>
+                        <th>수업시간</th>
+                        <th>개강일</th>
+                        <th>종강일</th>
+                        <th>대상 학년</th>
+                        <th>유형</th>
+                        <th>수강료</th>
+                        <th>정원</th>
+                        <th>선생님</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
                 <tr v-for="v in datas">
-                    <td>{{v.courseIdx.teacherIdx.name}}</td>
+                    <td>{{v.courseIdx.status}}</td>
                     <td>{{v.courseIdx.subject}}</td>
-                    <td>{{v.courseIdx.title}}</td>
+                    <td><a v-bind:href="courseDetailPage + v.courseIdx.idx">{{v.courseIdx.title}}</a></td>
                     <td>{{v.courseIdx.schedule}}</td>
-                    <td>{{v.courseIdx.type}}</td>
                     <td>{{v.courseIdx.openDate}}</td>
                     <td>{{v.courseIdx.closeDate}}</td>
-                    <td>{{v.courseIdx.status}}</td>
-                    <td>{{v.courseIdx.headCount}}</td>
-                    <td>{{v.courseIdx.tuition}}</td>
                     <td>{{v.courseIdx.target}}</td>
+                    <td>{{v.courseIdx.type}}</td>
+                    <td>{{v.courseIdx.tuition}}</td>
+                    <td>{{v.courseIdx.headCount}}</td>
+                    <td><a
+                            v-bind:href="teacherDetailPage + v.courseIdx.teacherIdx.idx">{{v.courseIdx.teacherIdx.name}}</a>
+                    </td>
                     <td>
-                        <a class="w3button" v-bind:href="url + v.courseIdx.idx">수강 신청</a>
+                        <a class="w3button" v-bind:href="url1 + v.courseIdx.idx + url2 + studentIdx">수강 신청</a>
                     </td>
                     <td>
                         <span class="w3button" @click="deleteCart(v.courseIdx.idx)">삭제하기</span>
@@ -151,7 +157,7 @@
                     <!-- v-bind:href="deleteurl + v.courseIdx.idx" -->
                 </tr>
             </table>
-            <div style="margin-top: 30px;" v-if="resultSize == '0'">장바구니에 담은 강의가 없어요. 강의를 담아 주세요:)</div>
+
         </div>
     </div>
 
@@ -161,9 +167,13 @@
             data: {
                 success: false,
                 datas: [],
-                url: "http://localhost/sendCatalog/",
+                url1: "http://localhost/sendCatalog/",
+                url2: "/cart/",
                 resultSize: "",
                 studentIdx: sessionStorage.getItem("studentIdx"),
+
+                courseDetailPage: "http://localhost/getCourseDetail/",
+                teacherDetailPage: "http://localhost/getTeacherDetail/"
             },
             created: function () {
                 if (this.studentIdx != null) {
@@ -171,7 +181,7 @@
                         method: "get",
                         url: "http://localhost/cart/studentidx",
                         params: {
-                            idx: sessionStorage.getItem("studentIdx"),
+                            studentIdx: sessionStorage.getItem("studentIdx"),
                         }
                     })
                         .then((resData) => {
@@ -196,6 +206,7 @@
                         method: "delete",
                         url: "http://localhost/cart",
                         params: {
+                            studentIdx: this.studentIdx,
                             courseIdx: idx,
                         },
                     })

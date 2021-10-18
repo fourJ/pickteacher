@@ -60,6 +60,12 @@
             background-color: #04aa6d;
             color: white;
         }
+
+        .courseHighlight {
+            font-weight: 900;
+            color: white;
+            background-color: red;
+        }
     </style>
 </head>
 
@@ -87,17 +93,17 @@
                     <th>상태</th>
                     <th>과목</th>
                     <th>강의명</th>
-                    <th>강의 요일</th>
+                    <th>수업시간</th>
                     <th>개강일</th>
                     <th>종강일</th>
                     <th>대상 학년</th>
-                    <th>진행 방식</th>
-                    <th>수강비</th>
-                    <th>수강 가능 인원</th>
-                    <th>담당 선생님</th>
+                    <th>유형</th>
+                    <th>수강료</th>
+                    <th>정원</th>
+                    <th>선생님</th>
                 </tr>
                 <tr>
-                    <td>{{course.status}}</td>
+                    <td><span class="courseHighlight">{{course.status}}</span></td>
                     <td>{{course.subject}}</td>
                     <td>{{course.title}}</td>
                     <td>{{course.schedule}}</td>
@@ -107,7 +113,7 @@
                     <td>{{course.type}}</td>
                     <td>{{course.tuition}}</td><br />
                     <td>{{catalogSize}} / {{course.headCount}}</td>
-                    <td><a v-bind:href="detailPage + course.idx">{{course.teacherIdx.name}}</a></td>
+                    <td><a v-bind:href="detailPage + course.teacherIdx.idx">{{course.teacherIdx.name}}</a></td>
                 </tr>
             </table>
             <!--담당 강사에서 강사 테이블로 넘어가게-->
@@ -117,8 +123,8 @@
             <!-- 찜 하기 / 장바구니 / 수강신청 버튼 -->
             <button @click="saveLikes">찜 하기</button>
             <button @click="deleteLikes">찜 취소</button>
-            <button v-if="course.status != '마감'" @click="saveCart">장바구니</button>
-            <button v-if="course.status != '마감'" @click="saveCatalog">수강신청</button>
+            <button v-if="course.status != '마감' && catalogSize < course.headCount" @click="saveCart">장바구니</button>
+            <button v-if="course.status != '마감' && catalogSize < course.headCount" @click="saveCatalog">수강신청</button>
         </div>
         <hr>
         <div>
@@ -262,9 +268,13 @@
                                         location.reload();
                                     }
                                 } else {
-                                    alert("동일한 강의에는 한번만 찜 가능?")
+                                    alert("이미 찜이 되어있는 강의입니다.");
+                                    if (window.confirm("내 찜 목록으로 이동할까요?")) {
+                                        window.location.href = "http://localhost/mypage/student_likes.html";
+                                    } else {
+                                        location.reload();
+                                    }
                                 }
-                                //window.location.href = "";
                             })
                             .catch((errorData) => {
                                 return console.log(errorData);
@@ -293,9 +303,13 @@
                                         location.reload();
                                     }
                                 } else {
-                                    alert("찜 삭제 실패")
+                                    alert("찜이 되어있지 않은 강의입니다.");
+                                    if (window.confirm("내 찜 목록으로 이동할까요?")) {
+                                        window.location.href = "http://localhost/mypage/student_likes.html";
+                                    } else {
+                                        location.reload();
+                                    }
                                 }
-                                //window.location.href = "";
                             })
                             .catch((errorData) => {
                                 return console.log(errorData);
@@ -324,9 +338,13 @@
                                         location.reload();
                                     }
                                 } else {
-                                    alert("동일한 강의에는 한번만 찜 가능? / 마감됐나?")
+                                    alert("이미 장바구니에 있는 강의입니다.");
+                                    if (window.confirm("내 장바구니로 이동할까요?")) {
+                                        window.location.href = "http://localhost/mypage/student_cart.html";
+                                    } else {
+                                        location.reload();
+                                    }
                                 }
-                                //window.location.href = "";
                             })
                             .catch((errorData) => {
                                 return console.log(errorData);
@@ -355,7 +373,12 @@
                                         location.reload();
                                     }
                                 } else {
-                                    alert("동일한 강의 듣니? / 정원초과니?")
+                                    alert("이미 수강하고 있는 강의입니다.");
+                                    if (window.confirm("내 수강내역으로 이동할까요?")) {
+                                        window.location.href = "http://localhost/mypage/student_catalog.html";
+                                    } else {
+                                        location.reload();
+                                    }
                                 }
                                 //window.location.href = "";
                             })
@@ -389,4 +412,5 @@
 
     </script>
 </body>
+
 </html>

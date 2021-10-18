@@ -3,29 +3,29 @@
 
 <head>
   <meta charset="utf-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-	<meta name="description" content="" />
-	<meta name="author" content="" />
-	<title>Pick Teacher</title>
-	<!-- Favicon-->
-	<link rel="icon" type="image/x-icon" href="../assets/pick.ico" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <meta name="description" content="" />
+  <meta name="author" content="" />
+  <title>Pick Teacher</title>
+  <!-- Favicon-->
+  <link rel="icon" type="image/x-icon" href="../assets/pick.ico" />
 
-	<!-- Font Awesome icons (free version)-->
-	<script src="https://use.fontawesome.com/releases/v5.15.3/js/all.js" crossorigin="anonymous"></script>
-	<!-- Simple line icons-->
-	<link href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.5.5/css/simple-line-icons.min.css"
-		rel="stylesheet" />
-	<!-- Google fonts-->
-	<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic"
-		rel="stylesheet" type="text/css" />
-	<!-- Vue.js -->
-	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <!-- Font Awesome icons (free version)-->
+  <script src="https://use.fontawesome.com/releases/v5.15.3/js/all.js" crossorigin="anonymous"></script>
+  <!-- Simple line icons-->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.5.5/css/simple-line-icons.min.css"
+    rel="stylesheet" />
+  <!-- Google fonts-->
+  <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic"
+    rel="stylesheet" type="text/css" />
+  <!-- Vue.js -->
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
   <!-- axios -->
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
-	<!-- stylesheet -->
-	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css" />
-	<link rel="stylesheet" href="../css/styles.css" />
+  <!-- stylesheet -->
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css" />
+  <link rel="stylesheet" href="../css/styles.css" />
 
   <style>
     .w3header {
@@ -92,103 +92,108 @@
       <a href="reviewpage.html">후기 작성하기</a>
       <a href="reivewall.html">전체 후기</a>
       <a href="reviewmyall.html">내가 쓴 글</a>
+    </div>
   </div>
-  </div>
-  <h2>후기작성 페이지</h2>
-  <div id="reviewWrite">
-    
+
+  <div class="w3-container" style="margin: 50px">
+    <h3>후기작성 페이지</h3>
+    <hr>
+    <div id="reviewWrite">
+
       <label for="courseIdx">Subject</label>
-      
-          <!-- <option>수강 강의 선택</option> -->
-      <select v-model="selected">  
-          <label>수강 강의 선택</label>  
-          <option v-for="c in catalogList" v-bind:value="c.courseIdx.idx">{{c.courseIdx.title}}</option>
+
+      <!-- <option>수강 강의 선택</option> -->
+      <select v-model="selected">
+        <label>내가 들은 수업</label>
+        <option v-for="c in courseList" v-bind:value="c.idx">{{c.title}}</option>
       </select>
 
-        <br><br>
-        <label for="star">Star</label>
-        <select id="star" name="star" v-model="star">
-          <option value=1>☆</option>
-          <option value=2>☆☆</option>
-          <option value=3>☆☆☆</option>
-          <option value=4>☆☆☆☆</option>
-          <option value=5>☆☆☆☆☆</option>
-        </select>
+      <br><br>
+      <label for="star">별점</label>
+      <select id="star" name="star" v-model="star">
+        <option value=1>☆</option>
+        <option value=2>☆☆</option>
+        <option value=3>☆☆☆</option>
+        <option value=4>☆☆☆☆</option>
+        <option value=5>☆☆☆☆☆</option>
+      </select>
 
       <br><br>
-      
-        <br>
-        <label for="content">contents</label>
-        <input type="text" id="content" name="content" style="height: 100;" v-model="content">
-        <!-- <button><a href="reivewall.html">완료</a></button> -->
-        
-        <a type="submit" value="작성완료" @click="reviewWrite">작성완료</a>
-          <br><br>
-     </form>
+
+      <br>
+      <label for="content">내용</label>
+      <input type="text" id="content" name="content" style="height: 100;" v-model="content">
+      <!-- <button><a href="reivewall.html">완료</a></button> -->
+
+      <input type="submit" id="content" style="height: 100" value="작성완료" @click="reviewWrite" />
+      <br><br>
+      </form>
+    </div>
   </div>
 
 
   <script>
     new Vue({
       el: "#reviewWrite",
-      data:{
+      data: {
         success: "",
-        catalogList: "",
+        courseList: "",
         selected: "",
         content: "",
         star: "",
         reviewWriteSuccess: "",
-     
+
       },
-      created:  
+      created:
         function () {
-                    axios({
-                        method: "get",
-                        url: "http://localhost/catalog/studentidx",
-                        params:{
-                          studentIdx: sessionStorage.getItem("studentIdx")
-                        }
-                    })
-                        .then((resData) => {
-                            this.success = resData.data.success;
-                            this.catalogList = resData.data.catalogList;
-                        })
-                        .catch((errorData) => {
-                            return console.log(errorData);
-                        });
-    },
-      methods:{
-      reviewWrite: function(){
-        axios({
-          method: "post",
-          url: "http://localhost/review/enroll",
-          data : {
-            studentIdx:sessionStorage.getItem("studentIdx"),
-            courseIdx : this.selected,
-            star : this.star,
-            content : this.content
-          }
-        })
-        .then((resData)=>{
-          this.reviewWriteSuccess = resData.data.success;
-          if(this.reviewWriteSuccess) {
-            alert("후기등록 성공");
-            window.location.reload()
-            location.href="http://localhost/reviewcommunity/reviewmyall.html";
-          }else{
-            alert("이미 작성한 후기입니다. 확인해주세요");
-            location.href="http://localhost/reviewcommunity/reviewpage.html";
-          }
-        }).catch((errorData)=> {
-          return console.log(errorData);
-          location.href="http://localhost/reviewcommunity/reviewpage.html";
-          alert("에러");
-        })
-      },
-    
-    }
-    
+          axios({
+            method: "get",
+            url: "http://localhost/course/noreview",
+            params: {
+              studentIdx: sessionStorage.getItem("studentIdx")
+            }
+          })
+            .then((resData) => {
+              this.success = resData.data.success;
+              this.courseList = resData.data.courseList;
+            })
+            .catch((errorData) => {
+              return console.log(errorData);
+            });
+        },
+      methods: {
+        reviewWrite: function () {
+          axios({
+            method: "post",
+            url: "http://localhost/review/enroll",
+            data: {
+              studentIdx: sessionStorage.getItem("studentIdx"),
+              courseIdx: this.selected,
+              star: this.star,
+              content: this.content
+            }
+          })
+            .then((resData) => {
+              this.reviewWriteSuccess = resData.data.success;
+              if (this.reviewWriteSuccess) {
+                alert("후기등록 성공");
+                window.location.reload()
+                location.href = "http://localhost/reviewcommunity/reviewmyall.html";
+              } else {
+                alert("이미 작성한 후기입니다. 확인해주세요");
+                location.href = "http://localhost/reviewcommunity/reviewpage.html";
+              }
+            }).catch((errorData) => {
+              return console.log(errorData);
+              location.href = "http://localhost/reviewcommunity/reviewpage.html";
+              alert("에러");
+            })
+        },
+
+      }
+
     })
-</script>
+  </script>
 </body>
+
 </html>
