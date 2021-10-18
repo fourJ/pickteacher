@@ -105,7 +105,7 @@
                         >Error message goes here</b
                     >
 
-                    <form>
+                    <form action="http://localhost/student" method="post">
                         <input type="hidden" value="register" />
 
                         <div
@@ -127,7 +127,7 @@
                                 class="mdl-textfield__input"
                                 type="text"
                                 id="textfield_new_username"
-                                name="username"
+                                name="id"
                                 required=""
                                 v-model="id"
                                 pattern="^[a-z0-9_-]{3,15}$"
@@ -157,7 +157,7 @@
                                 class="mdl-textfield__input"
                                 type="password"
                                 id="textfield_new_password"
-                                name="password"
+                                name="pw"
                                 required=""
                                 v-model="pw"
                                 pattern="^[a-zA-Z0-9]+$"
@@ -238,7 +238,7 @@
                                 class="mdl-textfield__input"
                                 type="date"
                                 id="textfield_new_username"
-                                name="name"
+                                name="birth"
                                 required=""
                                 v-model="birth"
                             />
@@ -263,7 +263,7 @@
                                 class="mdl-textfield__input"
                                 type="text"
                                 id="textfield_new_username"
-                                name="nickname"
+                                name="nickName"
                                 required=""
                                 v-model="nickName"
                             />
@@ -293,8 +293,8 @@
                                 list="genderList"
                             />
                             <select id="genderList" v-model="gender">
-                                <option value="1">여자</option>
-                                <option value="0">남자</option>
+                                <option value="여자">여자</option>
+                                <option value="남자">남자</option>
                             </select>
                         </div>
 
@@ -343,9 +343,10 @@
                                 type="tel"
                                 id="textfield_new_username"
                                 name="phone"
-                                required=""
+                                required
                                 v-model="phone"
-                                pattern="^[0-9_-]{3,15}$"
+                                pattern="[0-9]{3,12}"
+                                maxlength="13"
                                 v-on:keyup.enter="login"
                             />
                             <span class="mdl-textfield__error"
@@ -364,7 +365,7 @@
                                     mdl-js-button
                                     mdl-button--raised mdl-button--colored
                                 "
-                                @click="signup"
+                                type="submit"
                             >
                                 Register
                             </button>

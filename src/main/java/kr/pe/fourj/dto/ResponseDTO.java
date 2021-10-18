@@ -41,16 +41,17 @@ public class ResponseDTO {
 		}
 	}
 	
-	public static class Login extends BaseResponse {
-		public Login(Boolean success) {
-			super(success);
-		}
+	@Data
+	@AllArgsConstructor
+	public static class Login{
+		Boolean success;
+		private Long idx;
 	}
 	
-	public static class Logout extends BaseResponse {
-		public Logout(Boolean success) {
-			super(success);
-		}
+	@Data
+	@AllArgsConstructor
+	public static class Logout{
+		Boolean success;
 	}
 	
 	public static class CartToCatalogResponse extends BaseResponse {

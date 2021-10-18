@@ -173,6 +173,19 @@
                             console.log(resData.data);
                             this.datas = resData.data.reviewList;
                             console.log(this.datas);
+                            for (let r of this.datas) {
+                                if (r.star == "1") {
+                                    r.star = "☆";
+                                } else if (r.star == "2") {
+                                    r.star = "☆☆";
+                                } else if (r.star == "3") {
+                                    r.star = "☆☆☆";
+                                } else if (r.star == "4") {
+                                    r.star = "☆☆☆☆";
+                                } else if (r.star == "5") {
+                                    r.star = "☆☆☆☆☆";
+                                }
+                            }
                         })
                         .catch((errorData) => {
                             alert(errorData);

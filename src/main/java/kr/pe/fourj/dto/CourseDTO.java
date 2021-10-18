@@ -2,6 +2,8 @@ package kr.pe.fourj.dto;
 
 import java.time.LocalDate;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import lombok.Data;
 
 public class CourseDTO {
@@ -25,8 +27,14 @@ public class CourseDTO {
 		private Long idx;
 		private String title;
 		private String schedule;
+		
+		@DateTimeFormat(pattern = "yyyy-MM-dd")
 		private LocalDate openDate;
+		
+		@DateTimeFormat(pattern = "yyyy-MM-dd")
 		private LocalDate closeDate;
+		
+		private Integer headCount;
 		private String type;
 		private Integer tuition;
 		private String target;

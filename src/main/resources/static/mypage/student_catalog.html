@@ -65,19 +65,24 @@
         <!-- Navigation-->
 
         <!-- Header -->
-        <div class="w3header">
-            <a href="/index.html" class="logo">Pick Teacher</a>
-        </div>
-        <div
-            class="w3header"
-            style="background-color: #1d809f; margin-bottom: 30px"
-        >
-            <a href="mypage_student.html" class="logo">My Page</a>
-            <div class="w3header-right">
-                <a @click="studentinfo">내 정보</a>
-                <a href="student_catalog.html">수강 내역</a>
-                <a href="student_cart.html">장바구니</a>
-                <a href="student_likes.html">찜한 강의</a>
+        <div id="header" v-if="success">
+            <div class="w3header">
+                <a href="/index.html" class="logo">Pick Teacher</a>
+            </div>
+            <div
+                id="header"
+                v-if="success"
+                class="w3header"
+                style="background-color: #1d809f; margin-bottom: 30px"
+                v-show="success"
+            >
+                <a href="mypage_student.html" class="logo">My Page</a>
+                <div class="w3header-right">
+                    <a @click="studentinfo">내 정보</a>
+                    <a href="student_catalog.html">수강 내역</a>
+                    <a href="student_cart.html">장바구니</a>
+                    <a href="student_likes.html">찜한 강의</a>
+                </div>
             </div>
         </div>
 
@@ -117,7 +122,9 @@
                         <td>{{v.courseIdx.target}}</td>
                         <td>
                             <span>
-                                <a class="w3button" @click="coursedetail"
+                                <a
+                                    class="w3button"
+                                    v-bind:href="detailPage + v.courseIdx.idx"
                                     >강의 상세</a
                                 >
                             </span>
@@ -133,6 +140,8 @@
                 data: {
                     success: false,
                     datas: [],
+
+                    detailPage: "http://localhost/getCourseDetail/",
                 },
                 created: function () {
                     // catalog에 강의가 없을 때 출력멘트 보여주고 싶음
@@ -174,6 +183,55 @@
                             })
                             .catch((errorData) => {
                                 alert(errorData.response.data.message);
+                            });
+                    },
+                },
+            });
+
+            new Vue({
+                el: "#header",
+                data: {
+                    success: false,
+                    datas: [],
+                },
+                created: function () {
+                    axios({
+                        method: "get",
+                        url: "http://localhost/student",
+                    })
+                        .then((resData) => {
+                            this.success = resData.data.success;
+                            console.log(resData.data);
+
+                            this.datas = resData.data.student;
+                            console.log(this.datas);
+                        })
+                        .catch((errorData) => {
+                            alert(errorData);
+                            console.log(errorData);
+                        });
+                },
+                methods: {
+                    studentinfo: function () {
+                        axios({
+                            method: "get",
+                            url: "http://localhost/student",
+                        })
+                            .then((resData) => {
+                                console.log(resData.data.success);
+                                var inputpw = prompt("비밀번호를 입력하세요:)");
+                                console.log(inputpw);
+                                if (inputpw == this.datas.pw) {
+                                    window.location.href =
+                                        "http://localhost/mypage/student_info.html";
+                                    console.log("성공");
+                                } else {
+                                    alert("비밀번호를 재입력하세요!");
+                                }
+                            })
+                            .catch((errorData) => {
+                                alert(errorData);
+                                console.log(errorData);
                             });
                     },
                 },

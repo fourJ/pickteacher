@@ -93,6 +93,19 @@
                 color: red;
                 cursor: pointer;
             }
+
+            .modal_search_condition {
+                margin-right: 15px;
+            }
+
+            .modal_search_input {
+                display: inline;
+                margin-right: 8px;
+            }
+
+            .search_result_none {
+                margin-top: 30px;
+            }
         </style>
     </head>
 
@@ -196,41 +209,86 @@
                             <label for="search_input"><b>입력</b></label>
                             <!-- 성별 검색인 경우 -->
                             <div
+                                class="search_input"
                                 name="search_input_gender"
                                 v-show="searchCondition=='gender'"
                             >
-                                <label for="search_input_gender">성별</label>
-                                <input
-                                    type="radio"
-                                    name="gender"
-                                    value="남자"
-                                    checked
-                                    v-model="gender"
-                                />
-                                <label for="gender">남</label>
-                                <input
-                                    type="radio"
-                                    name="gender"
-                                    value="여자"
-                                    v-model="gender"
-                                />
-                                <label for="gender">여</label>
+                                <label
+                                    for="search_input_gender"
+                                    class="modal_search_condition"
+                                    >성별</label
+                                ><br />
+                                <div class="modal_search_input">
+                                    <input
+                                        type="radio"
+                                        name="gender"
+                                        value="남자"
+                                        checked
+                                        v-model="gender"
+                                    />
+                                    <label for="gender">남</label>
+                                </div>
+                                <div class="modal_search_input">
+                                    <input
+                                        type="radio"
+                                        name="gender"
+                                        value="여자"
+                                        v-model="gender"
+                                    />
+                                    <label for="gender">여</label>
+                                </div>
                             </div>
                             <!-- 경력 검색인 경우 -->
                             <div
+                                class="search_input"
                                 name="search_input_career"
                                 v-show="searchCondition=='career'"
                             >
                                 <!-- 선택하는 체크박스로? -->
-                                <label for="career">경력</label>
-                                <select name="career" v-model="career">
-                                    <option value="">검색 조건 선택</option>
-                                    <option value="신입">신입</option>
-                                    <option value="1-5년">1-5년</option>
-                                    <option value="6-10년">6-10년</option>
-                                    <option value="10년이상">10년이상</option>
-                                </select>
+                                <label
+                                    for="search_input_career"
+                                    class="modal_search_condition"
+                                    >경력</label
+                                ><br />
+                                <div class="modal_search_input">
+                                    <input
+                                        type="radio"
+                                        name="career"
+                                        value="신입"
+                                        v-model="career"
+                                    />
+                                    <label for="career">신입</label>
+                                </div>
+                                <div class="modal_search_input">
+                                    <input
+                                        type="radio"
+                                        name="career"
+                                        value="1-5년"
+                                        v-model="career"
+                                    />
+                                    <label for="career">1-5년</label>
+                                </div>
+                                <div class="modal_search_input">
+                                    <input
+                                        type="radio"
+                                        name="career"
+                                        value="6-10년"
+                                        v-model="career"
+                                    />
+                                    <label for="career">6-10년</label>
+                                </div>
+                                <div class="modal_search_input">
+                                    <input
+                                        type="radio"
+                                        name="career"
+                                        value="10년이상"
+                                        v-model="career"
+                                    />
+                                    <label for="career">10년이상</label>
+                                </div>
                             </div>
+
+                            <br />
 
                             <button @click="findAll">검색 조건 초기화</button>
 
@@ -268,9 +326,17 @@
             <!-- Search Result -->
             <div
                 class="teacher_list"
-                style="display: flex; flex-wrap: wrap"
+                style="
+                    display: flex;
+                    flex-wrap: wrap;
+                    justify-content: space-between;
+                "
                 v-if="success"
             >
+                <div class="search_result_none" v-if="resultSize == '0'">
+                    해당 조건의 강의가 존재하지 않습니다.
+                </div>
+
                 <div
                     v-for="t in teacherInfo"
                     v-show="success"

@@ -5,8 +5,6 @@ import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -73,21 +71,13 @@ public class StudentController {
 	
 	//학생 로그인
 	@RequestMapping(value="/student/login", method=RequestMethod.POST) 
-	public ResponseDTO.Login login(HttpServletRequest request, @RequestBody StudentDTO.Login dto) {
+	public ResponseDTO.Login login(@RequestBody StudentDTO.Login dto) {
 
 		boolean result = false;
 		Student student = studentService.findStudentById(dto.getId());
 		if(student != null) {
-			if(student.getPw().equals(dto.getPw()) && request.getSession().getAttribute("student") == null) {
-				request.getSession().setAttribute("student", student);
-				
-				Object object = request.getSession().getAttribute("student");
-				Student entity = (Student)object;
-				System.out.println(entity.getId());
-				System.out.println(entity.getPw());
-				
+			if(student.getPw().equals(dto.getPw())) {
 				result = true;
-				System.out.println(entity.getId() + " " + entity.getPw() + " " + "로그인 성공!");
 			}else {
 				System.out.println("로그인 실패! : 패스워드를 다시 확인해주세요. 중복 로그인은 불가합니다.");
 			}
@@ -95,115 +85,60 @@ public class StudentController {
 			System.out.println("로그인 실패! : 등록되지 않은 회원입니다.");
 		}
 
-		return new ResponseDTO.Login(result);
+		return new ResponseDTO.Login(result, student.getIdx());
 	}
-	
-	//학생 로그아웃
-	@RequestMapping("/student/logout")
-	public ResponseDTO.Logout logout(HttpServletRequest request) {
-		
-		boolean result = false;
-		if(request.getSession().getAttribute("student") != null) {
-			
-			Object object = request.getSession().getAttribute("student");
-			Student entity = (Student)object;
-			System.out.println(entity.getId());
-			System.out.println(entity.getPw());
-			
-			System.out.println(entity.getId() + " " + entity.getPw() + " " + "로그아웃 성공!");
-			request.getSession().removeAttribute("student");
-			result = true;
-		}else {
-			System.out.println("로그아웃 실패! : 로그인이 되어있지 않은 상태에서는 로그아웃이 불가합니다.");
-		}
-				
-		return new ResponseDTO.Logout(result);
-	}
-	
 
 	//학생 수정
 	@PutMapping("/student")
-	public ResponseDTO.Update updateStudent(HttpServletRequest request, @RequestBody StudentDTO.Update dto) {
+	public ResponseDTO.Update updateStudent(@RequestBody StudentDTO.Update dto) {
 		System.out.println("-- 학생 수정 시도 --");
 
 		boolean result = false;
-		if(request.getSession().getAttribute("student") != null) {
-			Object object = request.getSession().getAttribute("student");
-			Student entity = (Student)object;
-
-			try {
-				studentService.updateStudent(entity.getIdx(), dto);
-				result = true;
-			} catch (NotFoundException e) {
-				e.printStackTrace();
-			}
-		}else {
-			System.out.println("로그인 정보가 없습니다. 로그인이 필요한 기능입니다.");
+		try {
+			studentService.updateStudent(dto);
+			result = true;
+		} catch (NotFoundException e) {
+			e.printStackTrace();
 		}
-		
+
 		return new ResponseDTO.Update(result);
 	}
 
 	//학생 삭제
 	@DeleteMapping("/student")
-	public ResponseDTO.Delete deleteStudent(HttpServletRequest request) {
+	public ResponseDTO.Delete deleteStudent(StudentDTO.Delete dto) {
 		System.out.println("-- 학생 삭제 시도 --");
 
 		boolean result = false;
-		if(request.getSession().getAttribute("student") != null) {
-			Object object = request.getSession().getAttribute("student");
-			Student entity = (Student)object;
-
-			try {
-				studentService.deleteStudent(entity.getIdx());
-				request.getSession().removeAttribute("student"); //학생 삭제 후 바로 로그아웃 되도록
-				result = true;
-			} catch (NotFoundException e) {
-				e.printStackTrace();
-			}		
-		}else {
-			System.out.println("로그인 정보가 없습니다. 로그인이 필요한 기능입니다.");
-		}
+		try {
+			studentService.deleteStudent(dto);
+			result = true;
+		} catch (NotFoundException e) {
+			e.printStackTrace();
+		}		
 
 		return new ResponseDTO.Delete(result);
 	}
 
-	//학생 단일 검색
+	//특정 학생(자신) 단일 검색
 	@GetMapping("/student")
-	public ResponseDTO.StudentResponse findOne(HttpServletRequest request) {
+	public ResponseDTO.StudentResponse findOne(StudentDTO.Get dto) {
 		System.out.println("-- 학생 단일 검색 시도 --");
 		boolean result = false;
 		Student student = null;
-		if(request.getSession().getAttribute("student") != null) {
-			Object object = request.getSession().getAttribute("student");
-			Student entity = (Student)object;
-
-			try {
-				student = studentService.findOne(entity.getIdx());
-				result = true;
-			} catch (NotFoundException e) {
-				e.printStackTrace();
-			}
-		}else {
-			System.out.println("로그인 정보가 없습니다. 로그인이 필요한 기능입니다.");
+		try {
+			student = studentService.findOne(dto.getIdx());
+			result = true;
+		} catch (NotFoundException e) {
+			e.printStackTrace();
 		}
+
 		return new ResponseDTO.StudentResponse(result, student);
-	}
-
-	//???전체 학생 리스트를 검색하는 게 쓰일까요???
-	//학생 리스트 전체 검색
-	@GetMapping("/studentall")
-	public ResponseDTO.StudentListResponse findAll() {
-		System.out.println("-- 학생 리스트 전체 검색 시도 --");
-
-		List<Student> studentList = studentService.findAll();
-
-		return new ResponseDTO.StudentListResponse(true, studentList);
 	}
 
 	//특정 강의를 수강하는 학생 리스트 검색
 	@GetMapping("/student/courseIdx")
-	public ResponseDTO.StudentListResponse findAllBycourseIdx(@RequestBody StudentDTO.Get dto) {
+	public ResponseDTO.StudentListResponse findAllBycourseIdx(StudentDTO.Get dto) {
 		System.out.println("-- 특정 강의를 수강하는 학생 리스트 검색 시도 --");
 
 		boolean result = false;

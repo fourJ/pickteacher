@@ -25,7 +25,7 @@ public interface CourseRepository extends JpaRepository<Course, Long>{
 //	List<Course> findCourseListByStatus(String status);
 	List<Course> findCourseListByTarget(String target);
 	
-	@Query("select c from Course c where c.tuition >= :tuition")
+	@Query("select c from Course c where c.tuition <= :tuition")
 	List<Course> findCourseListByTuition(Integer tuition);
 
 }

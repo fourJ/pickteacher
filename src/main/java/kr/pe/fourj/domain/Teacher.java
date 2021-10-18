@@ -67,12 +67,5 @@ public class Teacher {
 	@OneToMany(mappedBy="teacherIdx", cascade=CascadeType.ALL)
 	@JsonBackReference
 	private List<Course> courseList;
-
-	@Override
-	public String toString() {
-		return "[아이디 : " + id + ", 이름 : " + name + ", 성별 : " + gender + 
-				", 주소 : " + address + ", 핸드폰 번호 : " + phone + ", 경력 : " + 
-				career + ", 전공 : " + major + ", 학교 : " + school + ", 등록일 : " + enrollDate + "]";
-	}
 	
 }

@@ -38,6 +38,7 @@ public class CourseService {
 		course.setOpenDate(dto.getOpenDate());
 		course.setCloseDate(dto.getCloseDate());
 		course.setStatus(calculateStatus(dto.getOpenDate(), dto.getCloseDate()));
+		course.setHeadCount(dto.getHeadCount());
 		course.setType(dto.getType());
 		course.setTuition(dto.getTuition());
 		course.setTarget(dto.getTarget());

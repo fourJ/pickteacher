@@ -62,6 +62,21 @@
             .w3header {
                 padding: 0;
             }
+
+            th,
+            td {
+                text-align: left;
+                padding: 5px;
+            }
+
+            tr:nth-child(even) {
+                background-color: #f2f2f2;
+            }
+
+            th {
+                background-color: #04aa6d;
+                color: white;
+            }
         </style>
     </head>
 
@@ -86,34 +101,71 @@
             <hr />
 
             <div>
-                <span>{{teacher.name}}</span>
-                <span>{{teacher.gender}}</span>
-                <span>{{teacher.address}}</span>
-                <span>{{teacher.phone}}</span>
-                <span>{{teacher.career}}</span>
-                <span>{{teacher.major}}</span>
-                <span>{{teacher.school}}</span>
+                <h4>{{teacher.name}} 선생님</h4>
+                <img v-bind:src="imageSrc1 + teacher.idx + imageSrc2" />
+                <br><br>
+
+                <table style="width: 100%" v-if="teacherSuccess">
+                        <tr>
+                            <th>전공</th>
+                            <th>경력</th>
+                            <th>학력</th>
+                            <th>성별</th>
+                        </tr>
+                        <tr >
+                            <td>{{teacher.major}}</td>
+                            <td>{{teacher.career}}</td>
+                            <td>{{teacher.school}} 졸업</td>
+                            <td>{{teacher.gender}}</td>
+                        </tr>  
+                </table> 
             </div>
 
-            <br />
+            <hr />
 
-            <button @click="getCourse">강의 리스트 보기</button>
+            <div>
+                <!-- 강사의 담당 강의 리스트 -->
+                <button @click="getCourse">강의 리스트 보기</button>
 
-            <div v-if="courseSuccess" v-for="c in courseList">
-                <span>{{c.idx}}</span>
-                <span>{{c.title}}</span>
-                <span>{{c.subject}}</span>
-                <span>{{c.schedule}}</span>
-                <span>{{c.status}}</span>
-                <span>{{c.openDate}}</span>
-                <span>{{c.closeDate}}</span>
-                <span>{{c.target}}</span>
-                <span>{{c.type}}</span>
-                <span>{{c.tuition}}</span>
-                <span>{{c.headCount}}</span>
-                <a v-bind:href="detailPage + c.idx">상세보기</a>
-                <br />
+                <div v-if="courseSize == '0'">
+                    <span>해당 강의에 대한 후기가 없습니다.</span>
+                </div>
+
+                <div v-if="courseSuccess && courseSize != '0'">
+                    <!-- 테이블로 강의 리스트 -->
+                    <table style="width: 100%">
+                        <tr>
+                            <th>번호</th>
+                            <th>상태</th>
+                            <th>과목</th>
+                            <th>강의명</th>
+                            <th>강의 요일</th>
+                            <th>개강일</th>
+                            <th>종강일</th>
+                            <th>대상 학년</th>
+                            <th>진행 방식</th>
+                            <th>수강비</th>
+                            <th>수강 인원</th>
+                            <th>강의 상세</th>
+                        </tr>
+                        <tr v-for="c in courseList">
+                            <td>{{c.idx}}</td>
+                            <td>{{c.status}}</td>
+                            <td>{{c.subject}}</td>
+                            <td>{{c.title}}</td>
+                            <td>{{c.schedule}}</td>
+                            <td>{{c.openDate}}</td>
+                            <td>{{c.closeDate}}</tdn>
+                            <td>{{c.target}}</td>
+                            <td>{{c.type}}</td>
+                            <td>{{c.tuition}}</td><br />
+                            <td>{{c.headCount}}</td>
+                            <td><a v-bind:href="detailPage + c.idx">더보기</a></td>
+                        </tr>
+                    </table>
+                </div>
             </div>
+            
             <!-- <div v-if="courseList.length"> -->
 
             </div>
@@ -134,6 +186,10 @@
 
                     courseSuccess: "",
                     courseList: [],
+                    courseSize: "",
+
+                    imageSrc1: "../assets/img/teacher/",
+                    imageSrc2: ".jpg",
 
                     detailPage: "http://localhost/getCourseDetail/",
                 },
@@ -165,6 +221,7 @@
                             .then((resData) => {
                                 this.courseSuccess = resData.data.success;
                                 this.courseList = resData.data.courseList;
+                                this.courseSize = courseList.length;
                             })
                             .catch((errorData) => {
                                 return console.log(errorData);

@@ -1,10 +1,274 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <meta charset="UTF-8" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Document</title>
+        <meta charset="utf-8" />
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1, shrink-to-fit=no"
+        />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>Pick Teacher</title>
+        <!-- Favicon-->
+        <link
+            rel="icon"
+            type="image/x-icon"
+            href="/src/main/resources/static/assets/pick.ico"
+        />
+        <!-- Font Awesome icons (free version)-->
+        <script
+            src="https://use.fontawesome.com/releases/v5.15.3/js/all.js"
+            crossorigin="anonymous"
+        ></script>
+        <!-- Simple line icons-->
+        <link
+            href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.5.5/css/simple-line-icons.min.css"
+            rel="stylesheet"
+        />
+        <!-- Google fonts-->
+        <link
+            href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic"
+            rel="stylesheet"
+            type="text/css"
+        />
+        <!-- Vue.js -->
+        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+        <!-- stylesheet -->
+        <link
+            rel="stylesheet"
+            href="https://www.w3schools.com/w3css/4/w3.css"
+        />
+        <link rel="stylesheet" href="../css/styles.css" />
+        <link rel="stylesheet" href="css/info.css" />
+        <style>
+            .mySlides {
+                display: none;
+            }
+
+            .w3-left,
+            .w3-right,
+            .w3-badge {
+                cursor: pointer;
+            }
+
+            .w3-badge {
+                height: 13px;
+                width: 13px;
+                padding: 0;
+            }
+
+            .w3header {
+                padding: 0;
+            }
+
+            th,
+            td {
+                text-align: left;
+                padding: 5px;
+            }
+
+            tr:nth-child(even) {
+                background-color: #f2f2f2;
+            }
+
+            th {
+                background-color: #04aa6d;
+                color: white;
+            }
+        </style>
     </head>
-    <body></body>
+
+    <body>
+        <!-- Header -->
+        <div class="w3header">
+            <a href="/index.html" class="logo">Pick Teacher</a>
+            <div class="w3header-right">
+                <a href="../login/studentlogin.html">로그인</a>
+                <a href="../login/studentsignup.html">회원 가입</a>
+            </div>
+        </div>
+        <div
+            class="w3header"
+            style="background-color: #1d809f; margin-bottom: 30px"
+        >
+            <a href="mypage_student.html" class="logo">My Page</a>
+        </div>
+
+        <div id="app" style="margin: 50px">
+            <div v-if="resData">
+                <h3>선생님 상세페이지</h3>
+                <hr />
+
+                <div>
+                    <table style="width: 100%" v-show="resData">
+                        <tr>
+                            <th>선생님 이름</th>
+                            <th>선생님 성별</th>
+                            <th>선생님 주소</th>
+                            <th>선생님 번호</th>
+                            <th>선생님 경력</th>
+                            <th>선생님 전공</th>
+                            <th>선생님 출신학교</th>
+                        </tr>
+
+                        <tr>
+                            <td>{{teacher.name}}</td>
+                            <td>{{teacher.gender}}</td>
+                            <td>{{teacher.address}}</td>
+                            <td>{{teacher.phone}}</td>
+                            <td>{{teacher.career}}</td>
+                            <td>{{teacher.major}}</td>
+                            <td>{{teacher.school}}</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <br />
+
+                <button @click="getCourse">강의 리스트 보기</button>
+
+                <div v-if="courseSuccess">
+                    <table style="width: 100%" v-show="resData">
+                        <tr>
+                            <th>강의번호</th>
+                            <th>강의제목</th>
+                            <th>강의과목</th>
+                            <th>강의스케줄</th>
+                            <th>강의상태</th>
+                            <th>개강일</th>
+                            <th>종강일</th>
+                            <th>강의대상</th>
+                            <th>강의종류</th>
+                            <th>강의료</th>
+                            <th>수강가능인원</th>
+                            <th>수정</th>
+                            <th>삭제</th>
+                            <th>학생리스트보기</th>
+                        </tr>
+
+                        <tr v-for="c in courseList">
+                            <td>{{c.idx}}</td>
+                            <td>
+                                <a v-bind:href="detailPage + c.idx"
+                                    >{{c.title}}</a
+                                >
+                            </td>
+                            <td>{{c.subject}}</td>
+                            <td>{{c.schedule}}</td>
+                            <td>{{c.status}}</td>
+                            <td>{{c.openDate}}</td>
+                            <td>{{c.closeDate}}</td>
+                            <td>{{c.target}}</td>
+                            <td>{{c.type}}</td>
+                            <td>{{c.tuition}}</td>
+                            <td>{{c.catalogSize}} / {{c.headCount}}</td>
+                            <td>
+                                <a v-bind:href="updatePage + c.idx">수정</a>
+                            </td>
+
+                            <td>
+                                <span class="close" @click="deleteCourse(c.idx)"
+                                    >&#x00D7;
+                                </span>
+                            </td>
+                            <td>
+                                <a v-bind:href="studentPage + c.idx"
+                                    >학생보기</a
+                                >
+                            </td>
+                            <br />
+                        </tr>
+                    </table>
+                    <br />
+                </div>
+                <!-- <div v-if="courseList.length"> -->
+            </div>
+            <hr />
+        </div>
+
+        <script>
+            new Vue({
+                el: "#app",
+                data: {
+                    teacherIdx: window.location.search.substring(
+                        window.location.search.indexOf("=") + 1
+                    ),
+
+                    teacherSuccess: "",
+                    teacher: [],
+
+                    resData: false,
+
+                    courseSuccess: "",
+                    courseList: [],
+
+                    catalogSuccess: "",
+                    catalogList: [],
+                    catalogSize: "",
+
+                    detailPage: "http://localhost/getCourseDetail/",
+                    updatePage: "http://localhost/getCourseUpdate/",
+                    studentPage: "http://localhost/getCourseStudent/",
+                },
+                created: function () {
+                    axios({
+                        method: "get",
+                        url: "http://localhost/teacher",
+                        params: {
+                            idx: 1,
+                        },
+                    })
+                        .then((resData) => {
+                            this.resData = true;
+                            this.teacherSuccess = resData.data.success;
+                            this.teacher = resData.data.teacher;
+                            this.catalogSuccess = resData.data.success;
+                            this.catalogList = resData.data.catalogList;
+                            // this.catalogSize = resData.data.catalogList.length;
+                        })
+                        .catch((errorData) => {
+                            return console.log(errorData);
+                        });
+                },
+                methods: {
+                    getCourse: function () {
+                        axios({
+                            method: "get",
+                            url: "http://localhost/course/teacheridx",
+                            params: {
+                                idx: this.teacher.idx,
+                            },
+                        })
+                            .then((resData) => {
+                                this.courseSuccess = resData.data.success;
+                                this.courseList = resData.data.courseList;
+                            })
+                            .catch((errorData) => {
+                                return console.log(errorData);
+                            });
+                    },
+                    deleteCourse: function (idx) {
+                        axios({
+                            method: "delete",
+                            url: "http://localhost/course",
+                            params: {
+                                courseIdx: idx,
+                            },
+                        })
+                            .then((resData) => {
+                                console.log("삭제성공");
+                                alert("삭제성공");
+                                window.location.reload();
+                                location.href = "teacher_courseList.html";
+                            })
+                            .catch((errorData) => {
+                                return console.log(errorData);
+                            });
+                    },
+                },
+            });
+        </script>
+    </body>
 </html>

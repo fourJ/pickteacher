@@ -98,9 +98,9 @@
   <div id="reviewWrite">
     
       <label for="courseIdx">Subject</label>
-      <select id="courseIdx" v-model="courseIdx">
+      <select v-model="selected">
           <option>수강 강의 선택</option>
-          <option v-for="c in catalogList" value="c.idx">{{c.courseIdx.title}}</option>
+          <option v-for="c in catalogList" v-bind:value="c.courseIdx.idx">{{c.courseIdx.title}}</option>
       </select>
 
         <br><br>
@@ -120,7 +120,8 @@
         <input type="text" id="content" name="content" style="height: 100;" v-model="content">
         <!-- <button><a href="reivewall.html">완료</a></button> -->
         
-        <input type="submit" value="작성완료" @click="reviewWrite"><br><br>
+        <a type="submit" value="작성완료" @click="reviewWrite">작성완료</a>
+          <br><br>
      </form>
   </div>
 
@@ -131,8 +132,7 @@
       data:{
         success: "",
         catalogList: "",
-
-        courseIdx: "",
+        selected: "",
         content: "",
         star: "",
         reviewWriteSuccess: ""
@@ -157,7 +157,7 @@
           method: "post",
           url: "http://localhost/review/enroll",
           data : {
-            courseIdx : this.courseIdx,
+            courseIdx : this.selected,
             star : this.star,
             content : this.content
           }

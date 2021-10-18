@@ -207,6 +207,7 @@
                                 console.log(resData.data.success);
                                 this.loginsuccess = resData.data.success;
                                 if (this.loginsuccess) {
+                                    sessionStorage.setItem("user", this.id);
                                     window.location.href =
                                         "http://localhost/index.html";
                                 } else {
@@ -241,6 +242,7 @@
                                 console.log(resData.data.success);
                                 this.logoutsuccess = resData.data.success;
                                 if (this.logoutsuccess) {
+                                    sessionStorage.clear();
                                     window.location.href =
                                         "http://localhost/index.html";
                                 } else {

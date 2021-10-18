@@ -104,7 +104,7 @@
                         >Error message goes here</b
                     >
 
-                    <form>
+                    <form action="http://localhost/teacher" method="post">
                         <input type="hidden" name="action" value="register" />
 
                         <div
@@ -126,6 +126,7 @@
                                 class="mdl-textfield__input"
                                 type="text"
                                 required=""
+                                name="id"
                                 v-model="id"
                                 pattern="^[a-z0-9_-]{3,15}$"
                             />
@@ -154,6 +155,7 @@
                                 class="mdl-textfield__input"
                                 type="password"
                                 required=""
+                                name="pw"
                                 v-model="pw"
                                 pattern="^[a-zA-Z0-9]+$"
                             />
@@ -206,6 +208,7 @@
                             <input
                                 class="mdl-textfield__input"
                                 type="text"
+                                name="name"
                                 required=""
                                 v-model="name"
                             />
@@ -232,7 +235,11 @@
                                 type="text"
                                 list="genderList"
                             />
-                            <select id="genderList" v-model="gender">
+                            <select
+                                id="genderList"
+                                v-model="gender"
+                                name="gender"
+                            >
                                 <option value="1">여자</option>
                                 <option value="0">남자</option>
                             </select>
@@ -257,6 +264,7 @@
                                 class="mdl-textfield__input"
                                 type="text"
                                 required=""
+                                name="address"
                                 v-model="address"
                             />
                         </div>
@@ -280,6 +288,7 @@
                                 class="mdl-textfield__input"
                                 type="tel"
                                 required=""
+                                name="phone"
                                 v-model="phone"
                                 pattern="^[0-9_-]{3,15}$"
                             />
@@ -309,6 +318,7 @@
                                 class="mdl-textfield__input"
                                 type="text"
                                 required=""
+                                name="career"
                                 v-model="career"
                                 list="careerList"
                             />
@@ -339,6 +349,7 @@
                                 class="mdl-textfield__input"
                                 type="text"
                                 required=""
+                                name="major"
                                 v-model="major"
                                 list="majorList"
                             />
@@ -369,6 +380,7 @@
                                 class="mdl-textfield__input"
                                 type="text"
                                 required=""
+                                name="school"
                                 v-model="school"
                                 pattern="^[a-z0-9_-]{3,15}$"
                                 v-on:keyup.enter="login"
@@ -386,7 +398,7 @@
                                     mdl-js-button
                                     mdl-button--raised mdl-button--colored
                                 "
-                                @click="signup"
+                                type="submit"
                             >
                                 Register
                             </button>

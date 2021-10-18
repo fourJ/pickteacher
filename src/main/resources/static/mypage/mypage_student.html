@@ -75,15 +75,13 @@
         </nav>
 
         <!-- Header -->
-        <!-- <header>
-    	<div th:replace="../common/header.html :: headerFragment"></div>
-    </header> -->
-
-        <div class="w3header" id="header" v-if="success">
+        <div id="header" v-if="success">
             <div class="w3header">
                 <a href="/index.html" class="logo">Pick Teacher</a>
             </div>
             <div
+                id="header"
+                v-if="success"
                 class="w3header"
                 style="background-color: #1d809f; margin-bottom: 30px"
                 v-show="success"
@@ -132,29 +130,6 @@
                             alert(errorData);
                             console.log(errorData);
                         });
-                },
-                methods: {
-                    studentinfo: function () {
-                        axios({
-                            method: "get",
-                            url: "http://localhost/student",
-                        })
-                            .then((resData) => {
-                                console.log(resData.data.success);
-                                var inputpw = prompt("비밀번호를 입력하세요:)");
-                                console.log(inputpw);
-                                if (inputpw == resData.data.pw) {
-                                    window.location.href =
-                                        "http://localhost/mypage/student_info.html";
-                                    console.log("성공");
-                                } else {
-                                    alert("비밀번호를 재입력하세요!");
-                                }
-                            })
-                            .catch((errorData) => {
-                                alert(errorData.response.data.message);
-                            });
-                    },
                 },
             });
 
