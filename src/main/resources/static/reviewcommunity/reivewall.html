@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1, shrink-to-fit=no"
+        />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>Pick Teacher</title>
+        <!-- Favicon-->
+        <link rel="icon" type="image/x-icon" href="../assets/pick.ico" />
+
+        <!-- Font Awesome icons (free version)-->
+        <script
+            src="https://use.fontawesome.com/releases/v5.15.3/js/all.js"
+            crossorigin="anonymous"
+        ></script>
+        <!-- Simple line icons-->
+        <link
+            href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.5.5/css/simple-line-icons.min.css"
+            rel="stylesheet"
+        />
+        <!-- Google fonts-->
+        <link
+            href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic"
+            rel="stylesheet"
+            type="text/css"
+        />
+        <!-- Vue.js -->
+        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+        <!-- stylesheet -->
+        <link
+            rel="stylesheet"
+            href="https://www.w3schools.com/w3css/4/w3.css"
+        />
+        <link rel="stylesheet" href="../css/styles.css" />
+        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+        <style>
+            .w3header {
+                padding: 0;
+            }
+
+            input[type="submit"] {
+                width: 6%;
+                background-color: #4caf50;
+                color: white;
+                padding: 2px 6px;
+                margin: 4px 0;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+            }
+
+            input[type="submit"]:hover {
+                background-color: #45a049;
+            }
+
+            /* div {
+      border-radius: 5px;
+      background-color: #f2f2f2;
+      padding: 20px;
+    } */
+
+            th,
+            td {
+                text-align: left;
+                padding: 5px;
+            }
+
+            tr:nth-child(even) {
+                background-color: #f2f2f2;
+            }
+
+            th {
+                background-color: #04aa6d;
+                color: white;
+            }
+        </style>
+    </head>
+
+    <body>
+        <!-- Header -->
+        <div class="w3header">
+            <a href="/index.html" class="logo">Pick Teacher</a>
+        </div>
+        <div
+            class="w3header"
+            style="background-color: #1d809f; margin-bottom: 30px"
+        >
+            <a href="reivewall.html" class="logo">Review List</a>
+            <div class="w3header-right">
+                <a href="reviewpage.html">후기 작성하기</a>
+                <a href="reivewall.html">전체 후기</a>
+                <a href="reviewmyall.html">내가 쓴 글</a>
+            </div>
+        </div>
+
+        <div id="review">
+            <!-- <button>1.모든 후기보기</button> -->
+            <!-- <button @click="reqResAjax()">1.모든 후기보기</button> -->
+            <div v-if="resData">
+                <table style="width: 100%" v-show="resData">
+                    <tr>
+                        <th>작성자</th>
+                        <th>닉네임</th>
+                        <th>강의제목</th>
+                        <th>강의과목</th>
+                        <th>작성시간</th>
+                        <th>후기내용</th>
+                        <th>별점</th>
+                    </tr>
+                    <tr v-for="v in datas">
+                        <td>{{v.studentIdx.name}}</td>
+                        <td>{{v.studentIdx.nickName}}</td>
+                        <td>{{v.courseIdx.title}}</td>
+                        <td>{{v.courseIdx.subject}}</td>
+                        <td>{{v.date}}</td>
+                        <td>{{v.content}}</td>
+                        <td>{{v.star}}</td>
+                    </tr>
+                </table>
+            </div>
+            <!-- login test -->
+        </div>
+
+        <script>
+            new Vue({
+                el: "#review",
+                data: {
+                    resData: false,
+                    datas: [],
+                    id: "",
+                    pw: "",
+                    loginSuccess: "",
+                },
+
+                created: function () {
+                    axios({
+                        method: "get",
+                        url: "http://localhost/reviewall",
+                    })
+                        .then((resData) => {
+                            this.resData = true;
+
+                            console.log(resData.data);
+                            this.datas = resData.data.reviewList;
+                            console.log(this.datas);
+                            for (let r of this.datas) {
+                                if (r.star == "1") {
+                                    r.star = "☆";
+                                } else if (r.star == "2") {
+                                    r.star = "☆☆";
+                                } else if (r.star == "3") {
+                                    r.star = "☆☆☆";
+                                } else if (r.star == "4") {
+                                    r.star = "☆☆☆☆";
+                                } else if (r.star == "5") {
+                                    r.star = "☆☆☆☆☆";
+                                }
+                            }
+                        })
+                        .catch((errorData) => {
+                            alert(errorData);
+                            console.log(errorData);
+                        });
+                },
+
+                methods: {
+                    deleteReview: function (idx) {
+                        axios({
+                            method: "delete",
+                            url: "http://localhost/review",
+                            // params:{
+                            //   courseIdx: idx
+                            // },
+                            params: {
+                                courseIdx: idx,
+                            },
+                        })
+                            .then((res) => {
+                                console.log("삭제성공");
+                                alert("삭제성공");
+                                // window.location.href="reviewmyall.html"
+                                window.location.reload();
+                                // var link = "http://localhost/index.html";
+                                location.href = link;
+                            })
+                            .catch((errorData) => {
+                                return console.log(errorData);
+                            });
+                    },
+                },
+            });
+        </script>
+    </body>
+</html>

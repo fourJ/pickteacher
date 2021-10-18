@@ -1,8 +1,7 @@
 package kr.pe.fourj.dto;
 
-import java.util.Date;
-
 import lombok.Data;
+import lombok.NonNull;
 
 public class TeacherDTO {
 	
@@ -11,13 +10,12 @@ public class TeacherDTO {
 		private String id;
 		private String pw;
 		private String name;
-		private Integer gender;
+		private String gender;
 		private String address;
 		private String phone;
 		private String career;		
 		private String major;
 		private String school;
-		private Date enrollDate;
 	}
 	
 	@Data
@@ -35,14 +33,20 @@ public class TeacherDTO {
 	@Data
 	public static class Get {
 		private Long idx;
-		private String id;
-		private String pw;
 		private String name;
-		private Integer birth;
-		private String nickName;
-		private Integer gender;
-		private String address;
-		private String phone;
+		private String gender;
+		private String school;
+		private String major;
+		private String career;
+	}
+	
+	@Data
+	public static class Login {
+		@NonNull
+		private String id;
+		
+		@NonNull
+		private String pw;
 	}
 
 }
