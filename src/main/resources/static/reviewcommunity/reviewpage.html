@@ -89,9 +89,9 @@
   <div class="w3header" style="background-color: #1D809F; margin-bottom: 30px;">
     <a href="reivewall.html" class="logo">Reivew Write</a>
     <div class="w3header-right">
-      <a href="reviewpage.html">후기 작성하기</a>
+      <a v-show="teacherIdx == null && studentIdx != null" href="reviewpage.html">후기 작성하기</a>
       <a href="reivewall.html">전체 후기</a>
-      <a href="reviewmyall.html">내가 쓴 글</a>
+      <a v-show="teacherIdx == null && studentIdx != null" href="reviewmyall.html">내가 쓴 글</a>
     </div>
   </div>
 
@@ -131,83 +131,85 @@
     </div>
   </div>
 
-        <br><br>
-        
-          <br>
-          <label for="content">contents</label>
-          <input type="text" id="content" name="content" style="height: 100;" v-model="content">
-          <!-- <button><a href="reivewall.html">완료</a></button> -->
-          
-          <a type="submit" value="작성완료" @click="reviewWrite">작성완료</a>
-            <br><br>
-      </form>
-    </div>
+  <br><br>
 
-  </div> 
-  </body>
+  <br>
+  <label for="content">contents</label>
+  <input type="text" id="content" name="content" style="height: 100;" v-model="content">
+  <!-- <button><a href="reivewall.html">완료</a></button> -->
 
-  <script>
-    new Vue({
-      el: "#reviewWrite",
-      data: {
-        success: "",
-        courseList: "",
-        selected: "",
-        content: "",
-        star: "",
-        reviewWriteSuccess: "",
+  <a type="submit" value="작성완료" @click="reviewWrite">작성완료</a>
+  <br><br>
+  </form>
+  </div>
 
+  </div>
+</body>
+
+<script>
+  new Vue({
+    el: "#reviewWrite",
+    data: {
+      success: "",
+      courseList: "",
+      selected: "",
+      content: "",
+      star: "",
+      reviewWriteSuccess: "",
+
+      studentIdx: sessionStorage.getItem("studentIdx"),
+      teacherIdx: sessionStorage.getItem("teacherIdx")
+    },
+    created:
+      function () {
+        axios({
+          method: "get",
+          url: "http://localhost/course/noreview",
+          params: {
+            studentIdx: sessionStorage.getItem("studentIdx")
+          }
+        })
+          .then((resData) => {
+            this.success = resData.data.success;
+            this.courseList = resData.data.courseList;
+          })
+          .catch((errorData) => {
+            return console.log(errorData);
+          });
       },
-      created:
-        function () {
-          axios({
-            method: "get",
-            url: "http://localhost/course/noreview",
-            params: {
-              studentIdx: sessionStorage.getItem("studentIdx")
-            }
-          })
-            .then((resData) => {
-              this.success = resData.data.success;
-              this.courseList = resData.data.courseList;
-            })
-            .catch((errorData) => {
-              return console.log(errorData);
-            });
-        },
-      methods: {
-        reviewWrite: function () {
-          axios({
-            method: "post",
-            url: "http://localhost/review/enroll",
-            data: {
-              studentIdx: sessionStorage.getItem("studentIdx"),
-              courseIdx: this.selected,
-              star: this.star,
-              content: this.content
-            }
-          })
-            .then((resData) => {
-              this.reviewWriteSuccess = resData.data.success;
-              if (this.reviewWriteSuccess) {
-                alert("후기등록 성공");
-                window.location.reload()
-                location.href = "http://localhost/reviewcommunity/reviewmyall.html";
-              } else {
-                alert("이미 작성한 후기입니다. 확인해주세요");
-                location.href = "http://localhost/reviewcommunity/reviewpage.html";
-              }
-            }).catch((errorData) => {
-              return console.log(errorData);
+    methods: {
+      reviewWrite: function () {
+        axios({
+          method: "post",
+          url: "http://localhost/review/enroll",
+          data: {
+            studentIdx: sessionStorage.getItem("studentIdx"),
+            courseIdx: this.selected,
+            star: this.star,
+            content: this.content
+          }
+        })
+          .then((resData) => {
+            this.reviewWriteSuccess = resData.data.success;
+            if (this.reviewWriteSuccess) {
+              alert("후기등록 성공");
+              window.location.reload()
+              location.href = "http://localhost/reviewcommunity/reviewmyall.html";
+            } else {
+              alert("이미 작성한 후기입니다. 확인해주세요");
               location.href = "http://localhost/reviewcommunity/reviewpage.html";
-              alert("에러");
-            })
-        },
+            }
+          }).catch((errorData) => {
+            return console.log(errorData);
+            location.href = "http://localhost/reviewcommunity/reviewpage.html";
+            alert("에러");
+          })
+      },
 
-      }
+    }
 
-    })
-  </script>
+  })
+</script>
 </body>
 
 </html>

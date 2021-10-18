@@ -1,211 +1,182 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <meta
-            name="viewport"
-            content="width=device-width, initial-scale=1, shrink-to-fit=no"
-        />
-        <meta name="description" content="" />
-        <meta name="author" content="" />
-        <title>Pick Teacher</title>
-        <!-- Favicon-->
-        <link
-            rel="icon"
-            type="image/x-icon"
-            href="/src/main/resources/static/assets/pick.ico"
-        />
-        <!-- Font Awesome icons (free version)-->
-        <script
-            src="https://use.fontawesome.com/releases/v5.15.3/js/all.js"
-            crossorigin="anonymous"
-        ></script>
-        <!-- Simple line icons-->
-        <link
-            href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.5.5/css/simple-line-icons.min.css"
-            rel="stylesheet"
-        />
-        <!-- Google fonts-->
-        <link
-            href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic"
-            rel="stylesheet"
-            type="text/css"
-        />
-        <!-- Vue.js -->
-        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
-        <!-- stylesheet -->
-        <link
-            rel="stylesheet"
-            href="https://www.w3schools.com/w3css/4/w3.css"
-        />
-        <link rel="stylesheet" href="../css/styles.css" />
-        <link rel="stylesheet" href="css/info.css" />
-        
-        <style>
-            .mySlides {
-                display: none;
-            }
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>Pick Teacher</title>
+    <!-- Favicon-->
+    <link rel="icon" type="image/x-icon" href="/src/main/resources/static/assets/pick.ico" />
+    <!-- Font Awesome icons (free version)-->
+    <script src="https://use.fontawesome.com/releases/v5.15.3/js/all.js" crossorigin="anonymous"></script>
+    <!-- Simple line icons-->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.5.5/css/simple-line-icons.min.css"
+        rel="stylesheet" />
+    <!-- Google fonts-->
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic"
+        rel="stylesheet" type="text/css" />
+    <!-- Vue.js -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
-            .w3-left,
-            .w3-right,
-            .w3-badge {
-                cursor: pointer;
-            }
+    <!-- stylesheet -->
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css" />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <link rel="stylesheet" href="css/info.css" />
 
-            .w3-badge {
-                height: 13px;
-                width: 13px;
-                padding: 0;
-            }
+    <style>
+        .mySlides {
+            display: none;
+        }
 
-            .w3header {
-                padding: 0;
-            }
+        .w3-left,
+        .w3-right,
+        .w3-badge {
+            cursor: pointer;
+        }
 
-            th,
-            td {
-                text-align: left;
-                padding: 5px;
-            }
+        .w3-badge {
+            height: 13px;
+            width: 13px;
+            padding: 0;
+        }
 
-            tr:nth-child(even) {
-                background-color: #f2f2f2;
-            }
+        .w3header {
+            padding: 0;
+        }
 
-            th {
-                background-color: #04aa6d;
-                color: white;
-            }
-        </style>
-    </head>
+        th,
+        td {
+            text-align: left;
+            padding: 5px;
+        }
 
-    <body>
-        <!-- Header -->
-        <div>
-            <div class="w3header">
-                <a href="/index.html" class="logo">Pick Teacher</a>
-            </div>
-            <div class="w3header" id="header" v-if="success" style="background-color: #1d809f; margin-bottom: 30px">
-                <a href="mypage_student.html" class="logo">My Page</a>
-                <div class="w3header-right">
-                    <a @click="teacherinfo">내 정보</a>
-        			<a href="teacher_courseList.html">내강의목록</a>
-                    <a href="teacher_cart.html">장바구니</a>
-                    <a href="teacher_likes.html">찜한 강의</a>
-                </div>
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        th {
+            background-color: #04aa6d;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <div>
+        <div class="w3header">
+            <a href="/index.html" class="logo">Pick Teacher</a>
+        </div>
+        <div class="w3header" id="header" v-if="success" style="background-color: #1d809f; margin-bottom: 30px">
+            <a href="mypage_student.html" class="logo">My Page</a>
+            <div class="w3header-right">
+                <a @click="teacherinfo">내 정보</a>
+                <a href="teacher_courseList.html">내강의목록</a>
+                <a href="teacher_cart.html">장바구니</a>
+                <a href="teacher_likes.html">찜한 강의</a>
             </div>
         </div>
-        
+    </div>
 
-       
-            <div id="app" style="margin: 50px">
-                <h1>내 강의 리스트</h1>
-                <hr>
-                <div v-if="courseSuccess">
-                    <table style="width: 100%" >
-                        <tr>
-                            <th>강의번호</th>
-                            <th>강의제목</th>
-                            <th>강의과목</th>
-                            <th>강의스케줄</th>
-                            <th>강의상태</th>
-                            <th>개강일</th>
-                            <th>종강일</th>
-                            <th>강의대상</th>
-                            <th>강의종류</th>
-                            <th>강의료</th>
-                            <th>수강가능인원</th>
-                            <th>수정</th>
-                            <th>삭제</th>
-                            <th>학생리스트보기</th>
-                        </tr>
 
-                        <tr v-for="c in courseList">
-                            <td>{{c.idx}}</td>
-                            <td>
-                                <a v-bind:href="detailPage + c.idx"
-                                    >{{c.title}}</a
-                                >
-                            </td>
-                            <td>{{c.subject}}</td>
-                            <td>{{c.schedule}}</td>
-                            <td>{{c.status}}</td>
-                            <td>{{c.openDate}}</td>
-                            <td>{{c.closeDate}}</td>
-                            <td>{{c.target}}</td>
-                            <td>{{c.type}}</td>
-                            <td>{{c.tuition}}</td>
-                            <td>{{c.catalogSize}} / {{c.headCount}}</td>
-                            <td>
-                                <a v-bind:href="updatePage + c.idx">수정</a>
-                            </td>
 
-                            <td>
-                                <span class="close" @click="deleteCourse(c.idx)"
-                                    >&#x00D7;
-                                </span>
-                            </td>
-                            <td>
-                                <a v-bind:href="studentPage + c.idx"
-                                    >학생보기</a
-                                >
-                            </td>
-                            <br />
-                        </tr>
-                    </table>
+    <div id="app" style="margin: 50px">
+        <h3>내 강의 리스트</h3>
+        <hr>
+        <div v-if="courseSuccess">
+            <table style="width: 100%">
+                <tr>
+                    <th>강의번호</th>
+                    <th>강의제목</th>
+                    <th>강의과목</th>
+                    <th>강의스케줄</th>
+                    <th>강의상태</th>
+                    <th>개강일</th>
+                    <th>종강일</th>
+                    <th>강의대상</th>
+                    <th>강의종류</th>
+                    <th>강의료</th>
+                    <th>수강가능인원</th>
+                    <th>수정</th>
+                    <th>삭제</th>
+                    <th>학생리스트보기</th>
+                </tr>
+
+                <tr v-for="c in courseList">
+                    <td>{{c.idx}}</td>
+                    <td>
+                        <a v-bind:href="detailPage + c.idx">{{c.title}}</a>
+                    </td>
+                    <td>{{c.subject}}</td>
+                    <td>{{c.schedule}}</td>
+                    <td>{{c.status}}</td>
+                    <td>{{c.openDate}}</td>
+                    <td>{{c.closeDate}}</td>
+                    <td>{{c.target}}</td>
+                    <td>{{c.type}}</td>
+                    <td>{{c.tuition}}</td>
+                    <td>{{c.headCount}}</td>
+                    <td>
+                        <a v-bind:href="updatePage + c.idx">수정</a>
+                    </td>
+
+                    <td>
+                        <span class="close" @click="deleteCourse(c.idx)">&#x00D7;
+                        </span>
+                    </td>
+                    <td>
+                        <a v-bind:href="studentPage + c.idx">학생보기</a>
+                    </td>
                     <br />
-                </div>
-                <!-- <div v-if="courseList.length"> -->
-            </div>
-            <hr />
+                </tr>
+            </table>
+            <br />
         </div>
+        <!-- <div v-if="courseList.length"> -->
+    </div>
+    <hr />
+    </div>
 
-        <script>
-            new Vue({
-                el: "#app",
-                data: {
-                    // teacherIdx: window.location.search.substring(
-                    //     window.location.search.indexOf("=") + 1
-                    // ),
+    <script>
+        new Vue({
+            el: "#app",
+            data: {
+                teacherSuccess: "",
+                teacher: [],
+                idx: "",
 
-                    teacherSuccess: "",
-                    teacher: [],
-                    idx: "",
+                resData: false,
 
-                    resData: false,
+                courseSuccess: "",
+                courseList: [],
 
-                    courseSuccess: "",
-                    courseList: [],
+                detailPage: "http://localhost/getCourseDetail/",
+                updatePage: "http://localhost/getCourseUpdate/",
+                studentPage: "http://localhost/getCourseStudent/",
+            },
 
-                    // catalogSuccess: "",
-                    // catalogSize: "",
-
-                    detailPage: "http://localhost/getCourseDetail/",
-                    updatePage: "http://localhost/getCourseUpdate/",
-                    studentPage: "http://localhost/getCourseStudent/",
-                },
-                
-                created: function() {
-                        axios({
-                            method: "get",
-                            url: "http://localhost/course/teacheridx",
-                            params: {
-                                teacherIdx: sessionStorage.getItem("teacherIdx")
-                            },
-                        })
-                            .then((resData) => {
-                                this.courseSuccess = resData.data.success;
-                                this.courseList = resData.data.courseList;
-                            })
-                            .catch((errorData) => {
-                                return console.log(errorData);
-                            });
+            created: function () {
+                axios({
+                    method: "get",
+                    url: "http://localhost/course/teacheridx",
+                    params: {
+                        teacherIdx: sessionStorage.getItem("teacherIdx")
                     },
+                })
+                    .then((resData) => {
+                        this.courseSuccess = resData.data.success;
+                        this.courseList = resData.data.courseList;
+                    })
+                    .catch((errorData) => {
+                        return console.log(errorData);
+                    });
+            },
 
-                 methods:{    
-                    deleteCourse: function (idx) {
+            methods: {
+                deleteCourse: function (idx) {
                     axios({
                         method: "delete",
                         url: "http://localhost/course",
@@ -222,10 +193,11 @@
                         .catch((errorData) => {
                             return console.log(errorData);
                         });
-                    }
-                },
-           
-            });
-        </script>
-    </body>
+                }
+            },
+
+        });
+    </script>
+</body>
+
 </html>

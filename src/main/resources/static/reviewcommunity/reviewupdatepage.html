@@ -88,11 +88,9 @@
     <div class="w3header" style="background-color: #1d809f; margin-bottom: 30px">
         <a href="reivewall.html" class="logo">ReivewList</a>
         <div class="w3header-right">
-            <a href="reviewmyall.html">내가 쓴 글</a>
+            <a v-show="teacherIdx == null && studentIdx != null" href="reviewpage.html">후기 작성하기</a>
             <a href="reivewall.html">전체 후기</a>
-            <a href="../mypage/student_cart.html">장바구니</a>
-            <a href="../mypage/student_likes.html">찜한 강의</a>
-            <a href="http://127.0.0.1:5500/index.html">로그아웃</a>
+            <a v-show="teacherIdx == null && studentIdx != null" href="reviewmyall.html">내가 쓴 글</a>
         </div>
     </div>
 
@@ -139,6 +137,9 @@
                 review: [],
                 reviewTitle: "",
                 updateSuccess: "",
+
+                studentIdx: sessionStorage.getItem("studentIdx"),
+                teacherIdx: sessionStorage.getItem("teacherIdx")
             },
             created: function () {
                 axios({

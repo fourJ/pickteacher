@@ -1,10 +1,13 @@
 package kr.pe.fourj.controller;
 
 import java.time.LocalDate;
+import java.time.Period;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
@@ -12,12 +15,17 @@ import org.springframework.web.servlet.view.RedirectView;
 import kr.pe.fourj.domain.Catalog;
 import kr.pe.fourj.domain.Course;
 import kr.pe.fourj.domain.Student;
+import kr.pe.fourj.domain.Teacher;
+import kr.pe.fourj.dto.CourseDTO;
+import kr.pe.fourj.dto.StudentDTO;
+import kr.pe.fourj.dto.TeacherDTO;
 import kr.pe.fourj.exception.Exception.ArgumentNullException;
 import kr.pe.fourj.exception.Exception.NotFoundException;
 import kr.pe.fourj.service.CartService;
 import kr.pe.fourj.service.CatalogService;
 import kr.pe.fourj.service.CourseService;
 import kr.pe.fourj.service.StudentService;
+import kr.pe.fourj.service.TeacherService;
 
 @RestController
 public class RedirectResponse {
@@ -30,10 +38,77 @@ public class RedirectResponse {
 	private StudentService studentService;
 	@Autowired
 	private CatalogService catalogService;
+	@Autowired
+	private TeacherService teacherService;
 	
+	/**
+	 * Student
+	 */
+	//학생 저장
+	@PostMapping("/student")
+	public RedirectView saveStudent(StudentDTO.Create dto) throws NotFoundException {
+		System.out.println("-- 학생 저장시도 --");
+
+		LocalDate now = LocalDate.now();
+		LocalDate birth = dto.getBirth();
+
+		Period period = Period.between(birth, now);
+		int age = period.getYears() + 1;
+
+
+		if (studentService.findStudentById(dto.getId()) == null) {
+			try {
+				studentService.saveStudent(new Student(dto.getId(), dto.getPw(), dto.getName(), dto.getBirth(),
+						age, dto.getNickName(), dto.getGender(), dto.getAddress(), dto.getPhone()));
+			} catch (ArgumentNullException e) {
+				e.printStackTrace();
+			}
+		}else {
+			System.out.println("이미 존재하는 회원id입니다.");
+		}
+
+		return new RedirectView("index.html");
+	}
+	
+	//학생 수정
+	@PutMapping("/student")
+	public RedirectView updateStudent(StudentDTO.Update dto) {
+		System.out.println("-- 학생 수정 시도 --");
+
+		try {
+			studentService.updateStudent(dto);
+		} catch (NotFoundException e) {
+			e.printStackTrace();
+		}
+
+		return new RedirectView("mypage/mypage_student.html");
+	}
+
 	/**
 	 *	Teacher 
 	 */
+	//선생님 저장
+	@PostMapping("/teacher")
+	public RedirectView saveTeacher(TeacherDTO.Create dto) {
+		System.out.println("-- 선생님 저장 시도 --");
+		
+		LocalDate date = LocalDate.now();
+		if(teacherService.findTeacherById(dto.getId()) == null) {
+			try {
+				teacherService.saveTeacher(new Teacher(dto.getId(),dto.getPw(), 
+																dto.getName(), dto.getGender(), 
+																dto.getAddress(), dto.getPhone(), 
+																dto.getCareer(), dto.getMajor(), 
+																dto.getSchool(), date));
+			} catch (ArgumentNullException e) {
+				e.printStackTrace();
+			}
+		}else {
+			System.out.println("이미 존재하는 회원id입니다.");
+		}
+		return new RedirectView("");
+	}
+		
 	//선생님 찾기에서 상세페이지로 이동
 	@GetMapping("getTeacherDetail/{idx}")
 	public RedirectView getTeacherDetail(@PathVariable Long idx, RedirectAttributes attr) {
@@ -54,6 +129,21 @@ public class RedirectResponse {
 	/**
 	 * Course
 	 */
+	//강의 수정
+	@PutMapping("/course")
+	public RedirectView updateCourse(CourseDTO.Update dto) {
+		System.out.println("-- 강의 수정 시도 --");
+
+		try {
+			Course course = courseService.findOne(dto.getIdx());
+			courseService.updateCourse(course.getIdx(), dto);
+		} catch (NotFoundException e) {
+			e.printStackTrace();
+		}
+
+		return new RedirectView("mypage/teacher_courseList.html");
+	}
+	
 	//강의 찾기에서 상세페이지로 이동
 	@GetMapping("getCourseDetail/{idx}")
 	public RedirectView getCourseDetail(@PathVariable Long idx, RedirectAttributes attr) {

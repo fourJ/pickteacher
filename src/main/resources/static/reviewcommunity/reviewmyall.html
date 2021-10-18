@@ -95,9 +95,9 @@
     <div class="w3header" style="background-color: #1d809f; margin-bottom: 30px">
         <a href="reivewall.html" class="logo">My ReivewList</a>
         <div class="w3header-right">
-            <a href="reviewpage.html">후기 작성하기</a>
+            <a v-show="teacherIdx == null && studentIdx != null" href="reviewpage.html">후기 작성하기</a>
             <a href="reivewall.html">전체 후기</a>
-            <a href="reviewmyall.html">내가 쓴 글</a>
+            <a v-show="teacherIdx == null && studentIdx != null" href="reviewmyall.html">내가 쓴 글</a>
         </div>
     </div>
 
@@ -143,6 +143,9 @@
                 datas: [],
                 urlSrc: "http://localhost/getReviewDetail/",
                 courseDetailPage: "http://localhost/getCourseDetail/",
+
+                studentIdx: sessionStorage.getItem("studentIdx"),
+                teacherIdx: sessionStorage.getItem("teacherIdx")
             },
 
             created: function () {

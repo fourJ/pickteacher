@@ -134,7 +134,7 @@
                 <tr v-for="v in datas">
                     <td>{{v.courseIdx.status}}</td>
                     <td>{{v.courseIdx.subject}}</td>
-                    <td><a v-bind:href="courseDetailPage + v.courseIdx.idx">{{v.courseIdx.title}}</a></td>
+                    <td>{{v.courseIdx.title}}</td>
                     <td>{{v.courseIdx.schedule}}</td>
                     <td>{{v.courseIdx.openDate}}</td>
                     <td>{{v.courseIdx.closeDate}}</td>
@@ -170,7 +170,6 @@
                 resultSize: "",
                 studentIdx: sessionStorage.getItem("studentIdx"),
 
-                courseDetailPage: "http://localhost/getCourseDetail/",
                 teacherDetailPage: "http://localhost/getTeacherDetail/"
             },
             created: function () {

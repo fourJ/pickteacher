@@ -7,10 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.view.RedirectView;
 
 import kr.pe.fourj.domain.Catalog;
 import kr.pe.fourj.domain.Course;
@@ -64,23 +62,6 @@ public class CourseController {
 			}
 		
 		return new ResponseDTO.Create(saveId, result);
-	}
-
-	//강의 수정
-	@PutMapping("/course")
-	public RedirectView updateCourse(CourseDTO.Update dto) {
-		System.out.println("-- 강의 수정 시도 --");
-
-		boolean result = false;			
-		try {
-			Course course = courseService.findOne(dto.getIdx());
-			courseService.updateCourse(course.getIdx(), dto);
-			result = true;
-		} catch (NotFoundException e) {
-			e.printStackTrace();
-		}
-
-		return new RedirectView("mypage/teacher_courseList.html");
 	}
 
 	//강의 삭제

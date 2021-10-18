@@ -1,21 +1,17 @@
 package kr.pe.fourj.controller;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import kr.pe.fourj.domain.Teacher;
 import kr.pe.fourj.dto.ResponseDTO;
 import kr.pe.fourj.dto.TeacherDTO;
-import kr.pe.fourj.exception.Exception.ArgumentNullException;
 import kr.pe.fourj.exception.Exception.NotFoundException;
 import kr.pe.fourj.service.TeacherService;
 
@@ -24,35 +20,10 @@ public class TeacherController {
 	
 	@Autowired
 	private TeacherService teacherService;
-	
-	//선생님 저장
-	@PostMapping("/teacher")
-	public ResponseDTO.Create saveTeacher(TeacherDTO.Create dto) {
-		System.out.println("-- 선생님 저장 시도 --");
-		
-		boolean result = false;
-		Long saveId = null;
-		LocalDate date = LocalDate.now();
-		if(teacherService.findTeacherById(dto.getId()) == null) {
-			try {
-				saveId = teacherService.saveTeacher(new Teacher(dto.getId(),dto.getPw(), 
-																dto.getName(), dto.getGender(), 
-																dto.getAddress(), dto.getPhone(), 
-																dto.getCareer(), dto.getMajor(), 
-																dto.getSchool(), date));
-				result = true;
-			} catch (ArgumentNullException e) {
-				e.printStackTrace();
-			}
-		}else {
-			System.out.println("이미 존재하는 회원id입니다.");
-		}
-		return new ResponseDTO.Create(saveId, result);
-	}
 
 	//선생님 로그인
 	@RequestMapping("/teacher/login")
-	public ResponseDTO.Login login(@RequestBody TeacherDTO.Login dto) {
+	public ResponseDTO.Login login(TeacherDTO.Login dto) {
 
 		boolean result = false;
 		Teacher teacher = teacherService.findTeacherById(dto.getId());

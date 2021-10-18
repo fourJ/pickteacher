@@ -92,7 +92,7 @@
                                     mdl-color-text--grey
                                 " for="textfield_new_username">아이디</label>
                         <input class="mdl-textfield__input" type="text" id="textfield_new_username" name="id"
-                            required="" v-model="id" pattern="^[a-z0-9_-]{3,15}$" />
+                            required="" name="id" pattern="^[a-z0-9_-]{3,15}$" />
                         <span class="mdl-textfield__error">3~15글자 (소문자, 숫자, _, - 가능)</span>
                     </div>
 
@@ -105,8 +105,8 @@
                                     mdl-textfield__label
                                     mdl-color-text--grey
                                 " for="pw1">비밀번호</label>
-                        <input class="mdl-textfield__input" type="password" id="pw1" name="pw"
-                            required="" v-model="pw" pattern="^[a-zA-Z0-9]+$" />
+                        <input class="mdl-textfield__input" type="password" id="pw1" name="pw" required=""
+                            pattern="^[a-zA-Z0-9]+$" />
                         <span class="mdl-textfield__error">6~20글자 (소문자, 대문자, 숫자, @, #, $, % 가능)</span>
                     </div>
 
@@ -119,8 +119,8 @@
                                     mdl-textfield__label
                                     mdl-color-text--grey
                                 " for="pw2">비밀번호 확인</label>
-                        <input class="mdl-textfield__input" type="password" id="pw2" required=""
-                            name="password_confirm" onchange="check()" />
+                        <input class="mdl-textfield__input" type="password" id="pw2" required="" name="password_confirm"
+                            onchange="check()" />
                     </div>
 
                     <div class="
@@ -133,7 +133,7 @@
                                     mdl-color-text--grey
                                 " for="textfield_new_username">이름</label>
                         <input class="mdl-textfield__input" type="text" id="textfield_new_username" name="name"
-                            required="" v-model="name" />
+                            required="" />
                     </div>
 
                     <!-- 생년월일 -->
@@ -146,8 +146,8 @@
                                     mdl-textfield__label
                                     mdl-color-text--grey
                                 " for="textfield_new_username">생년월일</label>
-                        <input class="mdl-textfield__input" type="date" id="textfield_new_username" name="birth"
-                            required="" v-model="birth" />
+                        <input class="mdl-textfield__input" type="date" id="textfield_new_username"
+                            style="margin-top: 20px;" name="birth" required="" />
                     </div>
 
                     <div class="
@@ -160,7 +160,7 @@
                                     mdl-color-text--grey
                                 " for="textfield_new_username">닉네임</label>
                         <input class="mdl-textfield__input" type="text" id="textfield_new_username" name="nickName"
-                            required="" v-model="nickName" />
+                            required="" />
                     </div>
 
                     <!-- Gender -->
@@ -169,13 +169,13 @@
                                 mdl-textfield--floating-label
                                 mdl-cell mdl-cell--12-col
                             ">
-                            <label class="
+                        <label class="
                                     mdl-textfield__label
                                     mdl-color-text--grey
                                 " for="textfield_new_username">성별</label>
                         <!-- <input class="mdl-textfield__input" type="text" id="textfield_new_username" name="gender"
                             list="genderList" /> -->
-                        <select id="genderList" v-model="gender" style="margin-top: 30px;">
+                        <select id="genderList" name="gender" style="margin-top: 30px;">
                             <option value="여자">여자</option>
                             <option value="남자">남자</option>
                         </select>
@@ -191,7 +191,7 @@
                                     mdl-color-text--grey
                                 " for="textfield_new_username">거주지</label>
                         <input class="mdl-textfield__input" type="text" id="textfield_new_username" name="address"
-                            required="" v-model="address" />
+                            required="" />
                     </div>
 
                     <div class="
@@ -204,7 +204,7 @@
                                     mdl-color-text--grey
                                 " for="textfield_new_username">전화번호</label>
                         <input class="mdl-textfield__input" type="tel" id="textfield_new_username" name="phone" required
-                            v-model="phone" pattern="[0-9]{3,12}" maxlength="13" v-on:keyup.enter="login" />
+                            pattern="[0-9]{3,12}" maxlength="13" v-on:keyup.enter="login" />
                         <span class="mdl-textfield__error">-제외 숫자만 입력</span>
                     </div>
                     <div class="mdl-cell mdl-cell--12-col send-button" align="center">
@@ -238,58 +238,6 @@
                 window.location.reload();
             }
         }
-    </script>
-
-    <script>
-        new Vue({
-            el: "#signup",
-            data: {
-                id: "",
-                pw: "",
-                name: "",
-                birth: "",
-                nickName: "",
-                gender: "",
-                address: "",
-                phone: "",
-                signupsuccess: "",
-            },
-            methods: {
-                signup: function () {
-                    axios({
-                        method: "post",
-                        url: "http://localhost/student",
-                        data: {
-                            id: this.id,
-                            pw: this.pw,
-                            name: this.name,
-                            birth: this.birth,
-                            nickName: this.nickName,
-                            gender: this.gender,
-                            address: this.address,
-                            phone: this.phone,
-                        },
-                    })
-                        .then((resData) => {
-                            this.signupsuccess = true;
-                            console.log(resData.data.success);
-                            this.signupsuccess = resData.data.success;
-                            console.log(resData.data);
-                            if (this.signupsuccess) {
-                                window.location.href =
-                                    "http://localhost/index.html";
-                                alert("성공공");
-                            } else {
-                                alert("입력한 정보를 다시 확인해주세요.");
-                            }
-                        })
-                        .catch((error) => {
-                            alert(error);
-                            console.log(error);
-                        });
-                },
-            },
-        });
     </script>
 </body>
 
