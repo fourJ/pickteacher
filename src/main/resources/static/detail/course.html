@@ -75,16 +75,13 @@
     <div class="w3header" style="background-color: #1d809f; margin-bottom: 30px">
         <a href="mypage_student.html" class="logo">My Page</a>
     </div>
-
     <div id="app" style="margin: 50px">
         <h3>강의 상세페이지</h3>
         <hr />
-
         <div>
             <h4>{{course.title}}</h4>
             <img v-bind:src="imageSrc1 + course.idx + imageSrc2" />
             <br><br>
-
             <table style="width: 100%" v-if="courseSuccess && catalogSuccess">
                 <tr>
                     <th>상태</th>
@@ -115,32 +112,24 @@
             </table>
             <!--담당 강사에서 강사 테이블로 넘어가게-->
         </div>
-
         <br>
-
         <div v-if="teacherIdx === null">
             <!-- 찜 하기 / 장바구니 / 수강신청 버튼 -->
-            <!-- v-if="likesCheckSuccess && likesCheck === '0'" -->
-            <!-- v-if="likesCheckSuccess && likesCheck === '1'"  -->
-            <div id="likes">
-                <button v-if="likesCheckSuccess && likesCheck === '0'" @click="saveLikes">찜 하기</button>
-                <button v-if="likesCheckSuccess && likesCheck === '1'" @click="deleteLikes">찜 취소</button>
-            </div>
+            <button @click="saveLikes">찜 하기</button>
+            <button @click="deleteLikes">찜 취소</button>
             <button v-if="course.status != '마감'" @click="saveCart">장바구니</button>
             <button v-if="course.status != '마감'" @click="saveCatalog">수강신청</button>
         </div>
-
         <hr>
-
         <div>
             <!-- 후기 리스트 -->
             <button @click="getReviewList">후기 보기</button>
-
             <br>
             <br>
             <div v-if="reviewSize == '0'">
                 <span>해당 강의에 대한 후기가 없습니다.</span>
             </div>
+
             <div v-if="reviewSuccess && reviewSize != '0'">
                 <!-- 테이블로 리뷰 리스트 -->
                 <table style="width: 100%">
@@ -165,9 +154,9 @@
                 </table>
             </div>
         </div>
-
         <hr />
     </div>
+
 
     <script>
         new Vue({
@@ -193,8 +182,12 @@
 
                 detailPage: "http://localhost/getTeacherDetail/",
 
+                studentIdx: sessionStorage.getItem("studentIdx"),
                 teacherIdx: sessionStorage.getItem("teacherIdx"),
-                studentIdx: sessionStorage.getItem("studentIdx")
+
+                likesCheckSuccess: "",
+                likesCheck: ""
+
             },
             created: function () {
                 axios({
@@ -212,6 +205,25 @@
                         return console.log(errorData);
                     });
             },
+
+            afterMount: function () {
+                axios({
+                    method: "get",
+                    url: "http://localhost/likes/check",
+                    params: {
+                        studentIdx: this.studentIdx,
+                        courseIdx: this.courseIdx,
+                    }
+                })
+                    .then((resData) => {
+                        this.likesCheckSuccess = resData.data.success;
+                        this.likesCheck = resData.data.check;
+                    })
+                    .catch((errorData) => {
+                        return console.log(errorData);
+                    });
+            },
+
             mounted: function () {
                 axios({
                     method: "get",
@@ -229,6 +241,7 @@
                         return console.log(errorData);
                     });
             },
+
             methods: {
                 saveLikes: function () {
                     if (sessionStorage.getItem("studentIdx") != null) {
@@ -266,7 +279,7 @@
                         axios({
                             method: "delete",
                             url: "http://localhost/likes",
-                            data: {
+                            params: {
                                 studentIdx: this.studentIdx,
                                 courseIdx: this.courseIdx,
                             },
@@ -374,50 +387,6 @@
             },
         });
 
-        new Vue({
-            el: "#likes",
-            data: {
-                studentIdx: sessionStorage.getItem("studentIdx"),
-                courseIdx: "",
-
-                likesCheckSuccess: "",
-                likesCheck: ""
-            },
-            created: function () {
-                axios({
-                    method: "get",
-                    url: "http://localhost/course",
-                    params: {
-                        idx: this.courseIdx,
-                    },
-                })
-                    .then((resData) => {
-                        this.courseSuccess = resData.data.success;
-                        this.course = resData.data.course;
-                    })
-                    .catch((errorData) => {
-                        return console.log(errorData);
-                    });
-            },
-            mounted: function () {
-                axios({
-                    method: "get",
-                    url: "http://localhost/likes/check",
-                    params: {
-                        studentIdx: this.studentIdx,
-                        courseIdx: this.course.idx,
-                    }
-                })
-                    .then((resData) => {
-                        this.likesCheckSuccess = resData.data.success;
-                            this.likesCheck = resData.data.check;
-                    })
-                    .catch((errorData) => {
-                        return console.log(errorData);
-                    });
-            }
-        });
     </script>
 </body>
-
 </html>

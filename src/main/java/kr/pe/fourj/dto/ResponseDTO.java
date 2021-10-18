@@ -121,6 +121,13 @@ public class ResponseDTO {
 	
 	@Data
 	@AllArgsConstructor
+	public static class LikesCheckResponse {
+		Boolean success;
+		Integer check;
+	}
+	
+	@Data
+	@AllArgsConstructor
 	public static class ReviewResponse {
 		Boolean success;
 		private Review review;

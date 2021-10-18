@@ -49,7 +49,7 @@ public class CartController {
 				Student student = studentService.findOne(dto.getStudentIdx());
 				Course course = courseService.findOne(dto.getCourseIdx());
 				
-				if(cartService.isNotAlreadyCart(student, course) && courseService.checkStatus(course) && course.getHeadCount() > catalogService.findAllByCourseIdx(course).size()) {
+				if(cartService.isNotAlreadyCart(student, course) && courseService.checkStatus(course)) {
 					try {
 						saveId = cartService.saveCart(new Cart(student, course));
 						result = true;
@@ -57,7 +57,7 @@ public class CartController {
 						e.printStackTrace();
 					}
 				}else {
-					System.out.println("동일한 강의를 이미 수강신청 하셨거나, 마감일이 지났거나, 정원이 다 찼습니다.");
+					System.out.println("동일한 강의를 이미 수강신청 하셨거나, 정원이 다 찼습니다.");
 				}
 			} catch (NotFoundException e) {
 				e.printStackTrace();
