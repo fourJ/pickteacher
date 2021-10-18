@@ -96,18 +96,23 @@
     	<div th:replace="../common/header.html :: headerFragment"></div>
     </header> -->
 
-            <div>
-                <div class="w3header">
-                    <a href="/index.html" class="logo">Pick Teacher</a>
-                </div>
-                <div class="w3header" id="header" v-if="success" style="background-color: #1d809f; margin-bottom: 30px">
-                    <a href="mypage_student.html" class="logo">My Page</a>
-                    <div class="w3header-right">
-                        <a @click="teacherinfo">내 정보</a>
-                        <a href="teacher_courseList.html">내강의목록</a>
-                        <a href="teacher_cart.html">장바구니</a>
-                        <a href="teacher_likes.html">찜한 강의</a>
-                    </div>
+
+        <div class="w3header" id="header">
+            <div class="w3header">
+                <a href="/index.html" class="logo">Pick Teacher</a>
+            </div>
+            <div
+                class="w3header"
+                style="background-color: #1d809f; margin-bottom: 30px"
+                v-show="success"
+            >
+                <a href="mypage_teacher.html" class="logo">My Page</a>
+                <div class="w3header-right">
+                    <a href="teacher_update.html">내 정보 수정</a>
+
+                    
+        			<a href="teacher_courseList.html">내 강의목록</a>
+
                 </div>
             </div>
 
@@ -118,8 +123,35 @@
             <div v-if="success">
                 <div class="container px-4" v-show="success">
                     <h5>{{datas.name}}님, 오늘도 화이팅:)</h5>
-                </div>
+                    <br>
+                    
+                   
+          
+                          <div>
+                              <table style="width: 100%" v-show="success">
+                                  <tr>
+                                      <th>선생님 이름</th>
+                                      <th>선생님 성별</th>
+                                      <th>선생님 주소</th>
+                                      <th>선생님 번호</th>
+                                      <th>선생님 경력</th>
+                                      <th>선생님 전공</th>
+                                      <th>선생님 출신학교</th>
+                                  </tr>
+          
+                                  <tr>
+                                      <td>{{datas.name}}</td>
+                                      <td>{{datas.gender}}</td>
+                                      <td>{{datas.address}}</td>
+                                      <td>{{datas.phone}}</td>
+                                      <td>{{datas.career}}</td>
+                                      <td>{{datas.major}}</td>
+                                      <td>{{datas.school}}</td>
+                                  </tr>
+                              </table>
+                          </div>
             </div>
+          </div>
         </div>
 
          <div id="app1" style="margin: 50px">
@@ -231,12 +263,12 @@
                         });
                 },
                 methods: {
-                    teacherinfo: function () {
+                    teacherupdate: function () {
                         axios({
                             method: "get",
                             url: "http://localhost/teacher",
                             params: {
-                            	idx: this.idx
+                            	idx: sessionStorage.getItem("teacherIdx")
                             }
                         })
                             .then((resData) => {
@@ -245,7 +277,7 @@
                                 console.log(inputpw);
                                 if (inputpw == resData.data.pw) {
                                     window.location.href =
-                                        "http://localhost/mypage/teacher_info.html";
+                                        "http://localhost/mypage/teacher_update.html";
                                     console.log("성공");
                                 } else {
                                     alert("비밀번호를 재입력하세요!");
@@ -263,11 +295,12 @@
                 data: {
                     success: false,
                     datas: [],
+                    idx: ""
                 },
                 created: function () {
                     axios({
                         method: "get",
-                        url: "http://localhost/teacher",
+                        url: "http://localhost/teacher" + this.idx,
                         params: {
                         	idx: sessionStorage.getItem("teacherIdx")
                         }
@@ -289,7 +322,7 @@
                     teacherinfo: function () {
                         axios({
                             method: "get",
-                            url: "http://localhost/teacher",
+                            url: "http://localhost/teacher?idx=" + this.idx,
                             parmas: {
                             	idx: this.idx
                             }
@@ -300,7 +333,7 @@
                                 console.log(inputpw);
                                 if (inputpw == this.datas.pw) {
                                     window.location.href =
-                                        "http://localhost/mypage/teacher_info.html";
+                                        "http://localhost/mypage/teacher_update.html";
                                     console.log("성공");
                                 } else {
                                     alert("비밀번호를 재입력하세요!");

@@ -42,6 +42,7 @@
         />
         <link rel="stylesheet" href="../css/styles.css" />
         <link rel="stylesheet" href="css/info.css" />
+        
         <style>
             .mySlides {
                 display: none;
@@ -202,7 +203,8 @@
                                 return console.log(errorData);
                             });
                     },
-                methods:{    
+
+                 methods:{    
                     deleteCourse: function (idx) {
                     axios({
                         method: "delete",
