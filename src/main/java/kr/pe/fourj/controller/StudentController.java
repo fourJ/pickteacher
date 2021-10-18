@@ -43,7 +43,7 @@ public class StudentController {
 			if(student.getPw().equals(dto.getPw())) {
 				result = true;
 			}else {
-				System.out.println("로그인 실패! : 패스워드를 다시 확인해주세요. 중복 로그인은 불가합니다.");
+				System.out.println("로그인 실패! : 패스워드를 다시 확인해주세요.");
 			}
 		}else {
 			System.out.println("로그인 실패! : 등록되지 않은 회원입니다.");

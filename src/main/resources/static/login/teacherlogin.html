@@ -156,11 +156,11 @@
                                 window.location.href =
                                     "http://localhost/index.html";
                             } else {
-                                alert("로그인 실패");
+                                alert("아이디 비밀번호를 다시 확인해주세요.");
                             }
                         })
-                        .catch(function () {
-                            alert("에러");
+                        .catch((errorData) => {
+                            alert("존재하지 않는 로그인 정보입니다.");
                         });
                 },
             },

@@ -162,15 +162,16 @@
                                     if (inputpw == this.datas.pw) {
                                         window.location.href =
                                             "http://localhost/mypage/student_update.html";
-                                        console.log("성공");
                                     } else {
                                         alert("비밀번호를 재입력하세요!");
                                     }
                                 } else {
-
                                     window.location.reload();
                                 }
                             })
+                            .catch((errorData) => {
+                                console.log(errorData);
+                            });
                     } else {
                         if (window.confirm("잠깐!! 🤭 학생 회원이신가요?")) {
                             window.location.href = "http://localhost/login/studentlogin.html";

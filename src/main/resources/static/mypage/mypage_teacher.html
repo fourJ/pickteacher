@@ -32,45 +32,21 @@
 </head>
 
 <body>
-    <!-- Navigation-->
-    <a class="menu-toggle rounded"><i class="fas fa-bars"></i></a>
-    <nav id="sidebar-wrapper">
-        <ul class="sidebar-nav">
-            <li class="sidebar-brand">
-                <a href="../index.html">Pick Teacher</a>
-            </li>
-            <li class="sidebar-nav-item">
-                <a href="../search/search_teacher.html">선생님 찾기</a>
-            </li>
-            <li class="sidebar-nav-item">
-                <a href="../search/search_course.html">강의 찾기</a>
-            </li>
-            <li class="sidebar-nav-item">
-                <a href="../reviewcommunity/reivewall.html">후기 커뮤니티</a>
-            </li>
-            <li class="sidebar-nav-item">
-                <a href="../mypage/mypage_teacher.html">마이 페이지</a>
-            </li>
-        </ul>
-    </nav>
+
     <!-- Header -->
-    <div class="w3header" id="header">
-            <div class="w3header">
-                <a href="/index.html" class="logo">Pick Teacher</a>
+    <div>
+        <div class="w3header">
+            <a href="/index.html" class="logo">Pick Teacher</a>
+        </div>
+        <div class="w3header" id="header" v-if="success" style="background-color: #1d809f; margin-bottom: 30px">
+            <a href="mypage_student.html" class="logo">My Page</a>
+            <div class="w3header-right">
+                <a @click="teacherinfo">내 정보 수정</a>
+                <a href="teacher_courseList.html">내 강의목록</a>
             </div>
-            <div
-                class="w3header"
-                style="background-color: #1D809F; margin-bottom: 30px"
-                v-show="success"
-            >
-                <a href="mypage_teacher.html" class="logo">My Page</a>
-                <div class="w3header-right">
-                    <a href="teacher_update.html">내 정보 수정</a>
-              <a href="teacher_courseList.html">내 강의목록</a>
-                </div>
-            </div>
-    </div>  
-  
+        </div>
+    </div>
+
     <div class="w3-container" id="app" style="margin: 50px">
         <h1>마이페이지</h1>
         <hr />
@@ -145,6 +121,7 @@
             data: {
                 success: false,
                 datas: [],
+                teacherIdx: sessionStorage.getItem("teacherIdx"),
             },
             created: function () {
                 axios({
@@ -156,41 +133,46 @@
                 })
                     .then((resData) => {
                         this.success = resData.data.success;
-                        this.idx = sessionStorage.getItem("teacherIdx");
-                        console.log(resData.data);
                         this.datas = resData.data.teacher;
-                        console.log(this.datas);
                     })
                     .catch((errorData) => {
-                        alert(errorData);
-                        console.log(errorData);
+                        console.log(errorData.response.data.message);
                     });
             },
             methods: {
                 teacherinfo: function () {
-                    axios({
-                        method: "get",
-                        url: "http://localhost/teacher",
-                        parmas: {
-                            idx: this.idx
-                        }
-                    })
-                        .then((resData) => {
-                            console.log(resData.data.success);
-                            var inputpw = prompt("비밀번호를 입력하세요:)");
-                            console.log(inputpw);
-                            if (inputpw == this.datas.pw) {
-                                window.location.href =
-                                    "http://localhost/mypage/teacher_info.html";
-                                console.log("성공");
-                            } else {
-                                alert("비밀번호를 재입력하세요!");
+                    if (this.teacherIdx != null) {
+                        axios({
+                            method: "get",
+                            url: "http://localhost/teacher",
+                            parmas: {
+                                idx: this.teacherIdx
                             }
                         })
-                        .catch((errorData) => {
-                            alert(errorData);
-                            console.log(errorData);
-                        });
+                            .then((resData) => {
+                                this.success = resData.data.success;
+                                var inputpw = prompt("비밀번호를 입력하세요:)");
+                                if (inputpw != null) {
+                                    if (inputpw == this.datas.pw) {
+                                        window.location.href =
+                                            "http://localhost/mypage/teacher_update.html";
+                                    } else {
+                                        alert("비밀번호를 재입력하세요!");
+                                    }
+                                } else {
+                                    window.location.reload();
+                                }
+                            })
+                            .catch((errorData) => {
+                                console.log(errorData);
+                            });
+                    } else {
+                        if (window.confirm("잠깐!! 🤭 선생님이신가요?")) {
+                            window.location.href = "http://localhost/login/teacherlogin.html";
+                        } else {
+                            window.location.href = "http://localhost/login/studentlogin.html";
+                        }
+                    }
                 }
             },
         });
