@@ -1,314 +1,423 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <meta
-            name="viewport"
-            content="width=device-width, initial-scale=1, shrink-to-fit=no"
-        />
-        <meta name="description" content="" />
-        <meta name="author" content="" />
-        <title>Pick Teacher</title>
-        <!-- Favicon-->
-        <link
-            rel="icon"
-            type="image/x-icon"
-            href="/src/main/resources/static/assets/pick.ico"
-        />
-        <!-- Font Awesome icons (free version)-->
-        <script
-            src="https://use.fontawesome.com/releases/v5.15.3/js/all.js"
-            crossorigin="anonymous"
-        ></script>
-        <!-- Simple line icons-->
-        <link
-            href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.5.5/css/simple-line-icons.min.css"
-            rel="stylesheet"
-        />
-        <!-- Google fonts-->
-        <link
-            href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic"
-            rel="stylesheet"
-            type="text/css"
-        />
-        <!-- Vue.js -->
-        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
-        <!-- stylesheet -->
-        <link
-            rel="stylesheet"
-            href="https://www.w3schools.com/w3css/4/w3.css"
-        />
-        <link rel="stylesheet" href="../css/styles.css" />
-        <link rel="stylesheet" href="css/info.css" />
-        <style>
-            .mySlides {
-                display: none;
-            }
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>Pick Teacher</title>
+    <!-- Favicon-->
+    <link rel="icon" type="image/x-icon" href="/src/main/resources/static/assets/pick.ico" />
+    <!-- Font Awesome icons (free version)-->
+    <script src="https://use.fontawesome.com/releases/v5.15.3/js/all.js" crossorigin="anonymous"></script>
+    <!-- Simple line icons-->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.5.5/css/simple-line-icons.min.css"
+        rel="stylesheet" />
+    <!-- Google fonts-->
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic"
+        rel="stylesheet" type="text/css" />
+    <!-- Vue.js -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
-            .w3-left,
-            .w3-right,
-            .w3-badge {
-                cursor: pointer;
-            }
+    <!-- stylesheet -->
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css" />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <link rel="stylesheet" href="css/info.css" />
+    <style>
+        .mySlides {
+            display: none;
+        }
 
-            .w3-badge {
-                height: 13px;
-                width: 13px;
-                padding: 0;
-            }
+        .w3-left,
+        .w3-right,
+        .w3-badge {
+            cursor: pointer;
+        }
 
-            .w3header {
-                padding: 0;
-            }
+        .w3-badge {
+            height: 13px;
+            width: 13px;
+            padding: 0;
+        }
 
-            th,
-            td {
-                text-align: left;
-                padding: 5px;
-            }
+        .w3header {
+            padding: 0;
+        }
 
-            tr:nth-child(even) {
-                background-color: #f2f2f2;
-            }
+        th,
+        td {
+            text-align: left;
+            padding: 5px;
+        }
 
-            th {
-                background-color: #04aa6d;
-                color: white;
-            }
-        </style>
-    </head>
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
 
-    <body>
-        <!-- Header -->
-        <div class="w3header">
-            <a href="/index.html" class="logo">Pick Teacher</a>
-            <div class="w3header-right">
-                <a href="../login/studentlogin.html">로그인</a>
-                <a href="../login/studentsignup.html">회원 가입</a>
-            </div>
+        th {
+            background-color: #04aa6d;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <div class="w3header">
+        <a href="/index.html" class="logo">Pick Teacher</a>
+        <div class="w3header-right">
+            <a href="../login/studentlogin.html">로그인</a>
+            <a href="../login/studentsignup.html">회원 가입</a>
         </div>
-        <div
-            class="w3header"
-            style="background-color: #1d809f; margin-bottom: 30px"
-        >
-            <a href="mypage_student.html" class="logo">My Page</a>
+    </div>
+    <div class="w3header" style="background-color: #1d809f; margin-bottom: 30px">
+        <a href="mypage_student.html" class="logo">My Page</a>
+    </div>
+
+    <div id="app" style="margin: 50px">
+        <h3>강의 상세페이지</h3>
+        <hr />
+
+        <div>
+            <h4>{{course.title}}</h4>
+            <img v-bind:src="imageSrc1 + course.idx + imageSrc2" />
+            <br><br>
+
+            <table style="width: 100%" v-if="courseSuccess && catalogSuccess">
+                <tr>
+                    <th>상태</th>
+                    <th>과목</th>
+                    <th>강의명</th>
+                    <th>강의 요일</th>
+                    <th>개강일</th>
+                    <th>종강일</th>
+                    <th>대상 학년</th>
+                    <th>진행 방식</th>
+                    <th>수강비</th>
+                    <th>수강 가능 인원</th>
+                    <th>담당 선생님</th>
+                </tr>
+                <tr>
+                    <td>{{course.status}}</td>
+                    <td>{{course.subject}}</td>
+                    <td>{{course.title}}</td>
+                    <td>{{course.schedule}}</td>
+                    <td>{{course.openDate}}</td>
+                    <td>{{course.closeDate}}</tdn>
+                    <td>{{course.target}}</td>
+                    <td>{{course.type}}</td>
+                    <td>{{course.tuition}}</td><br />
+                    <td>{{catalogSize}} / {{course.headCount}}</td>
+                    <td><a v-bind:href="detailPage + course.idx">{{course.teacherIdx.name}}</a></td>
+                </tr>
+            </table>
+            <!--담당 강사에서 강사 테이블로 넘어가게-->
         </div>
 
-        <div id="app" style="margin: 50px">
-            <h3>강의 상세페이지</h3>
-            <hr />
+        <br>
 
-            <div>
-                <h4>{{course.title}}</h4>
-                <img v-bind:src="imageSrc1 + course.idx + imageSrc2" />
-                <br><br>
-
-                    <table style="width: 100%" v-if="courseSuccess && catalogSuccess">
-                        <tr>
-                            <th>상태</th>
-                            <th>과목</th>
-                            <th>강의명</th>
-                            <th>강의 요일</th>
-                            <th>개강일</th>
-                            <th>종강일</th>
-                            <th>대상 학년</th>
-                            <th>진행 방식</th>
-                            <th>수강비</th>
-                            <th>수강 가능 인원</th>
-                            <th>담당 선생님</th>
-                        </tr>
-                        <tr >
-                            <td>{{course.status}}</td>
-                            <td>{{course.subject}}</td>
-                            <td>{{course.title}}</td>
-                            <td>{{course.schedule}}</td>
-                            <td>{{course.openDate}}</td>
-                            <td>{{course.closeDate}}</tdn>
-                            <td>{{course.target}}</td>
-                            <td>{{course.type}}</td>
-                            <td>{{course.tuition}}</td><br />
-                            <td>{{catalogSize}} / {{course.headCount}}</td>
-                            <td><a v-bind:href="detailPage + course.idx">{{course.teacherIdx.name}}</a></td>
-                        </tr>  
-                    </table> 
-                    <!--담당 강사에서 강사 테이블로 넘어가게-->
+        <div v-if="teacherIdx === null">
+            <!-- 찜 하기 / 장바구니 / 수강신청 버튼 -->
+            <!-- v-if="likesCheckSuccess && likesCheck === '0'" -->
+            <!-- v-if="likesCheckSuccess && likesCheck === '1'"  -->
+            <div id="likes">
+                <button v-if="likesCheckSuccess && likesCheck === '0'" @click="saveLikes">찜 하기</button>
+                <button v-if="likesCheckSuccess && likesCheck === '1'" @click="deleteLikes">찜 취소</button>
             </div>
+            <button v-if="course.status != '마감'" @click="saveCart">장바구니</button>
+            <button v-if="course.status != '마감'" @click="saveCatalog">수강신청</button>
+        </div>
+
+        <hr>
+
+        <div>
+            <!-- 후기 리스트 -->
+            <button @click="getReviewList">후기 보기</button>
 
             <br>
-
-            <div>
-                <!-- 찜 하기 / 장바구니 / 수강신청 버튼 -->
-                <button @click="saveLikes">찜 하기</button>
-                <button @click="saveCart">장바구니</button>
-                <button @click="saveCatalog">수강신청</button>
+            <br>
+            <div v-if="reviewSize == '0'">
+                <span>해당 강의에 대한 후기가 없습니다.</span>
             </div>
-
-            <hr>
-
-            <div>
-                <!-- 후기 리스트 -->
-                <button @click="getReviewList">후기 보기</button>
-
-                <br>
-                <br>
-                <div v-if="reviewSize == '0'">
-                    <span>해당 강의에 대한 후기가 없습니다.</span>
-                </div>
-                <div v-if="reviewSuccess && reviewSize != '0'">
-                    <!-- 테이블로 리뷰 리스트 -->
-                    <table style="width: 100%">
-                        <tr>
-                            <th>작성자</th>
-                            <th>닉네임</th>
-                            <th>강의제목</th>
-                            <th>강의과목</th>
-                            <th>작성시간</th>
-                            <th>후기내용</th>
-                            <th>별점</th>
-                        </tr>
-                        <tr v-for="v in reviewList">
-                            <td>{{v.studentIdx.name}}</td>
-                            <td>{{v.studentIdx.nickName}}</td>
-                            <td>{{v.courseIdx.title}}</td>
-                            <td>{{v.courseIdx.subject}}</td>
-                            <td>{{v.date}}</td>
-                            <td>{{v.content}}</td>
-                            <td>{{v.star}}</td>
-                        </tr>
-                    </table>
-                </div>
+            <div v-if="reviewSuccess && reviewSize != '0'">
+                <!-- 테이블로 리뷰 리스트 -->
+                <table style="width: 100%">
+                    <tr>
+                        <th>작성자</th>
+                        <th>닉네임</th>
+                        <th>강의제목</th>
+                        <th>강의과목</th>
+                        <th>작성시간</th>
+                        <th>후기내용</th>
+                        <th>별점</th>
+                    </tr>
+                    <tr v-for="v in reviewList">
+                        <td>{{v.studentIdx.name}}</td>
+                        <td>{{v.studentIdx.nickName}}</td>
+                        <td>{{v.courseIdx.title}}</td>
+                        <td>{{v.courseIdx.subject}}</td>
+                        <td>{{v.date}}</td>
+                        <td>{{v.content}}</td>
+                        <td>{{v.star}}</td>
+                    </tr>
+                </table>
             </div>
-
-            <hr />
         </div>
 
-        <script>
-            new Vue({
-                el: "#app",
-                data: {
-                    courseIdx: window.location.search.substring(
-                        window.location.search.indexOf("=") + 1
-                    ),
+        <hr />
+    </div>
 
-                    courseSuccess: "",
-                    course: [],
+    <script>
+        new Vue({
+            el: "#app",
+            data: {
+                courseIdx: window.location.search.substring(
+                    window.location.search.indexOf("=") + 1
+                ),
 
-                    catalogSuccess: "",
-                    catalogList: [],
-                    catalogSize: "",
+                courseSuccess: "",
+                course: [],
 
-                    reviewSuccess: "",
-                    reviewList: [],
-                    reviewSize: "",
+                catalogSuccess: "",
+                catalogList: [],
+                catalogSize: "",
 
-                    imageSrc1: "../assets/img/course/",
-                    imageSrc2: ".jpg",
+                reviewSuccess: "",
+                reviewList: [],
+                reviewSize: "",
 
-                    detailPage: "http://localhost/getTeacherDetail/"
-                },
-                created: function () {
-                    axios({
-                        method: "get",
-                        url: "http://localhost/course",
-                        params: {
-                            idx: this.courseIdx,
-                        },
+                imageSrc1: "../assets/img/course/",
+                imageSrc2: ".jpg",
+
+                detailPage: "http://localhost/getTeacherDetail/",
+
+                teacherIdx: sessionStorage.getItem("teacherIdx"),
+                studentIdx: sessionStorage.getItem("studentIdx")
+            },
+            created: function () {
+                axios({
+                    method: "get",
+                    url: "http://localhost/course",
+                    params: {
+                        idx: this.courseIdx,
+                    },
+                })
+                    .then((resData) => {
+                        this.courseSuccess = resData.data.success;
+                        this.course = resData.data.course;
                     })
-                        .then((resData) => {
-                            this.courseSuccess = resData.data.success;
-                            this.course = resData.data.course;
+                    .catch((errorData) => {
+                        return console.log(errorData);
+                    });
+            },
+            mounted: function () {
+                axios({
+                    method: "get",
+                    url: "http://localhost/catalog/courseidx",
+                    params: {
+                        courseIdx: this.courseIdx,
+                    },
+                })
+                    .then((resData) => {
+                        this.catalogSuccess = resData.data.success;
+                        this.catalogList = resData.data.catalogList;
+                        this.catalogSize = resData.data.catalogList.length;
+                    })
+                    .catch((errorData) => {
+                        return console.log(errorData);
+                    });
+            },
+            methods: {
+                saveLikes: function () {
+                    if (sessionStorage.getItem("studentIdx") != null) {
+                        axios({
+                            method: "post",
+                            url: "http://localhost/likes",
+                            data: {
+                                studentIdx: this.studentIdx,
+                                courseIdx: this.courseIdx,
+                            },
                         })
-                        .catch((errorData) => {
-                            return console.log(errorData);
-                        });
+                            .then((resData) => {
+                                if (resData.data.success) {
+                                    alert("찜 저장");
+                                    if (window.confirm("내 찜 목록으로 이동할까요?")) {
+                                        window.location.href = "http://localhost/mypage/student_likes.html";
+                                    } else {
+                                        location.reload();
+                                    }
+                                } else {
+                                    alert("동일한 강의에는 한번만 찜 가능?")
+                                }
+                                //window.location.href = "";
+                            })
+                            .catch((errorData) => {
+                                return console.log(errorData);
+                            })
+                    } else {
+                        alert("로그인이 필요한 기능입니다.");
+                        window.location.href = "#로그인 페이지";
+                    }
                 },
-                mounted: function () {
+                deleteLikes: function () {
+                    if (sessionStorage.getItem("studentIdx") != null) {
+                        axios({
+                            method: "delete",
+                            url: "http://localhost/likes",
+                            data: {
+                                studentIdx: this.studentIdx,
+                                courseIdx: this.courseIdx,
+                            },
+                        })
+                            .then((resData) => {
+                                if (resData.data.success) {
+                                    alert("찜 삭제");
+                                    if (window.confirm("내 찜 목록으로 이동할까요?")) {
+                                        window.location.href = "http://localhost/mypage/student_likes.html";
+                                    } else {
+                                        location.reload();
+                                    }
+                                } else {
+                                    alert("찜 삭제 실패")
+                                }
+                                //window.location.href = "";
+                            })
+                            .catch((errorData) => {
+                                return console.log(errorData);
+                            })
+                    } else {
+                        alert("로그인이 필요한 기능입니다.");
+                        window.location.href = "#로그인 페이지";
+                    }
+                },
+                saveCart: function () {
+                    if (sessionStorage.getItem("studentIdx") != null) {
+                        axios({
+                            method: "post",
+                            url: "http://localhost/cart",
+                            data: {
+                                studentIdx: this.studentIdx,
+                                courseIdx: this.courseIdx,
+                            },
+                        })
+                            .then((resData) => {
+                                if (resData.data.success) {
+                                    alert("장바구니 저장 성공");
+                                    if (window.confirm("내 장바구니로 이동할까요?")) {
+                                        window.location.href = "http://localhost/mypage/student_cart.html";
+                                    } else {
+                                        location.reload();
+                                    }
+                                } else {
+                                    alert("동일한 강의에는 한번만 찜 가능? / 마감됐나?")
+                                }
+                                //window.location.href = "";
+                            })
+                            .catch((errorData) => {
+                                return console.log(errorData);
+                            })
+                    } else {
+                        alert("로그인이 필요한 기능입니다.");
+                        window.location.href = "#로그인 페이지";
+                    }
+                },
+                saveCatalog: function () {
+                    if (sessionStorage.getItem("studentIdx") != null) {
+                        axios({
+                            method: "post",
+                            url: "http://localhost/catalog",
+                            data: {
+                                studentIdx: this.studentIdx,
+                                courseIdx: this.courseIdx,
+                            },
+                        })
+                            .then((resData) => {
+                                if (resData.data.success) {
+                                    alert("수강신청 성공");
+                                    if (window.confirm("내 수강내역으로 이동할까요?")) {
+                                        window.location.href = "http://localhost/mypage/student_catalog.html";
+                                    } else {
+                                        location.reload();
+                                    }
+                                } else {
+                                    alert("동일한 강의 듣니? / 정원초과니?")
+                                }
+                                //window.location.href = "";
+                            })
+                            .catch((errorData) => {
+                                return console.log(errorData);
+                            })
+                    } else {
+                        alert("로그인이 필요한 기능입니다.");
+                        window.location.href = "#로그인 페이지";
+                    }
+                },
+                getReviewList: function () {
                     axios({
                         method: "get",
-                        url: "http://localhost/catalog/courseidx",
+                        url: "http://localhost/review/courseidx",
                         params: {
                             courseIdx: this.courseIdx,
                         },
                     })
                         .then((resData) => {
-                            this.catalogSuccess = resData.data.success;
-                            this.catalogList = resData.data.catalogList;
-                            this.catalogSize = resData.data.catalogList.length;
+                            this.reviewSuccess = resData.data.success;
+                            this.reviewList = resData.data.reviewList;
+                            this.reviewSize = resData.data.reviewList.length;
                         })
                         .catch((errorData) => {
                             return console.log(errorData);
                         });
                 },
-                methods: {
-                    saveLikes: function () {
-                        axios({
-                            method: "post",
-                            url: "http://localhost/likes",
-                            data: {
-                                courseIdx: this.courseIdx,
-                            },
-                        })
-                            .then((resData) => {
-                                alert("찜 성공");
-                                //window.location.href = "";
-                            })
-                            .catch((errorData) => {
-                                return console.log(errorData);
-                            });
+            },
+        });
+
+        new Vue({
+            el: "#likes",
+            data: {
+                studentIdx: sessionStorage.getItem("studentIdx"),
+                courseIdx: "",
+
+                likesCheckSuccess: "",
+                likesCheck: ""
+            },
+            created: function () {
+                axios({
+                    method: "get",
+                    url: "http://localhost/course",
+                    params: {
+                        idx: this.courseIdx,
                     },
-                    saveCart: function () {
-                        axios({
-                            method: "post",
-                            url: "http://localhost/cart",
-                            data: {
-                                courseIdx: this.courseIdx,
-                            },
-                        })
-                            .then((resData) => {
-                                alert("장바구니 저장 성공");
-                                //window.location.href = "";
-                            })
-                            .catch((errorData) => {
-                                return console.log(errorData);
-                            });
-                    },
-                    saveCatalog: function () {
-                        axios({
-                            method: "post",
-                            url: "http://localhost/catalog",
-                            data: {
-                                courseIdx: this.courseIdx,
-                            },
-                        })
-                            .then((resData) => {
-                                alert("수강신청 성공");
-                                //window.location.href = "";
-                            })
-                            .catch((errorData) => {
-                                return console.log(errorData);
-                            });
-                    },
-                    getReviewList: function () {
-                        axios({
-                            method: "get",
-                            url: "http://localhost/review/courseidx",
-                            params: {
-                                courseIdx: this.courseIdx,
-                            },
-                        })
-                            .then((resData) => {
-                                this.reviewSuccess = resData.data.success;
-                                this.reviewList = resData.data.reviewList;
-                                this.reviewSize = resData.data.reviewList.length;
-                            })
-                            .catch((errorData) => {
-                                return console.log(errorData);
-                            });
-                    },
-                },
-            });
-        </script>
-    </body>
+                })
+                    .then((resData) => {
+                        this.courseSuccess = resData.data.success;
+                        this.course = resData.data.course;
+                    })
+                    .catch((errorData) => {
+                        return console.log(errorData);
+                    });
+            },
+            mounted: function () {
+                axios({
+                    method: "get",
+                    url: "http://localhost/likes/check",
+                    params: {
+                        studentIdx: this.studentIdx,
+                        courseIdx: this.course.idx,
+                    }
+                })
+                    .then((resData) => {
+                        this.likesCheckSuccess = resData.data.success,
+                            this.likesCheck = resData.data.check,
+                    })
+                    .catch((errorData) => {
+                        return console.log(errorData);
+                    });
+            }
+        });
+    </script>
+</body>
+
 </html>
