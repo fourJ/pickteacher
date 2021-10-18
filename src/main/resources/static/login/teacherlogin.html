@@ -203,11 +203,15 @@
                                 pw: this.pw,
                             },
                         })
-                            .then((resData) => {
+                        .then((resData) => {
                                 console.log(resData.data.success);
                                 this.loginsuccess = resData.data.success;
                                 if (this.loginsuccess) {
-                                    sessionStorage.setItem("user", this.id);
+                                    sessionStorage.setItem(
+                                        "teacherIdx",
+                                        resData.data.idx
+                                    );
+                                    alert("오늘도 화이팅 ❣");
                                     window.location.href =
                                         "http://localhost/index.html";
                                 } else {
@@ -221,7 +225,7 @@
                 },
             });
 
-            new Vue({
+                new Vue({
                 el: "#logout",
                 data: {
                     logoutsuccess: "",
@@ -230,28 +234,12 @@
                 },
                 methods: {
                     logout: function () {
-                        axios({
-                            method: "get",
-                            url: "http://localhost/teacher/logout",
-                            data: {
-                                id: this.id,
-                                pw: this.pw,
-                            },
-                        })
-                            .then((resData) => {
-                                console.log(resData.data.success);
-                                this.logoutsuccess = resData.data.success;
-                                if (this.logoutsuccess) {
-                                    sessionStorage.clear();
-                                    window.location.href =
-                                        "http://localhost/index.html";
-                                } else {
-                                    alert("로그아웃 실패");
-                                }
-                            })
-                            .catch(function () {
-                                alert("에러");
-                            });
+                        if (sessionStorage.getItem("teacherIdx") != null) {
+                            sessionStorage.clear();
+                            alert("로그아웃 성공 💨");
+                        } else {
+                            alert("로그아웃 실패");
+                        }
                     },
                 },
             });
