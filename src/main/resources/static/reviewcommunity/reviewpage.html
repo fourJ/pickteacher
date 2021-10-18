@@ -95,38 +95,42 @@
   </div>
   </div>
   <h2>후기작성 페이지</h2>
-  <div id="reviewWrite">
-    
-      <label for="courseIdx">Subject</label>
-      
-          <!-- <option>수강 강의 선택</option> -->
-      <select v-model="selected">  
-          <label>수강 강의 선택</label>  
-          <option v-for="c in catalogList" v-bind:value="c.courseIdx.idx">{{c.courseIdx.title}}</option>
-      </select>
 
-        <br><br>
-        <label for="star">Star</label>
-        <select id="star" name="star" v-model="star">
-          <option value=1>☆</option>
-          <option value=2>☆☆</option>
-          <option value=3>☆☆☆</option>
-          <option value=4>☆☆☆☆</option>
-          <option value=5>☆☆☆☆☆</option>
+  <div class="w3-container" id="app" style="margin: 50px"></div>
+    <div id="reviewWrite">
+      
+        <label for="courseIdx">Subject</label>
+        
+            <!-- <option>수강 강의 선택</option> -->
+        <select v-model="selected">  
+            <label>수강 강의 선택</label>  
+            <option v-for="c in catalogList" v-bind:value="c.courseIdx.idx">{{c.courseIdx.title}}</option>
         </select>
 
-      <br><br>
-      
-        <br>
-        <label for="content">contents</label>
-        <input type="text" id="content" name="content" style="height: 100;" v-model="content">
-        <!-- <button><a href="reivewall.html">완료</a></button> -->
-        
-        <a type="submit" value="작성완료" @click="reviewWrite">작성완료</a>
           <br><br>
-     </form>
-  </div>
+          <label for="star">Star</label>
+          <select id="star" name="star" v-model="star">
+            <option value=1>☆</option>
+            <option value=2>☆☆</option>
+            <option value=3>☆☆☆</option>
+            <option value=4>☆☆☆☆</option>
+            <option value=5>☆☆☆☆☆</option>
+          </select>
 
+        <br><br>
+        
+          <br>
+          <label for="content">contents</label>
+          <input type="text" id="content" name="content" style="height: 100;" v-model="content">
+          <!-- <button><a href="reivewall.html">완료</a></button> -->
+          
+          <a type="submit" value="작성완료" @click="reviewWrite">작성완료</a>
+            <br><br>
+      </form>
+    </div>
+
+  </div> 
+  </body>
 
   <script>
     new Vue({

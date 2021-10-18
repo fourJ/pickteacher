@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html
+    lang="ko"
+    xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+>
+    <head>
+        <meta charset="utf-8" />
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1, shrink-to-fit=no"
+        />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>Pick Teacher</title>
+        <!-- Favicon-->
+        <link rel="icon" type="image/x-icon" href="../assets/pick.ico" />
+        <!-- Font Awesome icons (free version)-->
+        <script
+            src="https://use.fontawesome.com/releases/v5.15.3/js/all.js"
+            crossorigin="anonymous"
+        ></script>
+        <!-- Simple line icons-->
+        <link
+            href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.5.5/css/simple-line-icons.min.css"
+            rel="stylesheet"
+        />
+        <!-- Google fonts-->
+        <link
+            href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic"
+            rel="stylesheet"
+            type="text/css"
+        />
+        <!-- Vue.js -->
+        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+        <!-- axios -->
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+        <!-- stylesheet -->
+        <link
+            rel="stylesheet"
+            href="https://www.w3schools.com/w3css/4/w3.css"
+        />
+        <link rel="stylesheet" href="../css/styles.css" />
+
+        <style>
+            .w3header {
+                padding: 0;
+            }
+            th,
+            td {
+                text-align: left;
+                padding: 5px;
+            }
+
+            tr:nth-child(even) {
+                background-color: #f2f2f2;
+            }
+
+            th {
+                background-color: #04aa6d;
+                color: white;
+            }
+        </style>
+
+        
+
+    </head>
+
+    <body>
+        <!-- Navigation-->
+        <a class="menu-toggle rounded"><i class="fas fa-bars"></i></a>
+        <nav id="sidebar-wrapper">
+            <ul class="sidebar-nav">
+                <li class="sidebar-brand">
+                    <a href="../index.html">Pick Teacher</a>
+                </li>
+                <li class="sidebar-nav-item">
+                    <a href="../search/search_teacher.html">선생님 찾기</a>
+                </li>
+                <li class="sidebar-nav-item">
+                    <a href="../search/search_course.html">강의 찾기</a>
+                </li>
+                <li class="sidebar-nav-item">
+                    <a href="../reviewcommunity/reivewall.html"
+                        >후기 커뮤니티</a
+                    >
+                </li>
+                <li class="sidebar-nav-item">
+                    <a href="../mypage/mypage_teacher.html">마이 페이지</a>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Header -->
+        <!-- <header>
+    	<div th:replace="../common/header.html :: headerFragment"></div>
+    </header> -->
+
+
+        <div class="w3header" id="header">
+            <div class="w3header">
+                <a href="/index.html" class="logo">Pick Teacher</a>
+            </div>
+            <div
+                class="w3header"
+                style="background-color: #1d809f; margin-bottom: 30px"
+                v-show="success"
+            >
+                <a href="mypage_teacher.html" class="logo">My Page</a>
+                <div class="w3header-right">
+                    <a href="teacher_update.html">내 정보 수정</a>
+
+                    
+        			<a href="teacher_courseList.html">내 강의목록</a>
+
+                </div>
+            </div>
+
+        <div class="w3-container" id="app" style="margin: 50px">
+            <h1>마이페이지</h1>
+            <hr />
+
+            <div v-if="success">
+                <div class="container px-4" v-show="success">
+                    <h5>{{datas.name}}님, 오늘도 화이팅:)</h5>
+                    <br>
+                    
+                   
+          
+                          <div>
+                              <table style="width: 100%" v-show="success">
+                                  <tr>
+                                      <th>선생님 이름</th>
+                                      <th>선생님 성별</th>
+                                      <th>선생님 주소</th>
+                                      <th>선생님 번호</th>
+                                      <th>선생님 경력</th>
+                                      <th>선생님 전공</th>
+                                      <th>선생님 출신학교</th>
+                                  </tr>
+          
+                                  <tr>
+                                      <td>{{datas.name}}</td>
+                                      <td>{{datas.gender}}</td>
+                                      <td>{{datas.address}}</td>
+                                      <td>{{datas.phone}}</td>
+                                      <td>{{datas.career}}</td>
+                                      <td>{{datas.major}}</td>
+                                      <td>{{datas.school}}</td>
+                                  </tr>
+                              </table>
+                          </div>
+            </div>
+          </div>
+        </div>
+
+         <div id="app1" style="margin: 50px">
+            <div v-if="resData">
+                <h3>선생님 상세페이지</h3>
+                <hr />
+
+                <div>
+                    <table style="width: 100%" >
+                        <tr>
+                            <th>선생님 이름</th>
+                            <th>선생님 성별</th>
+                            <th>선생님 주소</th>
+                            <th>선생님 번호</th>
+                            <th>선생님 경력</th>
+                            <th>선생님 전공</th>
+                            <th>선생님 출신학교</th>
+                        </tr>
+
+                        <tr>
+                            <td>{{teacher.name}}</td>
+                            <td>{{teacher.gender}}</td>
+                            <td>{{teacher.address}}</td>
+                            <td>{{teacher.phone}}</td>
+                            <td>{{teacher.career}}</td>
+                            <td>{{teacher.major}}</td>
+                            <td>{{teacher.school}}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>    
+                <br />  
+
+
+
+        <script type="text/javascript">
+
+                new Vue({
+                el: "#app1",
+                data: {
+                   
+                    teacherSuccess: "",
+                    teacher: [],
+                    idx: "",
+
+                    resData: false,
+
+                    courseSuccess: "",
+                    courseList: [],
+
+                    catalogSuccess: "",
+                    catalogSize: "",
+
+                    detailPage: "http://localhost/getCourseDetail/",
+                    updatePage: "http://localhost/getCourseUpdate/",
+                    studentPage: "http://localhost/getCourseStudent/",
+                },
+                created: function () {
+                    axios({
+                        method: "get",
+                        url: "http://localhost/teacher",
+                        params: {
+                            idx: sessionStorage.getItem("teacherIdx")
+                        },
+                    })
+                        .then((resData) => {
+                            this.resData = true;
+                            this.teacherSuccess = resData.data.success;
+                            this.teacher = resData.data.teacher;
+                            this.catalogSuccess = resData.data.success;
+                            this.catalogList = resData.data.catalogList;
+                            this.idx = sessionStorage.getItem("teacherIdx");
+                            console.log(this.courseList.idx);
+                            // this.catalogSize = resData.data.catalogList.length;
+                        })
+                        .catch((errorData) => {
+                            return console.log(errorData);
+                        });
+
+                    } 
+                });
+
+            new Vue({
+                el: "#app",
+                data: {
+                    success: false,
+                    datas: [],
+                },
+                created: function () {
+                    axios({
+                        method: "get",
+                        url: "http://localhost/teacher",
+                        params: {
+                        	idx: sessionStorage.getItem("teacherIdx")
+                        }
+                    })
+                        .then((resData) => {
+                            this.success = resData.data.success;
+                            this.idx = sessionStorage.getItem("teacherIdx");
+                            console.log(resData.data);
+
+                            this.datas = resData.data.teacher;
+                            console.log(this.datas);
+                        })
+                        .catch((errorData) => {
+                            alert(errorData);
+                            console.log(errorData);
+                        });
+                },
+                methods: {
+                    teacherupdate: function () {
+                        axios({
+                            method: "get",
+                            url: "http://localhost/teacher",
+                            params: {
+                            	idx: sessionStorage.getItem("teacherIdx")
+                            }
+                        })
+                            .then((resData) => {
+                                console.log(resData.data.success);
+                                var inputpw = prompt("비밀번호를 입력하세요:)");
+                                console.log(inputpw);
+                                if (inputpw == resData.data.pw) {
+                                    window.location.href =
+                                        "http://localhost/mypage/teacher_update.html";
+                                    console.log("성공");
+                                } else {
+                                    alert("비밀번호를 재입력하세요!");
+                                }
+                            })
+                            .catch((errorData) => {
+                                alert(errorData.response.data.message);
+                            });
+                    },
+                },
+            });
+
+            new Vue({
+                el: "#header",
+                data: {
+                    success: false,
+                    datas: [],
+                    idx: ""
+                },
+                created: function () {
+                    axios({
+                        method: "get",
+                        url: "http://localhost/teacher" + this.idx,
+                        params: {
+                        	idx: sessionStorage.getItem("teacherIdx")
+                        }
+                    })
+                        .then((resData) => {
+                            this.success = resData.data.success;
+                            this.idx = sessionStorage.getItem("teacherIdx");
+                            console.log(resData.data);
+
+                            this.datas = resData.data.teacher;
+                            console.log(this.datas);
+                        })
+                        .catch((errorData) => {
+                            alert(errorData);
+                            console.log(errorData);
+                        });
+                },
+                methods: {
+                    teacherinfo: function () {
+                        axios({
+                            method: "get",
+                            url: "http://localhost/teacher?idx=" + this.idx,
+                            parmas: {
+                            	idx: this.idx
+                            }
+                        })
+                            .then((resData) => {
+                                console.log(resData.data.success);
+                                var inputpw = prompt("비밀번호를 입력하세요:)");
+                                console.log(inputpw);
+                                if (inputpw == this.datas.pw) {
+                                    window.location.href =
+                                        "http://localhost/mypage/teacher_update.html";
+                                    console.log("성공");
+                                } else {
+                                    alert("비밀번호를 재입력하세요!");
+                                }
+                            })
+                            .catch((errorData) => {
+                                alert(errorData);
+                                console.log(errorData);
+                              });
+                            
+                    }
+                },
+            });
+        </script>
+    </body>
+</html>
