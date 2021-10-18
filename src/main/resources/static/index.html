@@ -37,75 +37,7 @@
         <link rel="stylesheet" href="css/styles.css" />
 
         <style>
-            .mySlides {
-                display: none;
-            }
-
-            .w3-left,
-            .w3-right,
-            .w3-badge {
-                cursor: pointer;
-            }
-
-            .w3-badge {
-                height: 13px;
-                width: 13px;
-                padding: 0;
-            }
-
-            @import url(https://fonts.googleapis.com/css?family=Crafty+Girls);
-
-            .menu-nav {
-                font-family: "Crafty Girls", cursive;
-                font-size: 3rem;
-                line-height: 300px;
-                vertical-align: middle;
-                margin-right: 30px;
-                border-radius: 20px;
-                transition: 2s ease 0s;
-                cursor: pointer;
-            }
-
-            .menu-nav:nth-child(1) {
-                content: "hello";
-                box-shadow: inset 0px -5px 0px #b73327;
-            }
-
-            .menu-nav:nth-child(1):hover {
-                box-shadow: inset 0px -300px 0px #b73327;
-            }
-
-            .menu-nav:nth-child(2) {
-                box-shadow: inset 0px 5px 0px #2f3a68;
-            }
-
-            .menu-nav:nth-child(2):hover {
-                box-shadow: inset 0px 300px 0px #2f3a68;
-            }
-
-            .menu-nav:nth-child(3) {
-                box-shadow: inset 0px -5px 0px #8aaabf;
-            }
-
-            .menu-nav:nth-child(3):hover {
-                box-shadow: inset 0px -300px 0px #8aaabf;
-            }
-
-            .menu-nav:nth-child(4) {
-                box-shadow: inset 0px 5px 0px #e4d18c;
-            }
-
-            .menu-nav:nth-child(4):hover {
-                box-shadow: inset 0px 300px 0px #e4d18c;
-            }
-
-            .menu-nav:nth-child(5) {
-                box-shadow: inset 0px -5px 0px #639465;
-            }
-
-            .menu-nav:nth-child(5):hover {
-                box-shadow: inset 0px -300px 0px #639465;
-            }
+            
         </style>
     </head>
 
@@ -137,28 +69,65 @@
         <!-- Header-->
         <header class="masthead d-flex align-items-center">
             <div class="container px-4 px-lg-5 text-center">
-                <a class="menu-nav" id="login" onclick="handleOnClick1()"
+                <a class="menu-nav" id="login" onclick="login()"
                     >&#160;LogIn&#160;</a
                 >
-                <a class="menu-nav" id="signup" onclick="handleOnClick2()"
+                <a class="menu-nav" id="signup" onclick="signup()"
                     >&#160;SignUp&#160;</a
                 >
+                
+                <!-- 로그인 모달 -->
+                  <div id="m1" class="modal-overlay">
+                    <div class="modal-window">
+                      <div class="title">
+                        <h2>Welcome</h2>
+                      </div>
+                      <div class="close-area">💨</div>
+                      <div class="content">
+                        
+                        <button class="btn" id="studentLog">학생 🙆‍♀️</button>
+                        <button class="btn" id="teacherLog">선생님 👩‍🏫</button>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <!-- 회원가입 모달 -->
+                  <div id="m2" class="modal-overlay">
+                    <div class="modal-window">
+                      <div class="title">
+                        <h2>Welcome</h2>
+                      </div>
+                      <div class="close-area">💨</div>
+                      <div class="content">
+                        
+                        <button class="btn" id="studentsignup">학생 🙆‍♀️</button>
+                        <button class="btn" id="teachersignup">선생님 👩‍🏫</button>
+                      </div>
+                    </div>
+                  </div>
+                  
                 <script>
-                    function handleOnClick1(url) {
-                        if (window.confirm("잠깐!! 🤭 학생 회원이신가요?")) {
-                            window.location.href = "login/studentlogin.html";
-                        } else {
-                            location.href = "login/teacherlogin.html";
-                        }
-                    }
 
-                    function handleOnClick2(url) {
-                        if (window.confirm("잠깐!! 🤭 학생 회원이신가요?")) {
-                            window.location.href = "login/studentsignup.html";
-                        } else {
-                            location.href = "login/teachersignup.html";
-                        }
-                    }
+                    const studentLog = document.querySelector("#studentLog");
+                    const teacherLog = document.querySelector("#teacherLog");
+                    const studentsignup = document.querySelector("#studentsignup");
+                    const teachersignup = document.querySelector("#teachersignup");
+
+                    studentLog.addEventListener("click", function() {
+                      window.location.href = "login/studentlogin.html";
+                    })
+                    
+                    teacherLog.addEventListener("click", function() {
+                      window.location.href = "login/teacherlogin.html";
+                    })
+                    
+                    studentsignup.addEventListener("click", function() {
+                      window.location.href = "login/studentsignup.html";
+                    })
+                    
+                    teachersignup.addEventListener("click", function() {
+                      window.location.href = "login/teachersignup.html";
+                    })
 
                     function mypage(url) {
                       if(sessionStorage.getItem("studentIdx") != null) {
@@ -169,7 +138,46 @@
                         alert("로그인은 하셨나요? 🤔");
                       }
                     }
+ 
+                    function login() {
+  	                  const modal = document.getElementById("m1")
+  	                  const btnModal = document.getElementById("login")
+  	                  btnModal.addEventListener("click", e => {
+  	                  modal.style.display = "flex"})
+  	                  
+  	                  const closeBtn = modal.querySelector(".close-area")
+                      closeBtn.addEventListener("click", e => {
+                        modal.style.display = "none"
+                      })
+                      
+                      modal.addEventListener("click", e => {
+                        const evTarget = e.target
+                        if(evTarget.classList.contains("modal-overlay")) {
+                            modal.style.display = "none"
+                        }
+                    })
+                   }
+                    
+                    function signup() {
+  	                  const modal = document.getElementById("m2")
+  	                  const btnModal = document.getElementById("signup")
+  	                  btnModal.addEventListener("click", e => {
+  	                  modal.style.display = "flex"})
+  	                  
+  	                  const closeBtn = modal.querySelector(".close-area")
+                      closeBtn.addEventListener("click", e => {
+                        modal.style.display = "none"
+                      })
+                      
+                      modal.addEventListener("click", e => {
+                        const evTarget = e.target
+                        if(evTarget.classList.contains("modal-overlay")) {
+                            modal.style.display = "none"
+                        }
+                    })
+                   }
                 </script>
+
                 <h1 class="mb-1">Pick Teacher</h1>
                 <h3 class="mb-5">나만의 선생님을 고르세요:)</h3>
                 <a class="btn btn-primary btn-xl" href="#about">배너 보기</a>

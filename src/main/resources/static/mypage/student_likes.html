@@ -189,7 +189,7 @@
                         method: "get",
                         url: "http://localhost/likes/studentidx",
                         params: {
-                            idx: sessionStorage.getItem("studentIdx"),
+                            studentIdx: sessionStorage.getItem("studentIdx"),
                         }
                     })
                         .then((resData) => {
@@ -209,11 +209,12 @@
                 }
             },
             methods: {
-                deleteLikes: function (idx) {
+                deleteLikes: function(idx) {
                     axios({
                         method: "delete",
                         url: "http://localhost/likes",
                         params: {
+                            studentIdx: this.studentIdx,
                             courseIdx: idx,
                         },
                     })
@@ -235,7 +236,7 @@
             data: {
                 success: false,
                 datas: [],
-                studentIdx: sessionStorage.getItem("studentIdx"),
+                studentIdx: ""
             },
             created: function () {
                 axios({
@@ -248,6 +249,7 @@
                     .then((resData) => {
                         this.success = resData.data.success;
                         this.datas = resData.data.student;
+                        this.studentIdx = sessionStorage.getItem("studentIdx");
                     })
                     .catch((errorData) => {
                         console.log(errorData.response.data.message);

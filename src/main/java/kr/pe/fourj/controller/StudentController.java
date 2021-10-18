@@ -41,7 +41,7 @@ public class StudentController {
 
 	//학생 저장
 	@PostMapping("/student")
-	public ResponseDTO.Create saveStudent(@RequestBody StudentDTO.Create dto) throws NotFoundException {
+	public ResponseDTO.Create saveStudent(StudentDTO.Create dto) throws NotFoundException {
 		System.out.println("-- 학생 저장시도 --");
 
 		boolean result = false;
