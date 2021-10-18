@@ -160,17 +160,22 @@
                     resData: false,
                     datas: [],
                     urlSrc: "http://localhost/getReviewDetail/",
+                    // courseIdx:""
                 },
 
                 created: function () {
                     axios({
                         method: "get",
                         url: "http://localhost/review/studentidx",
+                        params:{
+                        studentIdx: sessionStorage.getItem("studentIdx")
+                        }
                     })
                         .then((resData) => {
                             this.resData = true;
-
                             console.log(resData.data);
+
+                           this.courseIdx = resData.data.courseIdx;
                             this.datas = resData.data.reviewList;
                             console.log(this.datas);
                             for (let r of this.datas) {
@@ -186,6 +191,8 @@
                                     r.star = "☆☆☆☆☆";
                                 }
                             }
+
+                            
                         })
                         .catch((errorData) => {
                             alert(errorData);
@@ -202,6 +209,7 @@
                             // },
                             params: {
                                 courseIdx: idx,
+                                studentIdx:sessionStorage.getItem("studentIdx")
                             },
                         })
                             .then((res) => {
