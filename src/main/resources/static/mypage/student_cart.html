@@ -91,14 +91,12 @@
 </head>
 
 <body>
-    <!-- Navigation-->
-
     <!-- Header -->
     <div>
         <div class="w3header">
             <a href="/index.html" class="logo">Pick Teacher</a>
         </div>
-        <div class="w3header" id="header" v-if="success" style="background-color: #1d809f; margin-bottom: 30px">
+        <div class="w3header" id="header" style="background-color: #1d809f; margin-bottom: 30px">
             <a href="mypage_student.html" class="logo">My Page</a>
             <div class="w3header-right">
                 <a @click="studentinfo">내 정보</a>
@@ -116,6 +114,10 @@
         <div style="margin-top: 30px;" v-if="resultSize == '0'">장바구니에 담은 강의가 없어요. 강의를 담아 주세요:)</div>
 
         <div v-if="success && resultSize != '0'">
+            <div style="margin-top: 20px; margin-bottom: 20px;">
+                <span>이미 수강중이거나 / 마감일자가 지났거나 / 정원이 다 찬 강의는 수강신청이 불가합니다. </span> <br>
+                <b>위 경우 수강신청 버튼 클릭시, 해당 장바구니 내역이 자동으로 삭제됩니다.</b>
+            </div>
             <table class="w3-table-all" v-show="success">
                 <thead>
                     <tr class="w3-red">
@@ -183,17 +185,16 @@
                         method: "get",
                         url: "http://localhost/cart/studentidx",
                         params: {
-                            studentIdx: sessionStorage.getItem("studentIdx"),
+                            studentIdx: this.studentIdx,
                         }
                     })
                         .then((resData) => {
                             this.success = resData.data.success;
                             this.datas = resData.data.cartList;
-                            // this.resultSize = this.data.length;
-                            this.courseIdx = resData.datas.cartList.courseIdx.idx;
+                            this.resultSize = this.datas.length;
                         })
                         .catch((errorData) => {
-                            // console.log(errorData.response.data.message);
+                            console.log(errorData.response.data.message);
                             alert(errorData)
                         });
                 } else {
@@ -239,7 +240,7 @@
                     method: "get",
                     url: "http://localhost/student",
                     params: {
-                        studentIdx: sessionStorage.getItem("studentIdx"),
+                        idx: this.studentIdx,
                     }
                 })
                     .then((resData) => {
@@ -247,7 +248,7 @@
                         this.datas = resData.data.student;
                     })
                     .catch((errorData) => {
-                        // console.log(errorData.response.data.message);
+                        console.log(errorData.response.data.message);
                     });
             },
             methods: {

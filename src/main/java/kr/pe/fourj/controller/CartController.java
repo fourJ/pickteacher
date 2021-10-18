@@ -30,7 +30,7 @@ public class CartController {
 	@Autowired
 	private StudentService studentService;
 	
-	//카트 저장 => 프론트 연동 확인 필요 / 수강 정원 조건은 빼고 실험(이거 카탈로그에서 함)
+	//카트 저장
 	@PostMapping("/cart")
 	public ResponseDTO.Create saveCart(@RequestBody CartDTO.Create dto) {
 		System.out.println("-- 카트 저장 시도 --");
@@ -41,7 +41,7 @@ public class CartController {
 				Student student = studentService.findOne(dto.getStudentIdx());
 				Course course = courseService.findOne(dto.getCourseIdx());
 				
-				if(cartService.isNotAlreadyCart(student, course) && courseService.checkStatus(course)) {
+				if(cartService.isNotAlreadyCart(student, course)) {
 					try {
 						saveId = cartService.saveCart(new Cart(student, course));
 						result = true;
@@ -49,7 +49,7 @@ public class CartController {
 						e.printStackTrace();
 					}
 				}else {
-					System.out.println("동일한 강의를 이미 수강신청 하셨거나, 정원이 다 찼습니다.");
+					System.out.println("동일한 강의를 이미 수강하고 있습니다.");
 				}
 			} catch (NotFoundException e) {
 				e.printStackTrace();

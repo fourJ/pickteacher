@@ -149,8 +149,8 @@
                     <tr>
                         <th>작성자</th>
                         <th>닉네임</th>
-                        <th>강의제목</th>
-                        <th>강의과목</th>
+                        <th>강의명</th>
+                        <th>과목</th>
                         <th>작성시간</th>
                         <th>후기내용</th>
                         <th>별점</th>
@@ -385,6 +385,19 @@
                             this.reviewSuccess = resData.data.success;
                             this.reviewList = resData.data.reviewList;
                             this.reviewSize = resData.data.reviewList.length;
+                            for (let r of this.reviewList) {
+                                if (r.star == "1") {
+                                    r.star = "☆☆☆☆★";
+                                } else if (r.star == "2") {
+                                    r.star = "☆☆☆★★";
+                                } else if (r.star == "3") {
+                                    r.star = "☆☆★★★";
+                                } else if (r.star == "4") {
+                                    r.star = "☆★★★★";
+                                } else if (r.star == "5") {
+                                    r.star = "★★★★★";
+                                }
+                            }
                         })
                         .catch((errorData) => {
                             return console.log(errorData);

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+​
 
 <head>
     <meta charset="utf-8" />
@@ -24,17 +25,42 @@
     <!-- stylesheet -->
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css" />
     <link rel="stylesheet" href="../css/styles.css" />
-
+    ​
     <style>
         .w3header {
             padding: 0;
         }
     </style>
+    ​
+    ​
+    ​
+    ​
+    ​
+    <!-- header 자바스크립트 -->
+    <script src="../js/scripts.js"></script>
+    ​
+    ​
 </head>
+​
 
 <body>
+    ​
+    ​
+    ​
+    <!-- header 테스트 -->
+    <div id="body-div">
+        ​
+        <nav-bar-main></nav-bar-main>
+        ​
+        <!-- 메인 -->
+        <!-- <my-page></my-page>
+        <foot></foot> -->
+    </div>
+    ​
+    ​
+    ​
     <!-- Header -->
-    <div>
+    <!-- <div>
         <div class="w3header">
             <a href="/index.html" class="logo">Pick Teacher</a>
         </div>
@@ -47,17 +73,17 @@
                 <a href="student_likes.html">찜한 강의</a>
             </div>
         </div>
-    </div>
-
+    </div> -->
+    ​
     <div class="w3-container" id="app" style="margin: 50px">
         <h1>마이페이지</h1>
         <hr />
-
+        ​
         <div v-if="success">
             <div>
                 <h5>{{datas.name}}님, 오늘도 화이팅:)</h5>
             </div>
-
+            ​
             <div style="margin-top: 30px;">
                 <table class="w3-table-all" v-show="success">
                     <thead>
@@ -83,11 +109,11 @@
                         <td>{{datas.address}}</td>
                     </tr>
                 </table>
-
+                ​
             </div>
         </div>
     </div>
-
+    ​
     <script type="text/javascript">
         new Vue({
             el: "#app",
@@ -122,67 +148,109 @@
             },
         });
 
-        new Vue({
-            el: "#header",
-            data: {
-                success: false,
-                datas: [],
-                studentIdx: sessionStorage.getItem("studentIdx"),
-            },
-            created: function () {
-                axios({
-                    method: "get",
-                    url: "http://localhost/student",
-                    params: {
-                        idx: sessionStorage.getItem("studentIdx"),
-                    }
-                })
-                    .then((resData) => {
-                        this.success = resData.data.success;
-                        this.datas = resData.data.student;
-                    })
-                    .catch((errorData) => {
-                        console.log(errorData.response.data.message);
-                    });
+        // new Vue({
+        //     el: "#header",
+        //     data: {
+        //         success: false,
+        //         datas: [],
+        //         studentIdx: sessionStorage.getItem("studentIdx"),
+        //     },
+        //     created: function () {
+        //         axios({
+        //             method: "get",
+        //             url: "http://localhost/student",
+        //             params: {
+        //                 idx: sessionStorage.getItem("studentIdx"),
+        //             }
+        //         })
+        //             .then((resData) => {
+        //                 this.success = resData.data.success;
+        //                 this.datas = resData.data.student;
+        //             })
+        //             .catch((errorData) => {
+        //                 console.log(errorData.response.data.message);
+        //             });
+        //     },
+        //     methods: {
+        //         studentinfo: function () {
+        //             if (this.studentIdx != null) {
+        //                 axios({
+        //                     method: "get",
+        //                     url: "http://localhost/student",
+        //                     params: {
+        //                         idx: this.studentIdx,
+        //                     }
+        //                 })
+        //                     .then((resData) => {
+        //                         this.success = resData.data.success;
+        //                         var inputpw = prompt("비밀번호를 입력하세요:)");
+        //                         if (inputpw != null) {
+        //                             if (inputpw == this.datas.pw) {
+        //                                 window.location.href =
+        //                                     "http://localhost/mypage/student_update.html";
+        //                             } else {
+        //                                 alert("비밀번호를 재입력하세요!");
+        //                             }
+        //                         } else {
+        //                             window.location.reload();
+        //                         }
+        //                     })
+        //                     .catch((errorData) => {
+        //                         console.log(errorData);
+        //                     });
+        //             } else {
+        //                 if (window.confirm("잠깐!! 🤭 학생 회원이신가요?")) {
+        //                     window.location.href = "http://localhost/login/studentlogin.html";
+        //                 } else {
+        //                     window.location.href = "http://localhost/login/teacherlogin.html";
+        //                 }
+        //             }
+        //         },
+        //     },
+        // });
+
+
+
+
+
+        // 네비===========================================================================
+
+        // sidebar();
+        mainheader();
+
+        Vue.component('nav-bar-main', {
+            template: mainheaderScript,
+            data: function () {
+                return {
+                    login,
+                    logout,
+                }
             },
             methods: {
-                studentinfo: function () {
-                    if (this.studentIdx != null) {
-                        axios({
-                            method: "get",
-                            url: "http://localhost/student",
-                            params: {
-                                idx: this.studentIdx,
-                            }
-                        })
-                            .then((resData) => {
-                                this.success = resData.data.success;
-                                var inputpw = prompt("비밀번호를 입력하세요:)");
-                                if (inputpw != null) {
-                                    if (inputpw == this.datas.pw) {
-                                        window.location.href =
-                                            "http://localhost/mypage/student_update.html";
-                                    } else {
-                                        alert("비밀번호를 재입력하세요!");
-                                    }
-                                } else {
-                                    window.location.reload();
-                                }
-                            })
-                            .catch((errorData) => {
-                                console.log(errorData);
-                            });
-                    } else {
-                        if (window.confirm("잠깐!! 🤭 학생 회원이신가요?")) {
-                            window.location.href = "http://localhost/login/studentlogin.html";
-                        } else {
-                            window.location.href = "http://localhost/login/teacherlogin.html";
-                        }
+                ClickLogout: function () {
+                    const result = confirm("로그아웃 하시겠습니까?");
+                    if (result) {
+                        sessionStorage.clear();
+                        this.login = false;
+                        this.logout = true;
+                        window.location.href = "http://localhost/index.html";
                     }
-                },
-            },
-        });
+                }
+            }
+        })
+        // Vue.component('foot', {
+        //     template: footerScript,
+        // })
+
+        new Vue({
+            el: "#body-div",
+        })
     </script>
+    ​
+    ​
+    ​
+    ​
 </body>
+
 
 </html>

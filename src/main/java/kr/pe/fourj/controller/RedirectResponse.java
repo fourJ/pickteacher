@@ -108,6 +108,19 @@ public class RedirectResponse {
 		}
 		return new RedirectView("");
 	}
+	
+	//선생님 수정
+	@PutMapping("/teacher/update")
+	public RedirectView updateTeacher(TeacherDTO.Update dto) {
+		System.out.println("-- 선생님 수정 시도 --");
+		
+		try {
+			teacherService.updateTeacher(dto);
+		} catch (NotFoundException e) {
+			e.printStackTrace();
+		}		
+		return new RedirectView("mypage/mypage_teacher.html");
+	}
 		
 	//선생님 찾기에서 상세페이지로 이동
 	@GetMapping("getTeacherDetail/{idx}")
@@ -178,21 +191,30 @@ public class RedirectResponse {
 			Course course = courseService.findOne(courseIdx);		
 			LocalDate date = LocalDate.now();
 
-			//course.getHeadCount() > catalogService.findAllByCourseIdx(course).size()
-			if(courseService.checkStatus(course)) {
-				try {
-					boolean checkCart = cartService.isNotAlreadyCart(student, course);
-					if(!checkCart) {
+			if(courseService.checkStatus(course) && course.getHeadCount() > course.getCatalogList().size()) {
+				if(catalogService.isNotAlreadyCatalog(student, course)) {
+					try {
 						catalogService.saveCatalog(new Catalog(student, course, date));
 						cartService.deleteCart(student, course);
-					}else {
-						System.out.println("해당 강의가 장바구니에 없습니다.");
 					}
+					catch (ArgumentNullException e) {
+						e.printStackTrace();
+					}
+				}else {
+					System.out.println("동일한 강의를 이미 수강하고 있습니다.");
+					try {
+						cartService.deleteCart(student, course);
+					} catch (ArgumentNullException e) {
+						e.printStackTrace();
+					}
+				}			
+			} else {
+				System.out.println("마감일이 지났거나 정원이 초과했습니다.");
+				try {
+					cartService.deleteCart(student, course);
 				} catch (ArgumentNullException e) {
 					e.printStackTrace();
 				}
-			} else {
-				System.out.println("동일한 강의를 이미 수강신청 하셨거나, 마감일이 지났거나, 정원이 다 찼습니다.");
 			}
 		} catch (NotFoundException e) {
 			e.printStackTrace();

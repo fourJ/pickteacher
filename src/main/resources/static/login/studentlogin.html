@@ -145,13 +145,13 @@
                             console.log(resData.data.success);
                             this.loginsuccess = resData.data.success;
                             if (this.loginsuccess) {
-                                sessionStorage.setItem(
-                                    "studentIdx",
-                                    resData.data.idx
-                                );
+                                // if(sessionStorage == null) {
+                                sessionStorage.setItem("studentIdx", resData.data.idx)
                                 alert("오늘도 화이팅 ❣");
-                                window.location.href =
-                                    "http://localhost/index.html";
+                                window.location.href = "http://localhost/index.html";
+                                // }else {
+                                // sessionStorage.clear();
+                                // }
                             } else {
                                 alert("아이디 비밀번호를 다시 확인해주세요.");
                             }

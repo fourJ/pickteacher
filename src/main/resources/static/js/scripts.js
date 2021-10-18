@@ -79,71 +79,156 @@ function fadeIn(el, display) {
     })();
 };
 
+
+// 상단바 추가 =======================================================================
+function mainheader() {
+    mainheaderScript =
+        `
+    <div>
+        <div class="w3header">
+            <a href="/index.html" class="logo">Pick Teacher</a>
+        </div>
+        <div class="w3header" id="header" v-if="success" style="background-color: #1D809F; margin-bottom: 30px">
+            <a href="mypage_student.html" class="logo">My Page</a>
+            <div class="w3header-right">
+                <a @click="studentinfo">내 정보</a>
+                <a href="student_catalog.html">수강 내역</a>
+                <a href="student_cart.html">장바구니</a>
+                <a href="student_likes.html">찜한 강의</a>
+            </div>
+        </div>
+    </div>
+    `
+    get_session = sessionStorage.getItem("studentIdx");
+    login = false;
+    logout = true;
+    if (get_session != null) {
+        console.log("세션 비어있음");
+        // logRecord();
+    }
+}
+
+
+// 로그인 확인 =======================================================================
+function reviewcommunity(url) {
+    if (sessionStorage.getItem("studentIdx") != null) {
+        window.location.href = "reviewcommunity/reivewall.html"
+    } else if (sessionStorage.getItem("teacherIdx") != null) {
+        window.location.href = "reviewcommunity/reivewall.html";
+    } else {
+        alert("로그인은 하셨나요? 🤔");
+    }
+}
+
+
+//  로그인 모달 =======================================================================
 const studentLog = document.querySelector("#studentLog");
 const teacherLog = document.querySelector("#teacherLog");
+
+studentLog.addEventListener("click", function () {
+    window.location.href = "login/studentlogin.html";
+})
+teacherLog.addEventListener("click", function () {
+    window.location.href = "login/teacherlogin.html";
+})
+
+function login() {
+    const modal = document.getElementById("m1")
+    const btnModal = document.getElementById("login")
+    btnModal.addEventListener("click", e => {
+        modal.style.display = "flex"
+    })
+    const closeBtn = modal.querySelector(".close-area")
+    closeBtn.addEventListener("click", e => {
+        modal.style.display = "none"
+    })
+    modal.addEventListener("click", e => {
+        const evTarget = e.target
+        if (evTarget.classList.contains("modal-overlay")) {
+            modal.style.display = "none"
+        }
+    })
+}
+
+
+//  회원가입 모달 =======================================================================
 const studentsignup = document.querySelector("#studentsignup");
 const teachersignup = document.querySelector("#teachersignup");
 
-studentLog.addEventListener("click", function() {
-window.location.href = "login/studentlogin.html";
+studentsignup.addEventListener("click", function () {
+    window.location.href = "login/studentsignup.html";
 })
-
-teacherLog.addEventListener("click", function() {
-window.location.href = "login/teacherlogin.html";
+teachersignup.addEventListener("click", function () {
+    window.location.href = "login/teachersignup.html";
 })
-
-studentsignup.addEventListener("click", function() {
-window.location.href = "login/studentsignup.html";
-})
-
-teachersignup.addEventListener("click", function() {
-window.location.href = "login/teachersignup.html";
-})
-
-function mypage(url) {
-  if(sessionStorage.getItem("studentIdx") != null) {
-    window.location.href = "mypage/mypage_student.html";
-  }else if(sessionStorage.getItem("teacherIdx") != null) {
-    window.location.href = "mypage/mypage_teacher.html";
-  }else {
-    alert("로그인은 하셨나요? 🤔");
-  }
-}
-
-function login() {
-  const modal = document.getElementById("m1")
-  const btnModal = document.getElementById("login")
-  btnModal.addEventListener("click", e => {
-  modal.style.display = "flex"})
-
-  const closeBtn = modal.querySelector(".close-area")
-  closeBtn.addEventListener("click", e => {
-    modal.style.display = "none"
-  })
-
-  modal.addEventListener("click", e => {
-    const evTarget = e.target
-    if(evTarget.classList.contains("modal-overlay")) {
-        modal.style.display = "none"
-    }
-  })
-}
 
 function signup() {
-  const modal = document.getElementById("m2")
-  const btnModal = document.getElementById("signup")
-  btnModal.addEventListener("click", e => {
-  modal.style.display = "flex"})
-
-  const closeBtn = modal.querySelector(".close-area")
-  closeBtn.addEventListener("click", e => {
-    modal.style.display = "none"
-  })
-
-  modal.addEventListener("click", e => {
-    const evTarget = e.target
-    if(evTarget.classList.contains("modal-overlay")) {
+    const modal = document.getElementById("m2")
+    const btnModal = document.getElementById("signup")
+    btnModal.addEventListener("click", e => {
+        modal.style.display = "flex"
+    })
+    const closeBtn = modal.querySelector(".close-area")
+    closeBtn.addEventListener("click", e => {
         modal.style.display = "none"
-    }
-  })
+    })
+    modal.addEventListener("click", e => {
+        const evTarget = e.target
+        if (evTarget.classList.contains("modal-overlay")) {
+            modal.style.display = "none"
+        }
+    })
 }
+
+
+//  로그인 유형별 마이페이지 구분 =======================================================================
+function mypage(url) {
+    if (sessionStorage.getItem("studentIdx") != null) {
+        window.location.href = "mypage/mypage_student.html";
+    } else if (sessionStorage.getItem("teacherIdx") != null) {
+        window.location.href = "mypage/mypage_teacher.html";
+    } else {
+        alert("로그인은 하셨나요? 🤔");
+    }
+}
+
+
+//  채널톡 API =======================================================================
+(function () {
+    var w = window;
+    if (w.ChannelIO) {
+        return (window.console.error || window.console.log || function () { })('ChannelIO script included twice.');
+    }
+    var ch = function () {
+        ch.c(arguments);
+    };
+    ch.q = [];
+    ch.c = function (args) {
+        ch.q.push(args);
+    };
+    w.ChannelIO = ch;
+    function l() {
+        if (w.ChannelIOInitialized) {
+            return;
+        }
+        w.ChannelIOInitialized = true;
+        var s = document.createElement('script');
+        s.type = 'text/javascript';
+        s.async = true;
+        s.src = 'https://cdn.channel.io/plugin/ch-plugin-web.js';
+        s.charset = 'UTF-8';
+        var x = document.getElementsByTagName('script')[0];
+        x.parentNode.insertBefore(s, x);
+    }
+    if (document.readyState === 'complete') {
+        l();
+    } else if (window.attachEvent) {
+        window.attachEvent('onload', l);
+    } else {
+        window.addEventListener('DOMContentLoaded', l, false);
+        window.addEventListener('load', l, false);
+    }
+})();
+ChannelIO('boot', {
+    "pluginKey": "8db98516-1f72-46e5-8f5c-6c36416a271a"
+});

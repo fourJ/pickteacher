@@ -106,7 +106,7 @@
                                     mdl-color-text--grey
                                 " for="textfield_password">Password</label>
                         <input class="mdl-textfield__input" type="password" id="textfield_password" required=""
-                            name="password" v-model="pw" v-on:keyup.enter="login" />
+                            name="password" v-model="pw" />
                     </div>
 
                     <div class="mdl-cell mdl-cell--12-col send-button" align="center">
@@ -148,13 +148,13 @@
                             console.log(resData.data.success);
                             this.loginsuccess = resData.data.success;
                             if (this.loginsuccess) {
-                                sessionStorage.setItem(
-                                    "teacherIdx",
-                                    resData.data.idx
-                                );
+                                // if(sessionStorage.getItem("teacherIdx") && sessionStorage.getItem("studentIdx") == null) {
+                                sessionStorage.setItem("teacherIdx", resData.data.idx);
                                 alert("오늘도 화이팅 ❣");
-                                window.location.href =
-                                    "http://localhost/index.html";
+                                window.location.href = "http://localhost/index.html";
+                                // }else {
+                                // sessionStorage.clear();
+                                // }
                             } else {
                                 alert("아이디 비밀번호를 다시 확인해주세요.");
                             }

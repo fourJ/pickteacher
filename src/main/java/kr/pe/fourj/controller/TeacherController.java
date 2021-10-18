@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -38,22 +37,6 @@ public class TeacherController {
 		}
 
 		return new ResponseDTO.Login(result, teacher.getIdx());
-	}
-
-	//선생님 수정
-	@PutMapping("/teacher")
-	public ResponseDTO.Update updateTeacher(TeacherDTO.Update dto) {
-		System.out.println("-- 선생님 수정 시도 --");
-		
-		boolean result = false;
-		try {
-			teacherService.updateTeacher(dto);
-			result = true;
-		} catch (NotFoundException e) {
-			e.printStackTrace();
-		}		
-
-		return new ResponseDTO.Update(result);
 	}
 
 	//선생님 삭제

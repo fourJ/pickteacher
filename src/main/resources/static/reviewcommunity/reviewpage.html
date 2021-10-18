@@ -101,49 +101,39 @@
     <div id="reviewWrite">
 
       <label for="courseIdx">Subject</label>
+      <form>
+        <!-- <option>수강 강의 선택</option> -->
+        <select v-model="selected">
+          <label>내가 수강한 강의</label>
+          <option value="" selected>리뷰를 작성할 강의를 선택해주세요. (아래 강의가 없다면, 이미 수강한 강의의 후기를 모두 작성한 것입니다.)</option>
+          <option v-for="c in courseList" v-bind:value="c.idx">{{c.title}}</option>
+        </select>
 
-      <!-- <option>수강 강의 선택</option> -->
-      <select v-model="selected">
-        <label>내가 들은 수업</label>
-        <option v-for="c in courseList" v-bind:value="c.idx">{{c.title}}</option>
-      </select>
+        <br><br>
+        <label for="star">별점</label>
+        <select id="star" name="star" v-model="star">
+          <option value="" selected>리뷰 별점을 선택해주세요.</option>
+          <option value=1>☆☆☆☆★</option>
+          <option value=2>☆☆☆★★</option>
+          <option value=3>☆☆★★★</option>
+          <option value=4>☆★★★★</option>
+          <option value=5>★★★★★</option>
+        </select>
 
-      <br><br>
-      <label for="star">별점</label>
-      <select id="star" name="star" v-model="star">
-        <option value=1>☆</option>
-        <option value=2>☆☆</option>
-        <option value=3>☆☆☆</option>
-        <option value=4>☆☆☆☆</option>
-        <option value=5>☆☆☆☆☆</option>
-      </select>
+        <br><br>
 
-      <br><br>
+        <br>
+        <label for="content">내용</label>
+        <input type="text" id="content" name="content" style="height: 100;" v-model="content"
+          placeholder="후기 내용을 작성해주세요.">
+        <!-- <button><a href="reivewall.html">완료</a></button> -->
 
-      <br>
-      <label for="content">내용</label>
-      <input type="text" id="content" name="content" style="height: 100;" v-model="content">
-      <!-- <button><a href="reivewall.html">완료</a></button> -->
-
-      <input type="submit" id="content" style="height: 100" value="작성완료" @click="reviewWrite" />
-      <br><br>
+        <input type="submit" id="content" style="height: 100" value="작성완료" @click="reviewWrite" />
       </form>
     </div>
-  </div>
-
-  <br><br>
-
-  <br>
-  <label for="content">contents</label>
-  <input type="text" id="content" name="content" style="height: 100;" v-model="content">
-  <!-- <button><a href="reivewall.html">완료</a></button> -->
-
-  <a type="submit" value="작성완료" @click="reviewWrite">작성완료</a>
-  <br><br>
-  </form>
-  </div>
 
   </div>
+
 </body>
 
 <script>
