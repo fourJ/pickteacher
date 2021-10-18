@@ -45,19 +45,80 @@
         .w3header {
             padding: 0;
         }
+
+        .w3button {
+            border: none;
+            display: inline-block;
+            padding: 6px 12px;
+            vertical-align: middle;
+            overflow: hidden;
+            text-decoration: none;
+            color: white;
+            background-color: #17667f;
+            text-align: center;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .w3button {
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        .w3button:disabled {
+            cursor: not-allowed;
+            opacity: 0.3;
+        }
+
+        .w3button:hover {
+            color: white !important;
+            background-color: black !important;
+        }
+
+        .w3-disabled *,
+        :disabled * {
+            pointer-events: none;
+        }
+
+        .w3-btn:disabled:hover {
+            box-shadow: none;
+        }
     </style>
 </head>
 
 <body>
     <!-- Navigation-->
+    <a class="menu-toggle rounded"><i class="fas fa-bars"></i></a>
+    <nav id="sidebar-wrapper">
+        <ul class="sidebar-nav">
+            <li class="sidebar-brand">
+                <a href="../index.html">Pick Teacher</a>
+            </li>
+            <li class="sidebar-nav-item">
+                <a href="../search/search_teacher.html">선생님 찾기</a>
+            </li>
+            <li class="sidebar-nav-item">
+                <a href="../search/search_course.html">강의 찾기</a>
+            </li>
+            <li class="sidebar-nav-item">
+                <a href="../reviewcommunity/reivewall.html">후기 커뮤니티</a>
+            </li>
+            <li class="sidebar-nav-item">
+                <a href="../mypage/mypage_student.html">마이 페이지</a>
+            </li>
+        </ul>
+    </nav>
 
     <!-- Header -->
-    <div id="header" v-if="success">
+    <div>
         <div class="w3header">
             <a href="/index.html" class="logo">Pick Teacher</a>
         </div>
-        <div id="header" v-if="success" class="w3header" style="background-color: #1d809f; margin-bottom: 30px" v-show="success"
-        >
+        <div class="w3header" id="header" v-if="success" style="background-color: #1d809f; margin-bottom: 30px">
             <a href="mypage_student.html" class="logo">My Page</a>
             <div class="w3header-right">
                 <a @click="studentinfo">내 정보</a>
@@ -104,7 +165,7 @@
                     <td>{{v.courseIdx.target}}</td>
                     <td>
                         <span class="w3button" @click="deleteLikes(v.courseIdx.idx)">삭제하기</span>
-                            <!-- <a class="w3button" v-bind:href="url + v.courseIdx.idx">수강 신청</a> -->
+                        <!-- <a class="w3button" v-bind:href="url + v.courseIdx.idx">수강 신청</a> -->
                     </td>
                 </tr>
             </table>
@@ -120,25 +181,32 @@
                 datas: [],
                 url: "http://localhost/sendCatalog/",
                 resultSize: "",
+                studentIdx: sessionStorage.getItem("studentIdx"),
             },
             created: function () {
-                axios({
-                    method: "get",
-                    url: "http://localhost/likes/studentidx",
-                })
-                    .then((resData) => {
-                            this.success = resData.data.success;
-                            console.log(resData.data);
-
-                            this.datas = resData.data.likesList;
-                            console.log(this.datas);
-
-                            this.resultSize = this.datas.length;
+                if (this.studentIdx != null) {
+                    axios({
+                        method: "get",
+                        url: "http://localhost/likes/studentidx",
+                        params: {
+                            idx: sessionStorage.getItem("studentIdx"),
+                        }
                     })
-                    .catch((errorData) => {
-                        alert(errorData);
-                        console.log(errorData);
-                    });
+                        .then((resData) => {
+                            this.success = resData.data.success;
+                            this.datas = resData.data.likesList;
+                            this.resultSize = this.datas.length;
+                        })
+                        .catch((errorData) => {
+                            console.log(errorData.response.data.message);
+                        });
+                } else {
+                    if (window.confirm("잠깐!! 🤭 학생 회원이신가요?")) {
+                        window.location.href = "http://localhost/login/studentlogin.html";
+                    } else {
+                        window.location.href = "http://localhost/login/teacherlogin.html";
+                    }
+                }
             },
             methods: {
                 deleteLikes: function (idx) {
@@ -149,13 +217,14 @@
                             courseIdx: idx,
                         },
                     })
-                        .then((res) => {
+                        .then((resData) => {
+                            this.success = resData.data.success;
                             console.log("삭제성공");
                             alert("삭제성공");
                             window.location.reload();
                         })
                         .catch((errorData) => {
-                            return console.log(errorData);
+                            console.log(errorData.response.data.message);
                         });
                 },
             },
@@ -166,46 +235,55 @@
             data: {
                 success: false,
                 datas: [],
+                studentIdx: sessionStorage.getItem("studentIdx"),
             },
             created: function () {
                 axios({
                     method: "get",
                     url: "http://localhost/student",
+                    params: {
+                        idx: sessionStorage.getItem("studentIdx"),
+                    }
                 })
                     .then((resData) => {
                         this.success = resData.data.success;
-                        console.log(resData.data);
-
                         this.datas = resData.data.student;
-                        console.log(this.datas);
                     })
                     .catch((errorData) => {
-                        alert(errorData);
-                        console.log(errorData);
+                        console.log(errorData.response.data.message);
                     });
             },
             methods: {
                 studentinfo: function () {
-                    axios({
-                        method: "get",
-                        url: "http://localhost/student",
-                    })
-                        .then((resData) => {
-                            console.log(resData.data.success);
-                            var inputpw = prompt("비밀번호를 입력하세요:)");
-                            console.log(inputpw);
-                            if (inputpw == this.datas.pw) {
-                                window.location.href =
-                                    "http://localhost/mypage/student_info.html";
-                                console.log("성공");
-                            } else {
-                                alert("비밀번호를 재입력하세요!");
+                    if (this.studentIdx != null) {
+                        axios({
+                            method: "get",
+                            url: "http://localhost/student",
+                            params: {
+                                idx: this.studentIdx,
                             }
                         })
-                        .catch((errorData) => {
-                            alert(errorData);
-                            console.log(errorData);
-                        });
+                            .then((resData) => {
+                                this.success = resData.data.success;
+                                var inputpw = prompt("비밀번호를 입력하세요:)");
+                                if (inputpw == this.datas.pw) {
+                                    window.location.href =
+                                        "http://localhost/mypage/student_info.html";
+                                    console.log("성공");
+                                } else {
+                                    alert("비밀번호를 재입력하세요!");
+                                }
+                            })
+                            .catch((errorData) => {
+                                console.log(errorData.response.data.message);
+                            });
+                    } else {
+                        if (window.confirm("잠깐!! 🤭 학생 회원이신가요?")) {
+                            window.location.href = "http://localhost/login/studentlogin.html";
+                        } else {
+                            window.location.href = "http://localhost/login/teacherlogin.html";
+                        }
+                    }
                 },
             },
         });

@@ -409,8 +409,8 @@
                     }
                 })
                     .then((resData) => {
-                        this.likesCheckSuccess = resData.data.success,
-                            this.likesCheck = resData.data.check,
+                        this.likesCheckSuccess = resData.data.success;
+                            this.likesCheck = resData.data.check;
                     })
                     .catch((errorData) => {
                         return console.log(errorData);
