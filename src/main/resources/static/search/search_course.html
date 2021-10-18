@@ -336,13 +336,14 @@
                     flex-wrap: wrap;
                     margin-top: 10px;
                     justify-content: space-between;
+                    margin-top: 50px;
                 ">
             <div class="search_result_none" v-if="resultSize == '0'">
                 해당 조건의 강의가 존재하지 않습니다.
             </div>
 
             <div class="courselist-result" v-if="success && !statusCheck" v-for="c in courseInfo"
-                style="padding: 10px;">
+                style="padding: 10px; margin-bottom: 20px;">
                 <span>[{{c.status}}]</span>
                 <a v-bind:href="detailPage + c.idx" class="link">
                     {{c.title}}<br />
@@ -360,7 +361,8 @@
                 </div>
             </div>
 
-            <div class="courselist-result" v-if="success && statusCheck" v-for="s in statusCourse" style="padding: 5px">
+            <div class="courselist-result" v-if="success && statusCheck" v-for="s in statusCourse"
+                style="padding: 10px; margin-bottom: 20px;">
                 <span>[{{s.status}}]</span>
                 <a v-bind:href="detailPage + s.idx" class="link">
                     {{s.title}}<br />
