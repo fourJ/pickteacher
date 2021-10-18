@@ -107,7 +107,7 @@ public class CartController {
 	}
 	
 	//수강 신청시 수강 내역으로 연동
-	@GetMapping("sendCatalog/{courseIdx}")
+	@GetMapping("/sendCatalog/{courseIdx}")
 	public RedirectView sendCatalog(@PathVariable Long courseIdx, RedirectAttributes attr, CartDTO.Get dto) {
 
 		try {
@@ -134,6 +134,6 @@ public class CartController {
 			e.printStackTrace();
 		}
 
-		return new RedirectView("/mypage/student_catalog.html");
+		return new RedirectView("mypage/student_catalog.html");
 	}
 }

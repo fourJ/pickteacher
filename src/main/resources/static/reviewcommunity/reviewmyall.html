@@ -117,42 +117,43 @@
             </div>
         </div>
 
-        <div id="review">
-            <!-- <button @click="reqResAjax()">내가 작성한 후기보기</button> -->
-            <div v-if="resData">
-                <table style="width: 100%" v-show="resData">
-                    <tr>
-                        <th>후기번호</th>
-                        <th>작성자</th>
-                        <th>강의제목</th>
-                        <th>강의과목</th>
-                        <th>작성시간</th>
-                        <th>후기내용</th>
-                        <th>별점</th>
-                        <th>수정</th>
-                        <th>삭제</th>
-                    </tr>
-                    <tr v-for="v in datas">
-                        <td>{{v.idx}}</td>
-                        <td>{{v.studentIdx.name}}</td>
-                        <td>{{v.courseIdx.title}}</td>
-                        <td>{{v.courseIdx.subject}}</td>
-                        <td>{{v.dateTime}}</td>
-                        <td>{{v.content}}</td>
-                        <td>{{v.star}}</td>
-                        <td><a v-bind:href="urlSrc + v.idx">수정</a></td>
-                        <td>
-                            <span
-                                class="close"
-                                @click="deleteReview(v.courseIdx.idx)"
-                                >&#x00D7;</span
-                            >
-                        </td>
-                    </tr>
-                </table>
+        <div class="w3-container" id="app" style="margin: 50px">
+            <div id="review">
+                <!-- <button @click="reqResAjax()">내가 작성한 후기보기</button> -->
+                <div v-if="resData">
+                    <table style="width: 100%" v-show="resData">
+                        <tr>
+                            <th>후기번호</th>
+                            <th>작성자</th>
+                            <th>강의제목</th>
+                            <th>강의과목</th>
+                            <th>작성시간</th>
+                            <th>후기내용</th>
+                            <th>별점</th>
+                            <th>수정</th>
+                            <th>삭제</th>
+                        </tr>
+                        <tr v-for="v in datas">
+                            <td>{{v.idx}}</td>
+                            <td>{{v.studentIdx.name}}</td>
+                            <td>{{v.courseIdx.title}}</td>
+                            <td>{{v.courseIdx.subject}}</td>
+                            <td>{{v.dateTime}}</td>
+                            <td>{{v.content}}</td>
+                            <td>{{v.star}}</td>
+                            <td><a v-bind:href="urlSrc + v.idx">수정</a></td>
+                            <td>
+                                <span
+                                    class="close"
+                                    @click="deleteReview(v.courseIdx.idx)"
+                                    >&#x00D7;</span
+                                >
+                            </td>
+                        </tr>
+                    </table>
+                </div>
             </div>
         </div>
-
         <script>
             new Vue({
                 el: "#review",

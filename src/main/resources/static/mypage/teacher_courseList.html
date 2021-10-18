@@ -80,76 +80,30 @@
         </style>
     </head>
 
-    <body id="page-top">
+    <body>
         <!-- Header -->
-        <div class="w3header">
-            <a href="/index.html" class="logo">Pick Teacher</a>
-            <div class="w3header-right">
-              </div>
-              <div>
-              <a class="menu-toggle rounded" href="#"><i class="fas fa-bars"></i></a>
-              <nav id="sidebar-wrapper">
-                  <ul class="sidebar-nav">
-                      <li class="sidebar-brand">
-                          <a href="#page-top">Pick Teacher</a>
-                      </li>
-                      <li class="sidebar-nav-item"><a href="#page-top">메인</a></li>
-                      <li class="sidebar-nav-item"><a href="#about">배너</a></li>
-                      <li class="sidebar-nav-item">
-                          <a href="search/search_teacher.html">선생님 찾기</a>
-                      </li>
-                      <li class="sidebar-nav-item">
-                          <a href="search/search_course.html">강의 찾기</a>
-                      </li>
-                      <li class="sidebar-nav-item">
-                          <a href="reviewcommunity/reivewall.html">후기 커뮤니티</a>
-                      </li>
-                    </ul>
-                  </nav>
+        <div>
+            <div class="w3header">
+                <a href="/index.html" class="logo">Pick Teacher</a>
+            </div>
+            <div class="w3header" id="header" v-if="success" style="background-color: #1d809f; margin-bottom: 30px">
+                <a href="mypage_student.html" class="logo">My Page</a>
+                <div class="w3header-right">
+                    <a @click="teacherinfo">내 정보</a>
+        			<a href="teacher_courseList.html">내강의목록</a>
+                    <a href="teacher_cart.html">장바구니</a>
+                    <a href="teacher_likes.html">찜한 강의</a>
+                </div>
             </div>
         </div>
+        
 
-        <div
-            class="w3header"
-            style="background-color: #1d809f; margin-bottom: 30px">
-            <a href="mypage_teacher.html" class="logo">My Page</a>
-        </div>
-
-        <div id="app" style="margin: 50px">
-            <div v-if="resData">
-                <h3>선생님 상세페이지</h3>
-                <hr />
-
-                <div>
-                    <table style="width: 100%" v-show="resData">
-                        <tr>
-                            <th>선생님 이름</th>
-                            <th>선생님 성별</th>
-                            <th>선생님 주소</th>
-                            <th>선생님 번호</th>
-                            <th>선생님 경력</th>
-                            <th>선생님 전공</th>
-                            <th>선생님 출신학교</th>
-                        </tr>
-
-                        <tr>
-                            <td>{{teacher.name}}</td>
-                            <td>{{teacher.gender}}</td>
-                            <td>{{teacher.address}}</td>
-                            <td>{{teacher.phone}}</td>
-                            <td>{{teacher.career}}</td>
-                            <td>{{teacher.major}}</td>
-                            <td>{{teacher.school}}</td>
-                        </tr>
-                    </table>
-                </div>
-
-                <br />
-
-                <button @click="getCourse">강의 리스트 보기</button>
-
+       
+            <div id="app" style="margin: 50px">
+                <h1>내 강의 리스트</h1>
+                <hr>
                 <div v-if="courseSuccess">
-                    <table style="width: 100%" v-show="resData">
+                    <table style="width: 100%" >
                         <tr>
                             <th>강의번호</th>
                             <th>강의제목</th>
@@ -224,42 +178,20 @@
                     courseSuccess: "",
                     courseList: [],
 
-                    catalogSuccess: "",
-                    catalogSize: "",
+                    // catalogSuccess: "",
+                    // catalogSize: "",
 
                     detailPage: "http://localhost/getCourseDetail/",
                     updatePage: "http://localhost/getCourseUpdate/",
                     studentPage: "http://localhost/getCourseStudent/",
                 },
-                created: function () {
-                    axios({
-                        method: "get",
-                        url: "http://localhost/teacher",
-                        params: {
-                            idx: sessionStorage.getItem("teacherIdx")
-                        },
-                    })
-                        .then((resData) => {
-                            this.resData = true;
-                            this.teacherSuccess = resData.data.success;
-                            this.teacher = resData.data.teacher;
-                            this.catalogSuccess = resData.data.success;
-                            this.catalogList = resData.data.catalogList;
-                            this.idx = sessionStorage.getItem("teacherIdx");
-                            console.log(this.courseList.idx);
-                            // this.catalogSize = resData.data.catalogList.length;
-                        })
-                        .catch((errorData) => {
-                            return console.log(errorData);
-                        });
-                },
-                methods: {
-                    getCourse: function () {
+                
+                created: function() {
                         axios({
                             method: "get",
                             url: "http://localhost/course/teacheridx",
                             params: {
-                                teacherIdx: this.idx
+                                teacherIdx: sessionStorage.getItem("teacherIdx")
                             },
                         })
                             .then((resData) => {
@@ -270,41 +202,27 @@
                                 return console.log(errorData);
                             });
                     },
+                methods:{    
                     deleteCourse: function (idx) {
-                        axios({
-                            method: "delete",
-                            url: "http://localhost/course",
-                            params: {
-                                idx: idx
-                            },
+                    axios({
+                        method: "delete",
+                        url: "http://localhost/course",
+                        params: {
+                            idx: idx
+                        },
+                    })
+                        .then((resData) => {
+                            console.log("삭제성공");
+                            alert("삭제성공");
+                            window.location.reload();
+                            location.href = "teacher_courseList.html";
                         })
-                            .then((resData) => {
-                                console.log("삭제성공");
-                                alert("삭제성공");
-                                window.location.reload();
-                                location.href = "teacher_courseList.html";
-                            })
-                            .catch((errorData) => {
-                                return console.log(errorData);
-                            });
+                        .catch((errorData) => {
+                            return console.log(errorData);
+                        });
                     }
                 },
-                mounted: function () {
-                axios({
-                  method: "get",
-                  url: "http://localhost/catalog/courseidx",
-                  params: {
-                    courseIdx: this.courseList.idx
-                  },
-                })
-                  .then((resData) => {
-                    this.catalogSuccess = resData.data.success;
-                    this.catalogSize = resData.data.catalogList.length;
-                  })
-                  .catch((errorData) => {
-                    return console.log(errorData);
-                  });
-              },
+           
             });
         </script>
     </body>

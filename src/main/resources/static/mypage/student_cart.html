@@ -113,7 +113,9 @@
         <h3>나의 장바구니</h3>
         <hr />
 
-        <div v-if="success">
+        <div style="margin-top: 30px;" v-if="resultSize == '0'">장바구니에 담은 강의가 없어요. 강의를 담아 주세요:)</div>
+
+        <div v-if="success && resultSize != '0'">
             <table class="w3-table-all" v-show="success">
                 <tr class="w3-red">
                     <th>선생님</th>
@@ -143,7 +145,7 @@
                     <td>{{v.courseIdx.tuition}}</td>
                     <td>{{v.courseIdx.target}}</td>
                     <td>
-                        <a class="w3button" v-bind:href="url + v.courseIdx.idx">수강 신청</a>
+                        <a class="w3button" v-bind:href="sendurl + v.courseIdx.idx">수강 신청</a>
                     </td>
                     <td>
                         <span class="w3button" @click="deleteCart(v.courseIdx.idx)">삭제하기</span>
@@ -151,7 +153,7 @@
                     <!-- v-bind:href="deleteurl + v.courseIdx.idx" -->
                 </tr>
             </table>
-            <div style="margin-top: 30px;" v-if="resultSize == '0'">장바구니에 담은 강의가 없어요. 강의를 담아 주세요:)</div>
+
         </div>
     </div>
 
@@ -161,9 +163,10 @@
             data: {
                 success: false,
                 datas: [],
-                url: "http://localhost/sendCatalog/",
+                sendurl: "http://localhost/sendCatalog/",
                 resultSize: "",
                 studentIdx: sessionStorage.getItem("studentIdx"),
+                // courseIdx: "",
             },
             created: function () {
                 if (this.studentIdx != null) {
@@ -171,16 +174,19 @@
                         method: "get",
                         url: "http://localhost/cart/studentidx",
                         params: {
-                            idx: sessionStorage.getItem("studentIdx"),
+                        studentIdx: sessionStorage.getItem("studentIdx")
+
                         }
                     })
                         .then((resData) => {
                             this.success = resData.data.success;
                             this.datas = resData.data.cartList;
-                            this.resultSize = this.datas.length;
+                            // this.resultSize = this.data.length;
+                            this.courseIdx = resData.datas.cartList.courseIdx.idx;
                         })
                         .catch((errorData) => {
-                            console.log(errorData.response.data.message);
+                            // console.log(errorData.response.data.message);
+                            alert(errorData)
                         });
                 } else {
                     if (window.confirm("잠깐!! 🤭 학생 회원이신가요?")) {
@@ -196,6 +202,7 @@
                         method: "delete",
                         url: "http://localhost/cart",
                         params: {
+                            studentIdx: this.studentIdx,
                             courseIdx: idx,
                         },
                     })
@@ -224,7 +231,7 @@
                     method: "get",
                     url: "http://localhost/student",
                     params: {
-                        idx: sessionStorage.getItem("studentIdx"),
+                        studentIdx: sessionStorage.getItem("studentIdx"),
                     }
                 })
                     .then((resData) => {
@@ -232,7 +239,7 @@
                         this.datas = resData.data.student;
                     })
                     .catch((errorData) => {
-                        console.log(errorData.response.data.message);
+                        // console.log(errorData.response.data.message);
                     });
             },
             methods: {
