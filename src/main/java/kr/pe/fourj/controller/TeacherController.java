@@ -27,12 +27,12 @@ public class TeacherController {
 	
 	//선생님 저장
 	@PostMapping("/teacher")
-	public ResponseDTO.Create saveTeacher(@RequestBody TeacherDTO.Create dto) {
+	public ResponseDTO.Create saveTeacher(TeacherDTO.Create dto) {
 		System.out.println("-- 선생님 저장 시도 --");
 		
 		boolean result = false;
 		Long saveId = null;
-		LocalDate date = LocalDate.now();		
+		LocalDate date = LocalDate.now();
 		if(teacherService.findTeacherById(dto.getId()) == null) {
 			try {
 				saveId = teacherService.saveTeacher(new Teacher(dto.getId(),dto.getPw(), 

@@ -119,9 +119,47 @@ body {
   }
 }
 
+.w3button {
+  border: none;
+  display: inline-block;
+  padding: 6px 12px;
+  vertical-align: middle;
+  overflow: hidden;
+  text-decoration: none;
+  color: white;
+  background-color: #17667f;
+  text-align: center;
+  cursor: pointer;
+  white-space: nowrap;
+}
 
+.w3button {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
 
+.w3button:disabled {
+  cursor: not-allowed;
+  opacity: 0.3;
+}
 
+.w3button:hover {
+  color: white !important;
+  background-color: black !important;
+}
+
+.w3-disabled *,
+:disabled * {
+  pointer-events: none;
+}
+
+.w3-btn:disabled:hover {
+  box-shadow: none;
+}
 
 *,
 *::before,
