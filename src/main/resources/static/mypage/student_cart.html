@@ -1,206 +1,196 @@
 <!DOCTYPE html>
 <html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1, shrink-to-fit=no"
+        />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>Pick Teacher</title>
+        <!-- Favicon-->
+        <link rel="icon" type="image/x-icon" href="../assets/pick.ico" />
+        <!-- Font Awesome icons (free version)-->
+        <script
+            src="https://use.fontawesome.com/releases/v5.15.3/js/all.js"
+            crossorigin="anonymous"
+        ></script>
+        <!-- Simple line icons-->
+        <link
+            href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.5.5/css/simple-line-icons.min.css"
+            rel="stylesheet"
+        />
+        <!-- Google fonts-->
+        <link
+            href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic"
+            rel="stylesheet"
+            type="text/css"
+        />
+        <!-- Vue.js -->
+        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+        <!-- axios -->
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+        <!-- stylesheet -->
+        <link
+            rel="stylesheet"
+            href="https://www.w3schools.com/w3css/4/w3.css"
+        />
+        <link rel="stylesheet" href="../css/styles.css" />
 
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <meta name="description" content="" />
-    <meta name="author" content="" />
-    <title>Pick Teacher</title>
-    <!-- Favicon-->
-    <link rel="icon" type="image/x-icon" href="/src/main/resources/static/assets/pick.ico" />
-    <!-- Font Awesome icons (free version)-->
-    <script src="https://use.fontawesome.com/releases/v5.15.3/js/all.js" crossorigin="anonymous"></script>
-    <!-- Simple line icons-->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.5.5/css/simple-line-icons.min.css"
-        rel="stylesheet" />
-    <!-- Google fonts-->
-    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic"
-        rel="stylesheet" type="text/css" />
-    <!-- Vue.js -->
-    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-    <!-- stylesheet -->
-    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css" />
-    <link rel="stylesheet" href="../css/styles.css" />
-
-    <style>
-        .mySlides {
-            display: none
-        }
-
-        .w3-left,
-        .w3-right,
-        .w3-badge {
-            cursor: pointer
-        }
-
-        .w3-badge {
-            height: 13px;
-            width: 13px;
-            padding: 0
-        }
-
-        .w3header {
-            padding: 0
-        }
-    </style>
-</head>
-
-<body>
-
-    <!-- Navigation-->
-
-
-    <!-- Header -->
-    <div class="w3header">
-        <a href="/index.html" class="logo">Pick Teacher</a>
-    </div>
-    <div class="w3header" style="background-color: #1D809F; margin-bottom: 30px;">
-        <a href="mypage_student.html" class="logo">My Page</a>
-        <div class="w3header-right">
-            <a href="student_info.html">내 정보</a>
-            <a href="student_catalog.html">수강 내역</a>
-            <a href="student_cart.html">장바구니</a>
-            <a href="student_likes.html">찜한 강의</a>
-            <a href="#">탈퇴</a>
-        </div>
-    </div>
-
-
-
-    <div class="w3-container" id="app" style="margin: 50px;">
-        <h3>나의 수강 내역</h3>
-        <hr>
-        <table class="w3-table-all">
-            <thead>
-                <tr class="w3-red">
-                    <th>idx</th>
-                    <th>선생님</th>
-                    <th>과목</th>
-                    <th>강의명</th>
-                    <th>수업시간</th>
-                    <th>유형</th>
-                    <th>개강일</th>
-                    <th>종강일</th>
-                    <th>상태</th>
-                    <th>정원</th>
-                    <th>수강료</th>
-                    <th>대상 학년</th>
-                    <th>선택</th>
-                </tr>
-            </thead>
-            <tr v-for="item in items" : key="item.idx">
-                <td><span v-html="item.idx"></span></td>
-                <td><span v-html="item.teacherIdx"></span></td>
-                <td><span v-html="item.subject"></span></td>
-                <td><span v-html="item.title"></span></td>
-                <td><span v-html="item.schedule"></span></td>
-                <td><span v-html="item.type"></span></td>
-                <td><span v-html="item.openDate"></span></td>
-                <td><span v-html="item.closeDate"></span></td>
-                <td><span v-html="item.status"></span></td>
-                <td><span v-html="item.headCount"></span></td>
-                <td><span v-html="item.tuition"></span></td>
-                <td><span v-html="item.target"></span></td>
-                <td>
-                    <span>
-                        <button>수강 신청</button>
-                        <button>찜 목록에 추가</button>
-                        <button>삭제하기</button>
-                    </span>
-                </td>
-            </tr>
-        </table>
-    </div>
-
-    <script>
-        export default {
-            data() {
-                return {
-                    items: [
-                        {
-                            "idx": 1,
-                            "teacherIdx": {
-                                "idx": 1,
-                                "id": "id1",
-                                "pw": "pw1",
-                                "name": "선생님1",
-                                "gender": 1,
-                                "address": "주소1",
-                                "phone": "010-xxxx-xxxx",
-                                "career": "신입",
-                                "major": "전공1",
-                                "school": "학교1",
-                                "enrollDate": "2021-10-13"
-                            },
-                            "title": "고1국어",
-                            "subject": "국어",
-                            "schedule": "월8시",
-                            "type": "오프라인",
-                            "openDate": "2021-10-10T15:00:00.000+00:00",
-                            "closeDate": "2021-11-10T15:00:00.000+00:00",
-                            "status": "진행중",
-                            "headCount": 10,
-                            "tuition": 250000,
-                            "target": "고1"
-                        },
-                        {
-                            "idx": 2,
-                            "teacherIdx": {
-                                "idx": 2,
-                                "id": "id2",
-                                "pw": "pw2",
-                                "name": "선생님2",
-                                "gender": 1,
-                                "address": "주소2",
-                                "phone": "010-xxxx-xxxx",
-                                "career": "1년",
-                                "major": "전공2",
-                                "school": "학교2",
-                                "enrollDate": "2021-10-13"
-                            },
-                            "title": "고2수학",
-                            "subject": "수학",
-                            "schedule": "화7시",
-                            "type": "오프라인",
-                            "openDate": "2021-10-11T15:00:00.000+00:00",
-                            "closeDate": "2021-11-11T15:00:00.000+00:00",
-                            "status": "마감",
-                            "headCount": 5,
-                            "tuition": 450000,
-                            "target": "고2"
-                        },
-                        {
-                            "idx": 3,
-                            "teacherIdx": {
-                                "idx": 3,
-                                "id": "id3",
-                                "pw": "pw3",
-                                "name": "선생님3",
-                                "gender": 1,
-                                "address": "주소3",
-                                "phone": "010-xxxx-xxxx",
-                                "career": "2년",
-                                "major": "전공3",
-                                "school": "학교3",
-                                "enrollDate": "2021-10-13"
-                            },
-                            "title": "고3영어",
-                            "subject": "영어",
-                            "schedule": "토12시",
-                            "type": "온라인",
-                            "openDate": "2021-10-12T15:00:00.000+00:00",
-                            "closeDate": "2021-11-12T15:00:00.000+00:00",
-                            "status": "미개강",
-                            "headCount": 3,
-                            "tuition": 350000,
-                            "target": "고3"
-                        }
-                    ]
-                }
+        <style>
+            .mySlides {
+                display: none;
             }
-        }
-    </script>
-</body>
 
+            .w3-left,
+            .w3-right,
+            .w3-badge {
+                cursor: pointer;
+            }
+
+            .w3-badge {
+                height: 13px;
+                width: 13px;
+                padding: 0;
+            }
+
+            .w3header {
+                padding: 0;
+            }
+        </style>
+    </head>
+
+    <body>
+        <!-- Navigation-->
+
+        <!-- Header -->
+        <div class="w3header">
+            <a href="/index.html" class="logo">Pick Teacher</a>
+        </div>
+        <div
+            class="w3header"
+            style="background-color: #1d809f; margin-bottom: 30px"
+        >
+            <a href="mypage_student.html" class="logo">My Page</a>
+            <div class="w3header-right">
+                <a @click="studentinfo">내 정보</a>
+                <a href="student_catalog.html">수강 내역</a>
+                <a href="student_cart.html">장바구니</a>
+                <a href="student_likes.html">찜한 강의</a>
+            </div>
+        </div>
+
+        <div class="w3-container" id="app" style="margin: 50px">
+            <h3>나의 장바구니</h3>
+            <hr />
+
+            <div v-if="success">
+                <table class="w3-table-all" v-show="success">
+                    <tr class="w3-red">
+                        <th>선생님</th>
+                        <th>과목</th>
+                        <th>강의명</th>
+                        <th>수업시간</th>
+                        <th>유형</th>
+                        <th>개강일</th>
+                        <th>종강일</th>
+                        <th>상태</th>
+                        <th>정원</th>
+                        <th>수강료</th>
+                        <th>대상 학년</th>
+                        <th>선택</th>
+                        <th>선택</th>
+                    </tr>
+                    <tr v-for="v in datas">
+                        <td>{{v.courseIdx.teacherIdx.name}}</td>
+                        <td>{{v.courseIdx.subject}}</td>
+                        <td>{{v.courseIdx.title}}</td>
+                        <td>{{v.courseIdx.schedule}}</td>
+                        <td>{{v.courseIdx.type}}</td>
+                        <td>{{v.courseIdx.openDate}}</td>
+                        <td>{{v.courseIdx.closeDate}}</td>
+                        <td>{{v.courseIdx.status}}</td>
+                        <td>{{v.courseIdx.headCount}}</td>
+                        <td>{{v.courseIdx.tuition}}</td>
+                        <td>{{v.courseIdx.target}}</td>
+                        <td>
+                            <a
+                                class="w3button"
+                                v-bind:href="url + v.courseIdx.idx"
+                                >수강 신청</a
+                            >
+                        </td>
+                        <td>
+                            <span
+                                class="w3button"
+                                @click="deleteCart(v.courseIdx.idx)"
+                                >삭제하기</span
+                            >
+                        </td>
+                        <!-- v-bind:href="deleteurl + v.courseIdx.idx" -->
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <script>
+            new Vue({
+                el: "#app",
+                data: {
+                    success: false,
+                    datas: [],
+                    url: "http://localhost/sendCatalog/",
+                    //deleteurl: "http://localhost/cart/",
+                },
+                created: function () {
+                    // 카트에 강의가 없을 때 출력멘트 보여주고 싶음
+                    // if(length.cartList == 0) {
+                    axios({
+                        method: "get",
+                        url: "http://localhost/cart/studentidx",
+                    })
+                        .then((resData) => {
+                            this.success = resData.data.success;
+                            console.log(resData.data);
+
+                            this.datas = resData.data.cartList;
+                            console.log(this.datas);
+                        })
+                        .catch((errorData) => {
+                            alert(errorData);
+                            console.log(errorData);
+                        });
+                    // }else {
+                    //     document.write("장바구니가 비어있어요. 강의를 담아주세요:)");
+                    // }
+                },
+                methods: {
+                    deleteCart: function (idx) {
+                        axios({
+                            method: "delete",
+                            url: "http://localhost/cart",
+                            // params:{
+                            //   courseIdx: idx
+                            // },
+                            params: {
+                                courseIdx: idx,
+                            },
+                        })
+                            .then((res) => {
+                                console.log("삭제성공");
+                                alert("삭제성공");
+                                // window.location.href="reviewmyall.html"
+                                window.location.reload();
+                                // var link = "http://localhost/index.html";
+                                location.href = link;
+                            })
+                            .catch((errorData) => {
+                                return console.log(errorData);
+                            });
+                    },
+                },
+            });
+        </script>
+    </body>
 </html>

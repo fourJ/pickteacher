@@ -1,6 +1,6 @@
 package kr.pe.fourj.domain;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -44,7 +44,7 @@ public class Catalog {
 	private Course courseIdx;
 	
 	@NonNull
-	@Column(name="date_time")
-	private LocalDateTime dateTime;
+	@Column(name="catalog_date")
+	private LocalDate date;
 	
 }

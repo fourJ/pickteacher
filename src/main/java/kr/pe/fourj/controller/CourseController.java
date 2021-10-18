@@ -2,8 +2,6 @@ package kr.pe.fourj.controller;
 
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,66 +29,45 @@ public class CourseController {
 	
 	//강의 저장
 	@PostMapping("/course")
-	public ResponseDTO.Create saveCourse(HttpServletRequest request, @RequestBody CourseDTO.Create dto) {
+	public ResponseDTO.Create saveCourse(@RequestBody CourseDTO.Create dto) {
 		System.out.println("-- 강의 저장 시도 --");
 		
 		boolean result = false;
 		Long saveId = null;
-		if(request.getSession().getAttribute("teacher") != null) {
-			Object object = request.getSession().getAttribute("teacher");
-			Teacher entity = (Teacher)object;
-
 			String status = courseService.calculateStatus(dto.getOpenDate(), dto.getCloseDate());
-			
 			try {
-				Teacher teacher = teacherService.findOne(entity.getIdx());
-				
+				Teacher teacher = teacherService.findOne(dto.getTeacherIdx());
+
 				try {
 					saveId = courseService.saveCourse(new Course(teacher, 
-																 dto.getTitle(), dto.getSubject(), 
-																 dto.getSchedule(), dto.getType(), 
-																 dto.getOpenDate(), dto.getCloseDate(), 
-																 status, dto.getHeadCount(), 
-																 dto.getTuition(), dto.getTarget()));
+							dto.getTitle(), dto.getSubject(), 
+							dto.getSchedule(), dto.getType(), 
+							dto.getOpenDate(), dto.getCloseDate(), 
+							status, dto.getHeadCount(), 
+							dto.getTuition(), dto.getTarget()));
 					result = true;
-				} catch (ArgumentNullException e) {
-					e.printStackTrace();
+				} catch (ArgumentNullException e1) {
+					e1.printStackTrace();
 				}
-			} catch (NotFoundException e1) {
-				e1.printStackTrace();
+			} catch (NotFoundException e2) {
+				e2.printStackTrace();
 			}
-		}else {
-			System.out.println("로그인 정보가 없습니다. 로그인이 필요한 기능입니다.");
-		}
 		
 		return new ResponseDTO.Create(saveId, result);
 	}
 
 	//강의 수정
 	@PutMapping("/course")
-	public ResponseDTO.Update updateCourse(HttpServletRequest request, @RequestBody CourseDTO.Update dto) {
+	public ResponseDTO.Update updateCourse(CourseDTO.Update dto) {
 		System.out.println("-- 강의 수정 시도 --");
-		
-		boolean result = false;
-		if(request.getSession().getAttribute("teacher") != null) {
-			Object object = request.getSession().getAttribute("teacher");
-			Teacher entity = (Teacher)object;
-			
-			try {
-				Teacher teacher = teacherService.findOne(entity.getIdx());
-				Course course = courseService.findOne(dto.getIdx());
-				
-				if(course.getTeacherIdx().getIdx() == teacher.getIdx()) {
-					courseService.updateCourse(course.getIdx(), dto);
-					result = true;
-				}else {
-					System.out.println("본인의 강의만 수정할 수 있습니다.");
-				}
-			} catch (NotFoundException e1) {
-				e1.printStackTrace();
-			}
-		}else {
-			System.out.println("로그인 정보가 없습니다. 로그인이 필요한 기능입니다.");
+
+		boolean result = false;			
+		try {
+			Course course = courseService.findOne(dto.getIdx());
+			courseService.updateCourse(course.getIdx(), dto);
+			result = true;
+		} catch (NotFoundException e) {
+			e.printStackTrace();
 		}
 
 		return new ResponseDTO.Update(result);
@@ -98,38 +75,24 @@ public class CourseController {
 
 	//강의 삭제
 	@DeleteMapping("/course")
-	public ResponseDTO.Delete deleteCourse(HttpServletRequest request, @RequestBody CourseDTO.Delete dto) {
+	public ResponseDTO.Delete deleteCourse(CourseDTO.Delete dto) {
 		System.out.println("-- 강의 삭제 시도 --");
-		
-		boolean result = false;
-		if(request.getSession().getAttribute("teacher") != null) {
-			Object object = request.getSession().getAttribute("teacher");
-			Teacher entity = (Teacher)object;
-			
-			try {
-				Teacher teacher = teacherService.findOne(entity.getIdx());
-				Course course = courseService.findOne(dto.getIdx());
-				
-				if(course.getTeacherIdx().getIdx() == teacher.getIdx()) {
-					courseService.deleteCourse(course.getIdx(), dto);
-					result = true;
-				}else {
-					System.out.println("본인의 강의만 삭제할 수 있습니다.");
-				}
-			} catch (NotFoundException e1) {
-				e1.printStackTrace();
-			}
-		}else {
-			System.out.println("로그인 정보가 없습니다. 로그인이 필요한 기능입니다.");
+
+		boolean result = false;			
+		try {
+			Course course = courseService.findOne(dto.getIdx());
+			courseService.deleteCourse(course.getIdx(), dto);
+			result = true;
+		} catch (NotFoundException e) {
+			e.printStackTrace();
 		}
-		
+
 		return new ResponseDTO.Delete(result);
 	}
 	
-	//???idx로 하는 검색이 쓰일까요???
 	//강의 단일 검색
 	@GetMapping("/course")
-	public ResponseDTO.CourseResponse findOne(@RequestBody CourseDTO.Get dto) {
+	public ResponseDTO.CourseResponse findOne(CourseDTO.Get dto) {
 		System.out.println("-- 강의 단일 검색 시도 --");
 		
 		boolean result = false;
@@ -154,9 +117,9 @@ public class CourseController {
 		return new ResponseDTO.CourseListResponse(true, courseList);
 	}
 	
-	//특정 강의 제목으로 강의 리스트 검색
+	//특정 강의 제목 일부 포함된 강의 리스트 검색
 	@GetMapping("/course/titlecontaining")
-	public ResponseDTO.CourseListResponse findAllCourseByTitleContaining(@RequestBody CourseDTO.Get dto) {
+	public ResponseDTO.CourseListResponse findAllByTitleContaining(CourseDTO.Get dto) {
 		System.out.println("-- 강의 제목이 " + dto.getTitle() + "인 강의 리스트 검색 시도 --");
 		
 		List<Course> courseList = courseService.findAllByTitleContaining(dto);
@@ -165,28 +128,70 @@ public class CourseController {
 	}
 
 	//특정 선생님(자신)의 강의 리스트 검색
-	@GetMapping("/course/teacherIdx")
-	public ResponseDTO.CourseListResponse findAllByTeacherIdx(HttpServletRequest request) {
-		System.out.println("-- 특정 선생님의 강의 리스트 검색 시도 --");
+	@GetMapping("/course/myidx")
+	public ResponseDTO.CourseListResponse findAllByMyIdx(CourseDTO.Get dto) {
+		System.out.println("-- 나의 강의 리스트 검색 시도 --");
 		
 		boolean result = false;
 		List<Course> courseList = null;
-		if(request.getSession().getAttribute("teacher") != null) {
-			Object object = request.getSession().getAttribute("teacher");
-			Teacher entity = (Teacher)object;
-			
-			try {
-				Teacher teacher = teacherService.findOne(entity.getIdx());
-				courseList = teacher.getCourseList();
-				result = true;
-			} catch (NotFoundException e) {
-				e.printStackTrace();
-			}
-		}else {
-			System.out.println("로그인 정보가 없습니다. 로그인이 필요한 기능입니다.");
+		try {
+			Teacher teacher = teacherService.findOne(dto.getTeacherIdx());
+			courseList = teacher.getCourseList();
+			result = true;
+		} catch (NotFoundException e) {
+			e.printStackTrace();
 		}
-		
+
 		return new ResponseDTO.CourseListResponse(result, courseList);
 	}
+	
+	//과목으로 강의 리스트 검색
+	@GetMapping("/course/subject")
+	public ResponseDTO.CourseListResponse findAllBySubject(CourseDTO.Get dto) {
+		System.out.println("-- 특정 과목 강의 리스트 검색 시도 --");
 
+		List<Course> courseList = courseService.findAllBySubject(dto);
+
+		return new ResponseDTO.CourseListResponse(true, courseList);
+	}
+	
+	//타겟(대상학년)으로 강의 리스트 검색
+	@GetMapping("/course/target")
+	public ResponseDTO.CourseListResponse findAllByTarget(CourseDTO.Get dto) {
+		System.out.println("-- 특정 타겟으로 강의 리스트 검색 시도 --");
+
+		List<Course> courseList = courseService.findAllByTarget(dto);
+
+		return new ResponseDTO.CourseListResponse(true, courseList);
+	}
+	
+	//스케줄(요일)로 강의 리스트 검색
+	@GetMapping("/course/schedule")
+	public ResponseDTO.CourseListResponse findAllBySchedule(CourseDTO.Get dto) {
+		System.out.println("-- 특정 타겟으로 강의 리스트 검색 시도 --");
+
+		List<Course> courseList = courseService.findAllBySchedule(dto);
+
+		return new ResponseDTO.CourseListResponse(true, courseList);
+	}
+	
+	//타입(진행방식)으로 강의 리스트 검색
+	@GetMapping("/course/type")
+	public ResponseDTO.CourseListResponse findAllByType(CourseDTO.Get dto) {
+		System.out.println("-- 특정 타겟으로 강의 리스트 검색 시도 --");
+
+		List<Course> courseList = courseService.findAllByType(dto);
+
+		return new ResponseDTO.CourseListResponse(true, courseList);
+	}
+	
+	//가격으로 강의 리스트 검색(입력된 금액 이하 강의 찾기)
+	@GetMapping("/course/tuition")
+	public ResponseDTO.CourseListResponse findAllByTuition(CourseDTO.Get dto) {
+		System.out.println("-- 특정 타겟으로 강의 리스트 검색 시도 --");
+
+		List<Course> courseList = courseService.findAllByTuition(dto);
+
+		return new ResponseDTO.CourseListResponse(true, courseList);
+	}
 }

@@ -188,8 +188,8 @@ body {
 					letter-spacing: 1px;
 					outline: none;
         }
-					&:focus{
-						&+.input_detail {
+					.input:focus{
+						.input_detail {
 							font-size: 12px;
 							left: 10px;
 							top: 15%;

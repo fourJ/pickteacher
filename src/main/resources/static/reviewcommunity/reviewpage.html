@@ -8,7 +8,8 @@
 	<meta name="author" content="" />
 	<title>Pick Teacher</title>
 	<!-- Favicon-->
-	<link rel="icon" type="image/x-icon" href="/src/main/resources/static/assets/pick.ico" />
+	<link rel="icon" type="image/x-icon" href="../assets/pick.ico" />
+
 	<!-- Font Awesome icons (free version)-->
 	<script src="https://use.fontawesome.com/releases/v5.15.3/js/all.js" crossorigin="anonymous"></script>
 	<!-- Simple line icons-->
@@ -19,6 +20,9 @@
 		rel="stylesheet" type="text/css" />
 	<!-- Vue.js -->
 	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <!-- axios -->
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
 	<!-- stylesheet -->
 	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css" />
 	<link rel="stylesheet" href="../css/styles.css" />
@@ -83,51 +87,101 @@
     <a href="/index.html" class="logo">Pick Teacher</a>
   </div>
   <div class="w3header" style="background-color: #1D809F; margin-bottom: 30px;">
-    <a href="mypage_test.html" class="logo">ReivewList</a>
+    <a href="reivewall.html" class="logo">Reivew Write</a>
     <div class="w3header-right">
-      <a href="reviewmyall.html">내가 쓴 글</a>
+      <a href="reviewpage.html">후기 작성하기</a>
       <a href="reivewall.html">전체 후기</a>
-      <a href="student_cart.html">장바구니</a>
-      <a href="student_likes.html">찜한 강의</a>
-      <a href="http://127.0.0.1:5500/index.html">로그아웃</a>
-    </div>
+      <a href="reviewmyall.html">내가 쓴 글</a>
   </div>
-
+  </div>
   <h2>후기작성 페이지</h2>
-  <div>
-    <form action="/action_page.php">
-
-      <label for="subject">Subject</label>
-      <select id="subject" name="subject">
-        <option value="국어">국어</option>
-        <option value="영어">영어</option>
-        <option value="수학">수학</option>
+  <div id="reviewWrite">
+    
+      <label for="courseIdx">Subject</label>
+      <select v-model="selected">
+          <option>수강 강의 선택</option>
+          <option v-for="c in catalogList" v-bind:value="c.courseIdx.idx">{{c.courseIdx.title}}</option>
       </select>
 
-      <input type="submit" value="Submit"><br><br>
-
-      <form action="/action_page.php">
-
-        <label for="subjectTitle">SubjectTitle</label>
-        <select id="subjectTitle" name="subjectTitle">
-          <option value="고1국어">고1국어</option>
-          <option value="고2수학">고2수학</option>
-          <option value="고3영어">고3영어</option>
+        <br><br>
+        <label for="star">Star</label>
+        <select id="star" name="star" v-model="star">
+          <option value=1>☆</option>
+          <option value=2>☆☆</option>
+          <option value=3>☆☆☆</option>
+          <option value=4>☆☆☆☆</option>
+          <option value=5>☆☆☆☆☆</option>
         </select>
 
-        <input type="submit" value="Submit"><br><br>
-      </form>
-
-
+      <br><br>
+      
+        <br>
+        <label for="content">contents</label>
+        <input type="text" id="content" name="content" style="height: 100;" v-model="content">
+        <!-- <button><a href="reivewall.html">완료</a></button> -->
+        
+        <a type="submit" value="작성완료" @click="reviewWrite">작성완료</a>
+          <br><br>
+     </form>
   </div>
 
-  <form>
-    <br>
-    <label for="lname">contents</label>
-    <input type="text" id="lname" name="lname" value="Doe" style="height: 100;">
-    <button><a href="reivewall.html">완료</a></button>
-  </form>
 
+  <script>
+    new Vue({
+      el: "#reviewWrite",
+      data:{
+        success: "",
+        catalogList: "",
+        selected: "",
+        content: "",
+        star: "",
+        reviewWriteSuccess: ""
+      },
+      created:  
+        function () {
+                    axios({
+                        method: "get",
+                        url: "http://localhost/catalog/studentidx",
+                    })
+                        .then((resData) => {
+                            this.success = resData.data.success;
+                            this.catalogList = resData.data.catalogList;
+                        })
+                        .catch((errorData) => {
+                            return console.log(errorData);
+                        });
+    },
+      methods:{
+      reviewWrite: function(){
+        axios({
+          method: "post",
+          url: "http://localhost/review/enroll",
+          data : {
+            courseIdx : this.selected,
+            star : this.star,
+            content : this.content
+          }
+        })
+        .then((resData)=>{
+          this.reviewWriteSuccess = resData.data.success;
+          if(this.reviewWriteSuccess) {
+            alert("후기등록 성공");
+            window.location.reload()
+            location.href="http://localhost/reviewcommunity/reviewmyall.html";
+          }else{
+            alert("자신이 들은 강의만 후기를 남길 수 있습니다.");
+            location.href="http://localhost/reviewcommunity/reviewpage.html";
+          }
+        }).catch((errorData)=> {
+          return console.log(errorData);
+          location.href="http://localhost/reviewcommunity/reviewpage.html";
+          alert("에러");
+        })
+      },
+    
+    }
+    
+    })
+</script>
 </body>
-
 </html>

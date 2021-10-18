@@ -6,16 +6,19 @@ public class CartDTO {
 	
 	@Data
 	public static class Create {
+		private Long studentIdx;
 		private Long courseIdx;
 	}
 	
 	@Data
 	public static class Delete {
+		private Long studentIdx;
 		private Long courseIdx;
 	}
 	
 	@Data
 	public static class Get {
+		private Long studentIdx;
 		private Long courseIdx;
 	}
 }
