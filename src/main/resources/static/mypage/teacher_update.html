@@ -97,14 +97,15 @@
     <div>
         <div class="w3header">
             <a href="/index.html" class="logo">Pick Teacher</a>
+            <div class="w3header-right">
+                <a href="#">로그아웃</a>
+            </div>
         </div>
         <div class="w3header" id="header" v-if="success" style="background-color: #1d809f; margin-bottom: 30px">
-            <a href="mypage_student.html" class="logo">My Page</a>
+            <a href="mypage_teacher.html" class="logo">My Page</a>
             <div class="w3header-right">
-                <a @click="studentinfo">내 정보</a>
-                <a href="student_catalog.html">수강 내역</a>
-                <a href="student_cart.html">장바구니</a>
-                <a href="student_likes.html">찜한 강의</a>
+                <a href="mypage_teacher.html">내 정보</a>
+                <a href="teacher_courseList.html">내 강의목록</a>
             </div>
         </div>
     </div>
@@ -115,9 +116,9 @@
 
         <div style="margin-bottom: 50px">
             <div class="container px-4">
-                <form action="http://localhost/student" method="post">
+                <form action="http://localhost/teacher" method="post">
                     <input type="hidden" name="_method" value="put" />
-                    <input type="hidden" name="idx" v-bind:value="studentIdx" />
+                    <input type="hidden" name="idx" v-bind:value="teacherIdx" />
 
                     <label><b>아이디</b></label><br />
                     <input type="text" class="w3-input w3-border" style="
@@ -125,9 +126,7 @@
                                 cursor: no-drop;
                                 width: 500px;
                             " v-bind:value="datas.id" readonly /><br />
-                    <label><b>닉네임</b></label><br />
-                    <input type="text" class="w3-input w3-border" style="width: 500px" name="nickName"
-                        v-bind:value="datas.nickName" required /><br />
+
 
                     <label for="pw"><b>비밀번호</b></label><br />
                     <input type="password" id="pw1" class="w3-input w3-border" style="width: 500px" value=""
@@ -148,25 +147,29 @@
                                 cursor: no-drop;
                                 width: 500px;
                             " v-bind:value="datas.gender" readonly /><br />
-                    <label><b>생년월일</b></label><br />
-                    <input type="text" class="w3-input w3-border" style="
-                                background-color: #dedede;
-                                cursor: no-drop;
-                                width: 500px;
-                            " v-bind:value="datas.birth" readonly /><br />
-                    <label><b>나이</b></label><br />
-                    <input type="text" class="w3-input w3-border" style="
-                                background-color: #dedede;
-                                cursor: no-drop;
-                                width: 500px;
-                            " v-bind:value="datas.age" readonly /><br />
+
+
+                    <label><b>거주지</b></label><br />
+                    <input type="text" class="w3-input w3-border" style="width: 500px" name="address"
+                        v-bind:value="datas.address" required /><br />
+
                     <label><b>전화번호</b></label><br />
                     <input type="tel" class="w3-input w3-border" style="width: 500px" name="phone"
                         placeholder="XXX-XXXX-XXXX 형식으로 작성하세요" v-bind:value="datas.phone" pattern="^[0-9_-]{3,15}$"
                         required /><br />
-                    <label><b>거주지</b></label><br />
-                    <input type="text" class="w3-input w3-border" style="width: 500px" name="address"
-                        v-bind:value="datas.address" required /><br />
+
+                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-cell mdl-cell--12-col">
+                        <label class="mdl-textfield__label mdl-color-text--grey"
+                            for="textfield_new_username">Career</label>
+                        <input class="mdl-textfield__input" type="text" required="" name="career"
+                            v-bind:value="datas.career" list="careerList" />
+                        <datalist id="careerList">
+                            <option value="신입"></option>
+                            <option value="1-5년"></option>
+                            <option value="6-10년"></option>
+                            <option value="10년이상"></option>
+                        </datalist>
+                    </div>
 
                     <span style="margin-top: 100px; width: 500px">
                         <input type="submit" class="w3button" value="수정하기" style="
@@ -182,7 +185,7 @@
                                 width: 500px;
                                 margin: 20px 0px;
                                 background-color: red;
-                            " @click="deletestudent" />
+                            " @click="deleteteacher" />
                 </span>
             </div>
         </div>
@@ -212,43 +215,43 @@
             data: {
                 success: false,
                 datas: [],
-                nickName: "",
                 pw: "",
-                phone: "",
                 address: "",
-                studentIdx: sessionStorage.getItem("studentIdx"),
+                phone: "",
+                career: "",
+                teacherIdx: sessionStorage.getItem("teacherIdx"),
             },
             created: function () {
-                if (this.studentIdx != null) {
+                if (this.teacherIdx != null) {
                     axios({
                         method: "get",
-                        url: "http://localhost/student",
+                        url: "http://localhost/teacher",
                         params: {
-                            idx: sessionStorage.getItem("studentIdx"),
+                            idx: sessionStorage.getItem("teacherIdx"),
                         }
                     })
                         .then((resData) => {
                             this.success = resData.data.success;
-                            this.datas = resData.data.student;
+                            this.datas = resData.data.teacher;
                         })
                         .catch((errorData) => {
                             console.log(errorData.response.data.message);
                         });
                 } else {
                     if (window.confirm("잠깐!! 🤭 학생 회원이신가요?")) {
-                        window.location.href = "http://localhost/login/studentlogin.html";
+                        window.location.href = "http://localhost/login/teacherlogin.html";
                     } else {
                         window.location.href = "http://localhost/login/teacherlogin.html";
                     }
                 }
             },
             methods: {
-                deletestudent: function () {
+                deleteteacher: function () {
                     axios({
                         method: "delete",
-                        url: "http://localhost/student",
+                        url: "http://localhost/teacher",
                         params: {
-                            idx: sessionStorage.getItem("studentIdx")
+                            idx: sessionStorage.getItem("teacherIdx")
                         },
                     })
                         .then((resData) => {
@@ -263,7 +266,7 @@
                                     "http://localhost/index.html";
                             } else {
                                 window.location.href =
-                                    "http://localhost/mypage/mypage_student.html";
+                                    "http://localhost/mypage/teacher_update.html";
                             }
                         })
                         .catch((errorData) => {
@@ -278,32 +281,32 @@
             data: {
                 success: false,
                 datas: [],
-                studentIdx: sessionStorage.getItem("studentIdx"),
+                teacherIdx: sessionStorage.getItem("teacherIdx"),
             },
             created: function () {
                 axios({
                     method: "get",
-                    url: "http://localhost/student",
+                    url: "http://localhost/teacher",
                     params: {
-                        idx: sessionStorage.getItem("studentIdx"),
+                        idx: sessionStorage.getItem("teacherIdx"),
                     }
                 })
                     .then((resData) => {
                         this.success = resData.data.success;
-                        this.datas = resData.data.student;
+                        this.datas = resData.data.teacher;
                     })
                     .catch((errorData) => {
                         console.log(errorData.response.data.message);
                     });
             },
             methods: {
-                studentinfo: function () {
-                    if (this.studentIdx != null) {
+                teacherinfo: function () {
+                    if (this.teacherIdx != null) {
                         axios({
                             method: "get",
-                            url: "http://localhost/student",
+                            url: "http://localhost/teacher",
                             params: {
-                                idx: this.studentIdx,
+                                idx: this.teacherIdx,
                             }
                         })
                             .then((resData) => {
@@ -311,7 +314,7 @@
                                 var inputpw = prompt("비밀번호를 입력하세요:)");
                                 if (inputpw == this.datas.pw) {
                                     window.location.href =
-                                        "http://localhost/mypage/mypage_student.html";
+                                        "http://localhost/mypage/teacher_update.html";
                                     console.log("성공");
                                 } else {
                                     alert("비밀번호를 재입력하세요!");
@@ -322,7 +325,7 @@
                             });
                     } else {
                         if (window.confirm("잠깐!! 🤭 학생 회원이신가요?")) {
-                            window.location.href = "http://localhost/login/studentlogin.html";
+                            window.location.href = "http://localhost/login/teacherlogin.html";
                         } else {
                             window.location.href = "http://localhost/login/teacherlogin.html";
                         }

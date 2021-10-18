@@ -244,7 +244,7 @@
                         })
                             .then((resData) => {
                                 if (resData.data.success) {
-                                    alert("찜 저장");
+                                    alert("찜 저장 성공");
                                     if (window.confirm("내 찜 목록으로 이동할까요?")) {
                                         window.location.href = "http://localhost/mypage/student_likes.html";
                                     } else {
@@ -264,7 +264,7 @@
                             })
                     } else {
                         alert("로그인이 필요한 기능입니다.");
-                        window.location.href = "#로그인 페이지";
+                        window.location.href = "http://localhost/login/studentlogin.html";
                     }
                 },
                 deleteLikes: function () {
@@ -272,14 +272,14 @@
                         axios({
                             method: "delete",
                             url: "http://localhost/likes",
-                            data: {
+                            params: {
                                 studentIdx: this.studentIdx,
                                 courseIdx: this.courseIdx,
                             },
                         })
                             .then((resData) => {
                                 if (resData.data.success) {
-                                    alert("찜 삭제");
+                                    alert("찜 삭제 성공");
                                     if (window.confirm("내 찜 목록으로 이동할까요?")) {
                                         window.location.href = "http://localhost/mypage/student_likes.html";
                                     } else {
@@ -299,7 +299,7 @@
                             })
                     } else {
                         alert("로그인이 필요한 기능입니다.");
-                        window.location.href = "#로그인 페이지";
+                        window.location.href = "http://localhost/login/studentlogin.html";
                     }
                 },
                 saveCart: function () {
@@ -334,7 +334,7 @@
                             })
                     } else {
                         alert("로그인이 필요한 기능입니다.");
-                        window.location.href = "#로그인 페이지";
+                        window.location.href = "http://localhost/login/studentlogin.html";
                     }
                 },
                 saveCatalog: function () {
@@ -370,7 +370,7 @@
                             })
                     } else {
                         alert("로그인이 필요한 기능입니다.");
-                        window.location.href = "#로그인 페이지";
+                        window.location.href = "http://localhost/login/studentlogin.html";
                     }
                 },
                 getReviewList: function () {
