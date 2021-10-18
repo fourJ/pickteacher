@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 
 <head>
     <meta charset="utf-8" />
@@ -110,83 +110,128 @@
     </div>
 
     <div class="w3-container" id="app" style="margin: 50px">
-        <h3>나의 장바구니</h3>
+        <h3>내 정보</h3>
         <hr />
 
-        <div style="margin-top: 30px;" v-if="resultSize == '0'">장바구니에 담은 강의가 없어요. 강의를 담아 주세요:)</div>
+        <div style="margin-bottom: 50px">
+            <div class="container px-4">
+                <form action="http://localhost/student" method="post">
+                    <input type="hidden" name="_method" value="put" />
+                    <input type="hidden" name="idx" v-bind:value="studentIdx" />
 
-        <div v-if="success && resultSize != '0'">
-            <table class="w3-table-all" v-show="success">
-                <tr class="w3-red">
-                    <th>선생님</th>
-                    <th>과목</th>
-                    <th>강의명</th>
-                    <th>수업시간</th>
-                    <th>유형</th>
-                    <th>개강일</th>
-                    <th>종강일</th>
-                    <th>상태</th>
-                    <th>정원</th>
-                    <th>수강료</th>
-                    <th>대상 학년</th>
-                    <th>선택</th>
-                    <th>선택</th>
-                </tr>
-                <tr v-for="v in datas">
-                    <td>{{v.courseIdx.teacherIdx.name}}</td>
-                    <td>{{v.courseIdx.subject}}</td>
-                    <td>{{v.courseIdx.title}}</td>
-                    <td>{{v.courseIdx.schedule}}</td>
-                    <td>{{v.courseIdx.type}}</td>
-                    <td>{{v.courseIdx.openDate}}</td>
-                    <td>{{v.courseIdx.closeDate}}</td>
-                    <td>{{v.courseIdx.status}}</td>
-                    <td>{{v.courseIdx.headCount}}</td>
-                    <td>{{v.courseIdx.tuition}}</td>
-                    <td>{{v.courseIdx.target}}</td>
-                    <td>
-                        <a class="w3button" v-bind:href="sendurl + v.courseIdx.idx">수강 신청</a>
-                    </td>
-                    <td>
-                        <span class="w3button" @click="deleteCart(v.courseIdx.idx)">삭제하기</span>
-                    </td>
-                    <!-- v-bind:href="deleteurl + v.courseIdx.idx" -->
-                </tr>
-            </table>
+                    <label><b>아이디</b></label><br />
+                    <input type="text" class="w3-input w3-border" style="
+                                background-color: #dedede;
+                                cursor: no-drop;
+                                width: 500px;
+                            " v-bind:value="datas.id" readonly /><br />
+                    <label><b>닉네임</b></label><br />
+                    <input type="text" class="w3-input w3-border" style="width: 500px" name="nickName"
+                        v-bind:value="datas.nickName" required /><br />
 
+                    <label for="pw"><b>비밀번호</b></label><br />
+                    <input type="password" id="pw1" class="w3-input w3-border" style="width: 500px" value=""
+                        placeholder="새로운 비밀번호를 입력하세요:)" name="pw" required /><br />
+                    <label for="pw2"><b>비밀번호 확인</b></label><br />
+                    <input type="password" id="pw2" class="w3-input w3-border" style="width: 500px" value=""
+                        placeholder="비밀번호를 한 번 더 입력하세요:)" onchange="check()" required /><br />
+
+                    <label><b>이름</b></label><br />
+                    <input type="text" class="w3-input w3-border" style="
+                                background-color: #dedede;
+                                cursor: no-drop;
+                                width: 500px;
+                            " v-bind:value="datas.name" readonly /><br />
+                    <label><b>성별</b></label><br />
+                    <input type="text" class="w3-input w3-border" style="
+                                background-color: #dedede;
+                                cursor: no-drop;
+                                width: 500px;
+                            " v-bind:value="datas.gender" readonly /><br />
+                    <label><b>생년월일</b></label><br />
+                    <input type="text" class="w3-input w3-border" style="
+                                background-color: #dedede;
+                                cursor: no-drop;
+                                width: 500px;
+                            " v-bind:value="datas.birth" readonly /><br />
+                    <label><b>나이</b></label><br />
+                    <input type="text" class="w3-input w3-border" style="
+                                background-color: #dedede;
+                                cursor: no-drop;
+                                width: 500px;
+                            " v-bind:value="datas.age" readonly /><br />
+                    <label><b>전화번호 (XXX-XXXX-XXXX 형식으로 작성하세요)</b></label><br />
+                    <input type="tel" class="w3-input w3-border" style="width: 500px" name="phone"
+                        v-bind:value="datas.phone" pattern="^[0-9_-]{3,15}$" required /><br />
+                    <label><b>거주지</b></label><br />
+                    <input type="text" class="w3-input w3-border" style="width: 500px" name="address"
+                        v-bind:value="datas.address" v-on:keyup.enter="updatestudent" required /><br />
+
+                    <span style="margin-top: 100px; width: 500px">
+                        <input type="submit" class="w3button" value="수정하기" style="
+                                    height: 40px;
+                                    width: 500px;
+                                    margin: 20px 0px;
+                                " />
+                    </span>
+                </form>
+                <span style="margin-top: 100px; width: 500px">
+                    <input type="submit" class="w3button" value="탈퇴하기" style="
+                                height: 40px;
+                                width: 500px;
+                                margin: 20px 0px;
+                                background-color: red;
+                            " @click="deletestudent" />
+                </span>
+            </div>
         </div>
     </div>
 
-    <script>
+    <script type="text/javascript">
+        function check() {
+            var pw1 = document.getElementById("pw1").value;
+            var pw2 = document.getElementById("pw2").value;
+            if (pw1 != "" && pw2 != "") {
+                if (pw1 != pw2) {
+                    alert("비밀번호가 일치하지 않습니다!");
+                    window.location.reload();
+                } else {
+                    return true;
+                }
+            } else {
+                alert("비밀번호를 입력해주세요! \n기존 비밀번호도 사용 가능합니다:)");
+                window.location.reload();
+            }
+        }
+    </script>
+
+    <script type="text/javascript">
         new Vue({
             el: "#app",
             data: {
                 success: false,
                 datas: [],
-                sendurl: "http://localhost/sendCatalog/",
-                resultSize: "",
+                nickName: "",
+                pw: "",
+                phone: "",
+                address: "",
                 studentIdx: sessionStorage.getItem("studentIdx"),
-                // courseIdx: "",
             },
             created: function () {
                 if (this.studentIdx != null) {
                     axios({
                         method: "get",
-                        url: "http://localhost/cart/studentidx",
+                        url: "http://localhost/student",
                         params: {
-                        studentIdx: sessionStorage.getItem("studentIdx")
-
+                            idx: sessionStorage.getItem("studentIdx"),
                         }
                     })
                         .then((resData) => {
                             this.success = resData.data.success;
-                            this.datas = resData.data.cartList;
-                            // this.resultSize = this.data.length;
-                            this.courseIdx = resData.datas.cartList.courseIdx.idx;
+                            this.datas = resData.data.student;
                         })
                         .catch((errorData) => {
-                            // console.log(errorData.response.data.message);
-                            alert(errorData)
+                            console.log(errorData.response.data.message);
                         });
                 } else {
                     if (window.confirm("잠깐!! 🤭 학생 회원이신가요?")) {
@@ -197,20 +242,28 @@
                 }
             },
             methods: {
-                deleteCart: function (idx) {
+                deletestudent: function () {
                     axios({
                         method: "delete",
-                        url: "http://localhost/cart",
+                        url: "http://localhost/student",
                         params: {
-                            studentIdx: this.studentIdx,
-                            courseIdx: idx,
+                            idx: sessionStorage.getItem("studentIdx")
                         },
                     })
                         .then((resData) => {
-                            this.success = resData.data.success;
-                            console.log("삭제성공");
-                            alert("삭제성공");
-                            window.location.reload();
+                            if (
+                                window.confirm("정말 나가시겠어요...? 😥")
+                            ) {
+                                this.success = resData.data.success;
+                                console.log(resData.data.success);
+                                alert("탈퇴했습니다.. 또 오세요ㅠㅠ");
+                                sessionStorage.clear();
+                                window.location.href =
+                                    "http://localhost/index.html";
+                            } else {
+                                window.location.href =
+                                    "http://localhost/mypage/student_info.html";
+                            }
                         })
                         .catch((errorData) => {
                             console.log(errorData.response.data.message);
@@ -231,7 +284,7 @@
                     method: "get",
                     url: "http://localhost/student",
                     params: {
-                        studentIdx: sessionStorage.getItem("studentIdx"),
+                        idx: sessionStorage.getItem("studentIdx"),
                     }
                 })
                     .then((resData) => {
@@ -239,7 +292,7 @@
                         this.datas = resData.data.student;
                     })
                     .catch((errorData) => {
-                        // console.log(errorData.response.data.message);
+                        console.log(errorData.response.data.message);
                     });
             },
             methods: {
@@ -277,6 +330,11 @@
             },
         });
     </script>
+
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top"><i class="fas fa-angle-up"></i></a>
+    <!-- Bootstrap core JS-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

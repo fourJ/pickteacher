@@ -14,10 +14,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.view.RedirectView;
 
 import kr.pe.fourj.domain.Catalog;
 import kr.pe.fourj.domain.Course;
 import kr.pe.fourj.domain.Student;
+import kr.pe.fourj.dto.CourseDTO;
 import kr.pe.fourj.dto.ResponseDTO;
 import kr.pe.fourj.dto.StudentDTO;
 import kr.pe.fourj.exception.Exception.ArgumentNullException;
@@ -90,7 +92,7 @@ public class StudentController {
 
 	//학생 수정
 	@PutMapping("/student")
-	public ResponseDTO.Update updateStudent(StudentDTO.Update dto) {
+	public RedirectView updateStudent(StudentDTO.Update dto) {
 		System.out.println("-- 학생 수정 시도 --");
 
 		boolean result = false;
@@ -101,7 +103,7 @@ public class StudentController {
 			e.printStackTrace();
 		}
 
-		return new ResponseDTO.Update(result);
+		return new RedirectView("mypage/student_info.html");
 	}
 
 	//학생 삭제
