@@ -1,5 +1,6 @@
 package kr.pe.fourj.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,13 +12,17 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.view.RedirectView;
 
+import kr.pe.fourj.domain.Catalog;
 import kr.pe.fourj.domain.Course;
+import kr.pe.fourj.domain.Student;
 import kr.pe.fourj.domain.Teacher;
 import kr.pe.fourj.dto.CourseDTO;
 import kr.pe.fourj.dto.ResponseDTO;
 import kr.pe.fourj.exception.Exception.ArgumentNullException;
 import kr.pe.fourj.exception.Exception.NotFoundException;
 import kr.pe.fourj.service.CourseService;
+import kr.pe.fourj.service.ReviewService;
+import kr.pe.fourj.service.StudentService;
 import kr.pe.fourj.service.TeacherService;
 
 @RestController
@@ -27,6 +32,10 @@ public class CourseController {
 	private CourseService courseService;
 	@Autowired
 	private TeacherService teacherService;
+	@Autowired
+	private StudentService studentService;
+	@Autowired
+	private ReviewService reviewService;
 	
 	//강의 저장
 	@PostMapping("/course")
@@ -194,4 +203,30 @@ public class CourseController {
 
 		return new ResponseDTO.CourseListResponse(true, courseList);
 	}
+	
+	//특정 학생이 수강했지만 리뷰는 남기지 않은 강의 리스트 검색
+	@GetMapping("/course/noreview")
+	public ResponseDTO.CourseListResponse findAllNoReview(CourseDTO.Get dto) {
+		System.out.println("-- 특정 학생이 수강했지만 리뷰는 남기지 않은 강의 리스트 검색 시도 --");
+		
+		boolean result = false;
+		List<Course> courseList = new ArrayList<Course>();
+		try {
+			Student student = studentService.findOne(dto.getStudentIdx());
+			List<Catalog> studentCatalogList = student.getCatalogList();
+			
+			for(int i = 0; i < studentCatalogList.size(); i++) {
+				if(reviewService.isNotAlreadyReview(student, studentCatalogList.get(i).getCourseIdx())) {
+					courseList.add(studentCatalogList.get(i).getCourseIdx());
+				}
+			}
+			result = true;
+			
+		} catch (NotFoundException e) {
+			e.printStackTrace();
+		}
+		
+		return new ResponseDTO.CourseListResponse(result, courseList);
+	}
+	
 }

@@ -76,8 +76,36 @@
         <hr />
 
         <div v-if="success">
-            <div class="container px-4">
+            <div>
                 <h5>{{datas.name}}님, 오늘도 화이팅:)</h5>
+            </div>
+
+            <div style="margin-top: 30px;">
+                <table class="w3-table-all" v-show="success">
+                    <thead>
+                        <tr class="w3-green">
+                            <th>이름</th>
+                            <th>닉네임</th>
+                            <th>아이디</th>
+                            <th>생년월일</th>
+                            <th>나이</th>
+                            <th>성별</th>
+                            <th>연락처</th>
+                            <th>주소</th>
+                        </tr>
+                    </thead>
+                    <tr>
+                        <td>{{datas.name}}</td>
+                        <td>{{datas.nickName}}</td>
+                        <td>{{datas.id}}</td>
+                        <td>{{datas.birth}}</td>
+                        <td>{{datas.age}}</td>
+                        <td>{{datas.gender}}</td>
+                        <td>{{datas.phone}}</td>
+                        <td>{{datas.address}}</td>
+                    </tr>
+                </table>
+
             </div>
         </div>
     </div>
@@ -152,21 +180,19 @@
                             .then((resData) => {
                                 this.success = resData.data.success;
                                 var inputpw = prompt("비밀번호를 입력하세요:)");
-                                if(inputpw != null) {
+                                if (inputpw != null) {
                                     if (inputpw == this.datas.pw) {
                                         window.location.href =
-                                            "http://localhost/mypage/student_info.html";
+                                            "http://localhost/mypage/student_update.html";
                                         console.log("성공");
                                     } else {
                                         alert("비밀번호를 재입력하세요!");
                                     }
-                                }else {
+                                } else {
+
                                     window.location.reload();
                                 }
                             })
-                            .catch((errorData) => {
-                                console.log(errorData.response.data.message);
-                            });
                     } else {
                         if (window.confirm("잠깐!! 🤭 학생 회원이신가요?")) {
                             window.location.href = "http://localhost/login/studentlogin.html";

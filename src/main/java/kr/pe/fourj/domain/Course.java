@@ -74,15 +74,15 @@ public class Course {
 	@NonNull
 	private String target;
 	
-	@OneToMany(mappedBy="courseIdx", cascade=CascadeType.REMOVE)
+	@OneToMany(mappedBy="courseIdx", cascade=CascadeType.ALL)
 	@JsonBackReference
 	private List<Review> reviewList;
 	
-	@OneToMany(mappedBy="courseIdx", cascade=CascadeType.REMOVE)
+	@OneToMany(mappedBy="courseIdx", cascade=CascadeType.ALL)
 	@JsonBackReference
 	private List<Catalog> catalogList;
 	
-	@OneToMany(mappedBy="courseIdx", cascade=CascadeType.REMOVE)
+	@OneToMany(mappedBy="courseIdx", cascade=CascadeType.ALL)
 	@JsonBackReference
 	private List<Likes> likesList;
 
