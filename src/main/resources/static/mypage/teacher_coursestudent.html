@@ -1,159 +1,143 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8" />
-        <meta
-            name="viewport"
-            content="width=device-width, initial-scale=1, shrink-to-fit=no"
-        />
-        <meta name="description" content="" />
-        <meta name="author" content="" />
-        <title>Pick Teacher</title>
-        <!-- Favicon-->
-        <link rel="icon" type="image/x-icon" href="../assets/pick.ico" />
 
-        <!-- Font Awesome icons (free version)-->
-        <script
-            src="https://use.fontawesome.com/releases/v5.15.3/js/all.js"
-            crossorigin="anonymous"
-        ></script>
-        <!-- Simple line icons-->
-        <link
-            href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.5.5/css/simple-line-icons.min.css"
-            rel="stylesheet"
-        />
-        <!-- Google fonts-->
-        <link
-            href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic"
-            rel="stylesheet"
-            type="text/css"
-        />
-        <!-- Vue.js -->
-        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-        <!-- stylesheet -->
-        <link
-            rel="stylesheet"
-            href="https://www.w3schools.com/w3css/4/w3.css"
-        />
-        <link rel="stylesheet" href="../css/styles.css" />
-        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-        <style>
-            .mySlides {
-                display: none;
-            }
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>Pick Teacher</title>
+    <!-- Favicon-->
+    <link rel="icon" type="image/x-icon" href="../assets/pick.ico" />
 
-            .w3-left,
-            .w3-right,
-            .w3-badge {
-                cursor: pointer;
-            }
+    <!-- Font Awesome icons (free version)-->
+    <script src="https://use.fontawesome.com/releases/v5.15.3/js/all.js" crossorigin="anonymous"></script>
+    <!-- Simple line icons-->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.5.5/css/simple-line-icons.min.css"
+        rel="stylesheet" />
+    <!-- Google fonts-->
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic"
+        rel="stylesheet" type="text/css" />
+    <!-- Vue.js -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <!-- stylesheet -->
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css" />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <style>
+        .mySlides {
+            display: none;
+        }
 
-            .w3-badge {
-                height: 13px;
-                width: 13px;
-                padding: 0;
-            }
+        .w3-left,
+        .w3-right,
+        .w3-badge {
+            cursor: pointer;
+        }
 
-            .w3header {
-                padding: 0;
-            }
+        .w3-badge {
+            height: 13px;
+            width: 13px;
+            padding: 0;
+        }
 
-            th,
-            td {
-                text-align: left;
-                padding: 5px;
-            }
+        .w3header {
+            padding: 0;
+        }
 
-            tr:nth-child(even) {
-                background-color: #f2f2f2;
-            }
+        th,
+        td {
+            text-align: left;
+            padding: 5px;
+        }
 
-            th {
-                background-color: #04aa6d;
-                color: white;
-            }
-        </style>
-    </head>
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
 
-    <body>
-        <div class="w3header">
-            <a href="/index.html" class="logo">Pick Teacher</a>
+        th {
+            background-color: #04aa6d;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="w3header">
+        <a href="/index.html" class="logo">Pick Teacher</a>
+    </div>
+    <div class="w3header" style="background-color: #1d809f; margin-bottom: 30px">
+        <a href="reivewall.html" class="logo">My StudentList</a>
+        <!--  -->
+    </div>
+
+    <div id="app" style="margin: 50px">
+        <h3>나의 학생 리스트</h3>
+        <hr />
+        <div v-if="resData">
+            <table style="width: 100%" v-show="resData">
+                <tr>
+                    <th>학생번호</th>
+                    <th>작성자</th>
+                    <th>아이디</th>
+                    <th>생년월일</th>
+                    <th>나이</th>
+                    <th>닉네임</th>
+                    <th>성별</th>
+                    <th>주소</th>
+                    <th>연락처</th>
+                </tr>
+                <tr v-for="s in studentList">
+                    <td>{{s.idx}}</td>
+                    <td>{{s.name}}</td>
+                    <td>{{s.id}}</td>
+                    <td>{{s.birth}}</td>
+                    <td>{{s.age}}</td>
+                    <td>{{s.nickName}}</td>
+                    <td>{{s.gender}}</td>
+                    <td>{{s.address}}</td>
+                    <td>{{s.phone}}</td>
+                </tr>
+            </table>
         </div>
-        <div
-            class="w3header"
-            style="background-color: #1d809f; margin-bottom: 30px"
-        >
-            <a href="reivewall.html" class="logo">My StudentList</a>
-            <!--  -->
-        </div>
+    </div>
 
-        <div id="app" style="margin: 50px">
-            <!-- <button @click="reqResAjax()">내가 작성한 후기보기</button> -->
-            <h3>나의 학생 리스트</h3>
-            <hr />
-            <div v-if="resData">
-                <table style="width: 100%" v-show="resData">
-                    <tr>
-                        <th>학생번호</th>
-                        <th>작성자</th>
-                        <th>아이디</th>
-                        <th>생년월일</th>
-                        <th>나이</th>
-                        <th>닉네임</th>
-                        <th>성별</th>
-                        <th>주소</th>
-                        <th>연락처</th>
-                    </tr>
-                    <tr v-for="s in studentList">
-                        <td>{{s.idx}}</td>
-                        <td>{{s.name}}</td>
-                        <td>{{s.id}}</td>
-                        <td>{{s.birth}}</td>
-                        <td>{{s.age}}</td>
-                        <td>{{s.nickName}}</td>
-                        <td>{{s.gender}}</td>
-                        <td>{{s.address}}</td>
-                        <td>{{s.phone}}</td>
-                    </tr>
-                </table>
-            </div>
-        </div>
+    <script>
+        new Vue({
+            el: "#app",
+            data: {
+                resData: false,
+                datas: [],
+                courseIdx: window.location.search.substring(
+                    window.location.search.indexOf("=") + 1
+                ),
 
-        <script>
-            new Vue({
-                el: "#app",
-                data: {
-                    resData: false,
-                    datas: [],
-                    courseIdx: window.location.search.substring(
-                        window.location.search.indexOf("=") + 1
-                    ),
+                studentList: [],
+            },
 
-                    studentList: [],
-                },
+            created: function () {
+                axios({
+                    method: "get",
+                    url: "http://localhost/student/courseIdx",
+                    params: {
+                        courseIdx: this.courseIdx,
+                    },
+                })
+                    .then((resData) => {
+                        this.resData = true;
 
-                created: function () {
-                    axios({
-                        method: "get",
-                        url: "http://localhost/student/courseIdx",
-                        params: {
-                            courseIdx: this.courseIdx,
-                        },
+                        console.log(resData.data);
+                        this.studentList = resData.data.studentList;
+                        console.log(this.studentList);
                     })
-                        .then((resData) => {
-                            this.resData = true;
+                    .catch((errorData) => {
+                        alert(errorData);
+                        console.log(errorData);
+                    });
+            },
+        });
+    </script>
+</body>
 
-                            console.log(resData.data);
-                            this.studentList = resData.data.studentList;
-                            console.log(this.studentList);
-                        })
-                        .catch((errorData) => {
-                            alert(errorData);
-                            console.log(errorData);
-                        });
-                },
-            });
-        </script>
-    </body>
 </html>

@@ -114,10 +114,8 @@ public class RedirectResponse {
 	public RedirectView updateTeacher(TeacherDTO.Update dto) {
 		System.out.println("-- 선생님 수정 시도 --");
 		
-		boolean result = false;
 		try {
 			teacherService.updateTeacher(dto);
-			result = true;
 		} catch (NotFoundException e) {
 			e.printStackTrace();
 		}		

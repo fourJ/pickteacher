@@ -64,14 +64,15 @@
 </head>
 
 <body>
+    <!-- Header -->
     <div id="header" class="w3header">
         <a href="http://localhost/index.html" class="logo">Pick Teacher</a>
         <div v-if="studentIdx == null && teacherIdx == null" class="w3header-right">
-            <a id="#studentLog" onclick="login()">로그인</a>
-            <a id="signup" onclick="signup()">회원 가입</a>
+            <a class="login" @click="login" style="color: white; cursor: pointer;">로그인</a>
+            <a class="signup" @click="signup" style="color: white; cursor: pointer;">회원 가입</a>
         </div>
         <div v-if="studentIdx != null || teacherIdx != null" class="w3header-right">
-            <a href="http://localhost/login/index.html">로그아웃</a>
+            <a @click="logout" style="color: white; cursor: pointer;">로그아웃</a>
         </div>
     </div>
 

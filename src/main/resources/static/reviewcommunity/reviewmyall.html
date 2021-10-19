@@ -93,7 +93,7 @@
     <div id="header" class="w3header">
         <a href="/index.html" class="logo">Pick Teacher</a>
         <div v-if="studentIdx != null || teacherIdx != null" class="w3header-right">
-            <a @click="logout">로그아웃</a>
+            <a @click="logout" style="color: white; cursor: pointer;">로그아웃</a>
         </div>
     </div>
     <div class="w3header" style="background-color: #1d809f; margin-bottom: 30px">
@@ -109,7 +109,6 @@
     <div id="review" class="w3-container" style="margin: 50px">
         <h3>내가 쓴 후기</h3>
         <hr />
-        <!-- <button @click="reqResAjax()">내가 작성한 후기보기</button> -->
         <div v-if="resData">
             <table style="width: 100%" v-show="resData">
                 <tr>
