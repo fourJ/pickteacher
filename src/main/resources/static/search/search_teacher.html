@@ -107,18 +107,22 @@
 
 <body>
     <!-- Header -->
-    <div class="w3header">
-        <a href="/index.html" class="logo">Pick Teacher</a>
-        <div class="w3header-right">
-            <a href="#로그인">로그인</a>
-            <a href="#회원가입페이지">회원가입</a>
+    <div id="header" class="w3header">
+        <a href="http://localhost/index.html" class="logo">Pick Teacher</a>
+        <div v-if="studentIdx == null && teacherIdx == null" class="w3header-right">
+            <a id="#studentLog" onclick="login()">로그인</a>
+            <a id="signup" onclick="signup()">회원 가입</a>
         </div>
-        <!-- 로그인했을 때 보여야하는 내용은 다르게! -->
-    </div>
-    <div class="w3header" style="background-color: #1d809f; margin-bottom: 30px">
-        <a href="http://localhost/search/search_teacher.html" class="logo">선생님 찾기</a>
+        <div v-if="studentIdx != null || teacherIdx != null" class="w3header-right">
+            <a href="http://localhost/login/index.html">로그아웃</a>
+        </div>
     </div>
 
+    <div class="w3header" style="background-color: #1d809f; margin-bottom: 30px">
+        <a href="http://localhost/detail/course.html" class="logo">Search Teacher</a>
+    </div>
+
+    <!-- Main -->
     <div id="app" style="margin: 50px">
         <h3>선생님 검색하기</h3>
         <hr />
@@ -383,6 +387,25 @@
                 },
             },
         });
+
+        new Vue({
+            el: "#header",
+            data: {
+                studentIdx: sessionStorage.getItem("studentIdx"),
+                teacherIdx: sessionStorage.getItem("teacherIdx")
+            },
+            methods: {
+                logout: function () {
+                    if (sessionStorage != null) {
+                        sessionStorage.clear();
+                        alert("로그아웃 성공 💨");
+                        window.location.href = "http://localhost/index.html";
+                    } else {
+                        alert("로그아웃 실패");
+                    }
+                },
+            }
+        })
     </script>
 </body>
 

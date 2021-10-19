@@ -83,9 +83,14 @@
 
 <body>
 
-  <div class="w3header">
+  <!-- Header -->
+  <div id="header" class="w3header">
     <a href="/index.html" class="logo">Pick Teacher</a>
+    <div v-if="studentIdx != null || teacherIdx != null" class="w3header-right">
+      <a @click="logout">로그아웃</a>
+    </div>
   </div>
+
   <div class="w3header" style="background-color: #1D809F; margin-bottom: 30px;">
     <a href="reivewall.html" class="logo">Reivew Write</a>
     <div class="w3header-right">
@@ -198,6 +203,25 @@
 
     }
 
+  })
+
+  new Vue({
+    el: "#header",
+    data: {
+      studentIdx: sessionStorage.getItem("studentIdx"),
+      teacherIdx: sessionStorage.getItem("teacherIdx")
+    },
+    methods: {
+      logout: function () {
+        if (sessionStorage != null) {
+          sessionStorage.clear();
+          alert("로그아웃 성공 💨");
+          window.location.href = "http://localhost/index.html";
+        } else {
+          alert("로그아웃 실패");
+        }
+      },
+    }
   })
 </script>
 </body>

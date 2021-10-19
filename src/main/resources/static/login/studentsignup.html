@@ -53,14 +53,19 @@
 </style>
 
 <body class="mdl-color--blue-grey-50">
-    <div class="w3header">
-        <a href="/index.html" class="logo">Pick Teacher</a>
-        <div class="w3header-right">
-            <a href="http://localhost/login/studentlogin.html">로그인</a>
+    <!-- Header -->
+    <div id="header" class="w3header">
+        <a href="http://localhost/index.html" class="logo">Pick Teacher</a>
+        <div v-if="studentIdx == null && teacherIdx == null" class="w3header-right">
+            <a class="login" @click="login">로그인</a>
+            <a class="signup" @click="signup">회원 가입</a>
+        </div>
+        <div v-if="studentIdx != null || teacherIdx != null" class="w3header-right">
+            <a @click="logout">로그아웃</a>
         </div>
     </div>
     <div class="w3header" style="background-color: #1d809f; margin-bottom: 30px">
-        <a href="mypage_test.html" class="logo">강의 찾기</a>
+        <a href="http://localhost/login/studentsignup.html" class="logo">Student SignUp</a>
     </div>
 
     <!-- REGISTER FORM -->
@@ -238,6 +243,24 @@
                 window.location.reload();
             }
         }
+
+        new Vue({
+            el: "#header",
+            data: {
+                studentIdx: sessionStorage.getItem("studentIdx"),
+                teacherIdx: sessionStorage.getItem("teacherIdx")
+            },
+            methods: {
+                logout: function () {
+                    if (sessionStorage != null) {
+                        sessionStorage.clear();
+                        alert("로그아웃 성공 💨");
+                    } else {
+                        alert("로그아웃 실패");
+                    }
+                },
+            }
+        })
     </script>
 </body>
 

@@ -114,7 +114,7 @@ function reviewcommunity(url) {
     if (sessionStorage.getItem("studentIdx") != null) {
         window.location.href = "http://localhost/reviewcommunity/reivewall.html"
     } else if (sessionStorage.getItem("teacherIdx") != null) {
-        window.location.href = "http://localhost/reviewcommunity/reivewall.html";
+        window.location.href = "http://reviewcommunity/reivewall.html";
     } else {
         alert("로그인은 하셨나요? 🤔");
     }
@@ -156,10 +156,10 @@ const studentsignup = document.querySelector("#studentsignup");
 const teachersignup = document.querySelector("#teachersignup");
 
 studentsignup.addEventListener("click", function () {
-    window.location.href = "http://localhost/login/studentsignup.html";
+    window.location.href = "login/studentsignup.html";
 })
 teachersignup.addEventListener("click", function () {
-    window.location.href = "http://localhost/login/teachersignup.html";
+    window.location.href = "login/teachersignup.html";
 })
 
 function signup() {
@@ -184,9 +184,9 @@ function signup() {
 //  로그인 유형별 마이페이지 구분 =======================================================================
 function mypage(url) {
     if (sessionStorage.getItem("studentIdx") != null) {
-        window.location.href = "http://localhost/mypage/mypage_student.html";
+        window.location.href = "mypage/mypage_student.html";
     } else if (sessionStorage.getItem("teacherIdx") != null) {
-        window.location.href = "http://localhost/mypage/mypage_teacher.html";
+        window.location.href = "mypage/mypage_teacher.html";
     } else {
         alert("로그인은 하셨나요? 🤔");
     }

@@ -44,64 +44,30 @@
 
         .w3header {
             padding: 0;
-        }
-
-        .w3button {
-            border: none;
-            display: inline-block;
-            padding: 6px 12px;
-            vertical-align: middle;
-            overflow: hidden;
-            text-decoration: none;
-            color: white;
-            background-color: #17667f;
-            text-align: center;
-            cursor: pointer;
-            white-space: nowrap;
-        }
-
-        .w3button {
-            -webkit-touch-callout: none;
-            -webkit-user-select: none;
-            -khtml-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
-        }
-
-        .w3button:disabled {
-            cursor: not-allowed;
-            opacity: 0.3;
-        }
-
-        .w3button:hover {
-            color: white !important;
-            background-color: black !important;
-        }
-
-        .w3-disabled *,
-        :disabled * {
-            pointer-events: none;
-        }
-
-        .w3-btn:disabled:hover {
-            box-shadow: none;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            left: 0;
+            right: 0;
         }
     </style>
 </head>
 
 <body>
-    <!-- Navigation-->
-
     <!-- Header -->
-    <div>
-        <div class="w3header">
+    <div class="w3header" id="header" style="margin-bottom: 30px">
+        <div style="background-color: #ecb807; margin-bottom: 50px;">
             <a href="/index.html" class="logo">Pick Teacher</a>
+            <div style="float: right;">
+                <a @click="logoutclick" style="color: white; cursor: pointer;" v-if="loginsuccess">로그아웃</a>
+                <a @click="loginclick" v-else="loginsuccess">로그인</a>
+            </div>
         </div>
-        <div class="w3header" id="header" v-if="success" style="background-color: #1d809f; margin-bottom: 30px">
+
+        <div v-if="success" style="background-color: #1d809f;">
             <a href="mypage_student.html" class="logo">My Page</a>
-            <div class="w3header-right">
-                <a @click="studentinfo">내 정보</a>
+            <div style="float: right;">
+                <a @click="studentinfo" style="color: white; cursor: pointer;">내 정보</a>
                 <a href="student_catalog.html">수강 내역</a>
                 <a href="student_cart.html">장바구니</a>
                 <a href="student_likes.html">찜한 강의</a>
@@ -109,8 +75,8 @@
         </div>
     </div>
 
-    <div class="w3-container" id="app" style="margin: 50px">
-        <h3>내 정보</h3>
+    <div class="w3-container" id="app" style="margin: 120px 50px;">
+        <h2>내 정보</h2>
         <hr />
 
         <div style="margin-bottom: 50px">
@@ -276,66 +242,23 @@
         new Vue({
             el: "#header",
             data: {
-                success: false,
-                datas: [],
                 studentIdx: sessionStorage.getItem("studentIdx"),
-            },
-            created: function () {
-                axios({
-                    method: "get",
-                    url: "http://localhost/student",
-                    params: {
-                        idx: sessionStorage.getItem("studentIdx"),
-                    }
-                })
-                    .then((resData) => {
-                        this.success = resData.data.success;
-                        this.datas = resData.data.student;
-                    })
-                    .catch((errorData) => {
-                        console.log(errorData.response.data.message);
-                    });
+                teacherIdx: sessionStorage.getItem("teacherIdx")
             },
             methods: {
-                studentinfo: function () {
-                    if (this.studentIdx != null) {
-                        axios({
-                            method: "get",
-                            url: "http://localhost/student",
-                            params: {
-                                idx: this.studentIdx,
-                            }
-                        })
-                            .then((resData) => {
-                                this.success = resData.data.success;
-                                var inputpw = prompt("비밀번호를 입력하세요:)");
-                                if (inputpw == this.datas.pw) {
-                                    window.location.href =
-                                        "http://localhost/mypage/mypage_student.html";
-                                    console.log("성공");
-                                } else {
-                                    alert("비밀번호를 재입력하세요!");
-                                }
-                            })
-                            .catch((errorData) => {
-                                console.log(errorData.response.data.message);
-                            });
+                logout: function () {
+                    if (sessionStorage != null) {
+                        sessionStorage.clear();
+                        alert("로그아웃 성공 💨");
+                        window.location.href = "http://localhost/index.html";
                     } else {
-                        if (window.confirm("잠깐!! 🤭 학생 회원이신가요?")) {
-                            window.location.href = "http://localhost/login/studentlogin.html";
-                        } else {
-                            window.location.href = "http://localhost/login/teacherlogin.html";
-                        }
+                        alert("로그아웃 실패");
                     }
                 },
-            },
-        });
+            }
+        })
     </script>
 
-    <!-- Scroll to Top Button-->
-    <a class="scroll-to-top rounded" href="#page-top"><i class="fas fa-angle-up"></i></a>
-    <!-- Bootstrap core JS-->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>
