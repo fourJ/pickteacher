@@ -1,21 +1,26 @@
 package kr.pe.fourj.dto;
 
-import java.util.Date;
+import java.time.LocalDate;
 
-import kr.pe.fourj.domain.Teacher;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import lombok.Data;
 
 public class CourseDTO {
 	
 	@Data
 	public static class Create {
-		private Teacher teacherIdx;
+		private Long teacherIdx;
+		private String title;
 		private String subject;
 		private String schedule;
 		private String type;
-		private Date openDate;
-		private Date closeDate;
-		private String status;
+		
+		@DateTimeFormat(pattern = "yyyy-MM-dd")
+		private LocalDate openDate;
+	
+		@DateTimeFormat(pattern = "yyyy-MM-dd")
+		private LocalDate closeDate;
 		private Integer headCount;
 		private Integer tuition;
 		private String target;
@@ -24,11 +29,19 @@ public class CourseDTO {
 	@Data
 	public static class Update {
 		private Long idx;
+		private String title;
 		private String schedule;
-		private String type;
-		private String status;
+		
+		@DateTimeFormat(pattern = "yyyy-MM-dd")
+		private LocalDate openDate;
+		
+		@DateTimeFormat(pattern = "yyyy-MM-dd")
+		private LocalDate closeDate;
+		
 		private Integer headCount;
+		private String type;
 		private Integer tuition;
+		private String target;
 	}
 	
 	@Data
@@ -39,15 +52,13 @@ public class CourseDTO {
 	@Data
 	public static class Get {
 		private Long idx;
-		private Teacher teacherIdx;
+		private Long studentIdx;
+		private Long teacherIdx;
+		private String title;
 		private String subject;
+		private String target;
 		private String schedule;
 		private String type;
-		private Date openDate;
-		private Date closeDate;
-		private String status;
-		private Integer headCount;
 		private Integer tuition;
-		private String target;
 	}
 }
