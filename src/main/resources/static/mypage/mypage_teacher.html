@@ -39,18 +39,13 @@
 <body>
 
     <!-- Header -->
-    <div class="w3header" id="header" style="margin-bottom: 30px">
-        <div style="background-color: #ecb807; margin-bottom: 50px;">
+    <div>
+        <div class="w3header">
             <a href="/index.html" class="logo">Pick Teacher</a>
-            <div style="float: right;">
-                <a @click="logoutclick" style="color: white; cursor: pointer;" v-if="loginsuccess">로그아웃</a>
-                <a @click="loginclick" style="color: white; cursor: pointer;" v-else="loginsuccess">로그인</a>
-            </div>
         </div>
-
-        <div class="w3header" id="header" v-if="success" style="background-color: #1d809f; margin-top: 50px">
+        <div class="w3header" id="header" v-if="success" style="background-color: #1d809f; margin-bottom: 30px">
             <a href="mypage_teacher.html" class="logo">My Page</a>
-            <div style="float: right;">
+            <div class="w3header-right">
                 <a @click="teacherinfo" style="color: white; cursor: pointer;">내 정보 수정</a>
                 <a href="teacher_courseList.html">내 강의목록</a>
                 <a href="teacher_coursesave.html">강의 추가</a>
@@ -132,27 +127,19 @@
             data: {
                 success: false,
                 datas: [],
-                teacherIdx: sessionStorage.getItem("teacherIdx"),
-                loginsuccess: false,
+                studentIdx: sessionStorage.getItem("studentIdx"),
             },
             created: function () {
                 axios({
                     method: "get",
-                    url: "http://localhost/teacher",
+                    url: "http://localhost/student",
                     params: {
-                        idx: sessionStorage.getItem("teacherIdx"),
+                        idx: sessionStorage.getItem("studentIdx"),
                     }
                 })
                     .then((resData) => {
                         this.success = resData.data.success;
-                        this.datas = resData.data.teacher;
-
-                        if (this.teacherIdx != null) {
-                            this.loginsuccess = true;
-                        } else {
-                            this.loginsuccess = false;
-                        }
-
+                        this.datas = resData.data.student;
                     })
                     .catch((errorData) => {
                         console.log(errorData.response.data.message);
@@ -161,30 +148,17 @@
             methods: {
                 teacherinfo: function () {
                     if (this.teacherIdx != null) {
-                        axios({
-                            method: "get",
-                            url: "http://localhost/teacher",
-                            params: {
-                                idx: sessionStorage.getItem("teacherIdx"),
+                        var inputpw = prompt("비밀번호를 입력하세요:)");
+                        if (inputpw != null) {
+                            if (inputpw == this.datas.pw) {
+                                window.location.href =
+                                    "http://localhost/mypage/teacher_update.html";
+                            } else {
+                                alert("비밀번호를 재입력하세요!");
                             }
-                        })
-                            .then((resData) => {
-                                this.success = resData.data.success;
-                                var inputpw = prompt("비밀번호를 입력하세요:)");
-                                if (inputpw != null) {
-                                    if (inputpw == this.datas.pw) {
-                                        window.location.href =
-                                            "http://localhost/mypage/teacher_update.html";
-                                    } else {
-                                        alert("비밀번호를 재입력하세요!");
-                                    }
-                                } else {
-                                    window.location.reload();
-                                }
-                            })
-                            .catch((errorData) => {
-                                console.log(errorData.response.data.message);
-                            });
+                        } else {
+                            window.location.reload();
+                        }
                     } else {
                         if (window.confirm("잠깐!! 🤭 학생 회원이신가요?")) {
                             window.location.href = "http://localhost/login/studentlogin.html";

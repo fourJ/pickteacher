@@ -50,24 +50,18 @@
 
 <body>
     <!-- Header -->
-    <div id="header" class="w3header">
-        <a href="http://localhost/index.html" class="logo">Pick Teacher</a>
-        <div v-if="studentIdx == null && teacherIdx == null" class="w3header-right">
-            <a class="login" @click="login" style="color: white; cursor: pointer;">로그인</a>
-            <a class="signup" @click="signup" style="color: white; cursor: pointer;">회원 가입</a>
+    <div>
+        <div class="w3header">
+            <a href="/index.html" class="logo">Pick Teacher</a>
         </div>
-        <div v-if="studentIdx != null || teacherIdx != null" class="w3header-right">
-            <a @click="logout" style="color: white; cursor: pointer;">로그아웃</a>
-        </div>
-    </div>
-
-    <div class="w3header" style="background-color: #1d809f; margin-bottom: 30px">
-        <a href=" mypage_student.html" class="logo">My Page</a>
-        <div style="float: right;">
-            <a @click="teacherinfo" style="color: white; cursor: pointer;">내 정보 수정</a>
-            <a href="student_catalog.html">수강내역</a>
-            <a href="student_cart.html">장바구니</a>
-            <a href="student_likes.html">찜한 강의</a>
+        <div class="w3header" id="header" v-if="success" style="background-color: #1d809f; margin-bottom: 30px">
+            <a href="mypage_student.html" class="logo">My Page</a>
+            <div class="w3header-right">
+                <a @click="studentinfo" style="color: white; cursor: pointer;">내 정보</a>
+                <a href="student_catalog.html">수강 내역</a>
+                <a href="student_cart.html">장바구니</a>
+                <a href="student_likes.html">찜한 강의</a>
+            </div>
         </div>
     </div>
 
@@ -194,21 +188,48 @@
         new Vue({
             el: "#header",
             data: {
+                success: false,
+                datas: [],
                 studentIdx: sessionStorage.getItem("studentIdx"),
-                teacherIdx: sessionStorage.getItem("teacherIdx")
+            },
+            created: function () {
+                axios({
+                    method: "get",
+                    url: "http://localhost/student",
+                    params: {
+                        idx: sessionStorage.getItem("studentIdx"),
+                    }
+                })
+                    .then((resData) => {
+                        this.success = resData.data.success;
+                        this.datas = resData.data.student;
+                    })
+                    .catch((errorData) => {
+                        console.log(errorData.response.data.message);
+                    });
             },
             methods: {
-                logout: function () {
-                    if (sessionStorage != null) {
-                        sessionStorage.clear();
-                        alert("로그아웃 성공 💨");
-                        window.location.href = "http://localhost/index.html";
+                studentinfo: function () {
+                    if (this.studentIdx != null) {
+                        var inputpw = prompt("비밀번호를 입력하세요:)");
+                        if (inputpw != null) {
+                            if (inputpw == this.datas.pw) {
+                                window.location.href =
+                                    "http://localhost/mypage/student_update.html";
+                            } else {
+                                alert("비밀번호를 재입력하세요!");
+                            }
+                        }
                     } else {
-                        alert("로그아웃 실패");
+                        if (window.confirm("잠깐!! 🤭 학생 회원이신가요?")) {
+                            window.location.href = "http://localhost/login/studentlogin.html";
+                        } else {
+                            window.location.href = "http://localhost/login/teacherlogin.html";
+                        }
                     }
                 },
-            }
-        })
+            },
+        });
     </script>
 </body>
 

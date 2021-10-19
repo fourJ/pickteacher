@@ -80,64 +80,63 @@
         </div>
     </div>
 
-    <div class="w3-container" style="margin: 50px">
+
+
+    <div id="app" style="margin: 50px">
         <h3>내 강의 리스트</h3>
         <hr>
+        <div v-if="courseSuccess">
+            <table style="width: 100%">
+                <tr>
+                    <th>강의번호</th>
+                    <th>강의제목</th>
+                    <th>강의과목</th>
+                    <th>강의스케줄</th>
+                    <th>강의상태</th>
+                    <th>개강일</th>
+                    <th>종강일</th>
+                    <th>강의대상</th>
+                    <th>강의종류</th>
+                    <th>강의료</th>
+                    <th>수강가능인원</th>
+                    <th>수정</th>
+                    <th>삭제</th>
+                    <th>학생리스트보기</th>
+                </tr>
 
-        <div id="app">
-            <div v-if="courseSuccess && resultSize == '0'">
-                강의 리스트가 없습니다.
-            </div>
-            <div v-if="courseSuccess && resultSize != '0'">
-                <table style="width: 100%">
-                    <tr>
-                        <th>강의번호</th>
-                        <th>강의제목</th>
-                        <th>강의과목</th>
-                        <th>강의스케줄</th>
-                        <th>강의상태</th>
-                        <th>개강일</th>
-                        <th>종강일</th>
-                        <th>강의대상</th>
-                        <th>강의종류</th>
-                        <th>강의료</th>
-                        <th>수강가능인원</th>
-                        <th>수정</th>
-                        <th>삭제</th>
-                        <th>학생리스트보기</th>
-                    </tr>
+                <tr v-for="c in courseList">
+                    <td>{{c.idx}}</td>
+                    <td>
+                        <a v-bind:href="detailPage + c.idx">{{c.title}}</a>
+                    </td>
+                    <td>{{c.subject}}</td>
+                    <td>{{c.schedule}}</td>
+                    <td>{{c.status}}</td>
+                    <td>{{c.openDate}}</td>
+                    <td>{{c.closeDate}}</td>
+                    <td>{{c.target}}</td>
+                    <td>{{c.type}}</td>
+                    <td>{{c.tuition}}</td>
+                    <td>{{c.headCount}}</td>
+                    <td>
+                        <a v-bind:href="updatePage + c.idx">수정</a>
+                    </td>
 
-                    <tr v-for="c in courseList">
-                        <td>{{c.idx}}</td>
-                        <td>
-                            <a v-bind:href="detailPage + c.idx">{{c.title}}</a>
-                        </td>
-                        <td>{{c.subject}}</td>
-                        <td>{{c.schedule}}</td>
-                        <td>{{c.status}}</td>
-                        <td>{{c.openDate}}</td>
-                        <td>{{c.closeDate}}</td>
-                        <td>{{c.target}}</td>
-                        <td>{{c.type}}</td>
-                        <td>{{c.tuition}}</td>
-                        <td>{{c.headCount}}</td>
-                        <td>
-                            <a v-bind:href="updatePage + c.idx">수정</a>
-                        </td>
-
-                        <td>
-                            <span class="close" @click="deleteCourse(c.idx)">&#x00D7;
-                            </span>
-                        </td>
-                        <td>
-                            <a v-bind:href="studentPage + c.idx">학생보기</a>
-                        </td>
-                        <br />
-                    </tr>
-                </table>
-                <br />
-            </div>
+                    <td>
+                        <span class="close" @click="deleteCourse(c.idx)">&#x00D7;
+                        </span>
+                    </td>
+                    <td>
+                        <a v-bind:href="studentPage + c.idx">학생보기</a>
+                    </td>
+                    <br />
+                </tr>
+            </table>
+            <br />
         </div>
+        <!-- <div v-if="courseList.length"> -->
+    </div>
+    <hr />
     </div>
 
     <script>
@@ -152,7 +151,6 @@
 
                 courseSuccess: "",
                 courseList: [],
-                resultSize: "",
 
                 detailPage: "http://localhost/getCourseDetail/",
                 updatePage: "http://localhost/getCourseUpdate/",
@@ -170,7 +168,6 @@
                     .then((resData) => {
                         this.courseSuccess = resData.data.success;
                         this.courseList = resData.data.courseList;
-                        this.resultSize = this.courseList.length;
                     })
                     .catch((errorData) => {
                         return console.log(errorData);
@@ -198,6 +195,70 @@
                 }
             },
 
+        });
+
+        new Vue({
+            el: "#header",
+            data: {
+                success: false,
+                datas: [],
+                studentIdx: sessionStorage.getItem("studentIdx"),
+            },
+            created: function () {
+                axios({
+                    method: "get",
+                    url: "http://localhost/student",
+                    params: {
+                        idx: sessionStorage.getItem("studentIdx"),
+                    }
+                })
+                    .then((resData) => {
+                        this.success = resData.data.success;
+                        this.datas = resData.data.student;
+                    })
+                    .catch((errorData) => {
+                        console.log(errorData.response.data.message);
+                    });
+            },
+            methods: {
+                teacherinfo: function () {
+                    if (this.teacherIdx != null) {
+                        var inputpw = prompt("비밀번호를 입력하세요:)");
+                        if (inputpw != null) {
+                            if (inputpw == this.datas.pw) {
+                                window.location.href =
+                                    "http://localhost/mypage/teacher_update.html";
+                            } else {
+                                alert("비밀번호를 재입력하세요!");
+                            }
+                        } else {
+                            window.location.reload();
+                        }
+                    } else {
+                        if (window.confirm("잠깐!! 🤭 학생 회원이신가요?")) {
+                            window.location.href = "http://localhost/login/studentlogin.html";
+                        } else {
+                            window.location.href = "http://localhost/login/teacherlogin.html";
+                        }
+                    }
+                },
+                logoutclick: function () {
+                    const result = confirm("로그아웃 하시겠습니까?");
+                    if (result) {
+                        sessionStorage.clear();
+                        this.loginsuccess = false;
+                        window.location.href = "http://localhost/index.html";
+                    }
+                },
+                loginclick: function () {
+                    const result = confirm("선생님이신가요?");
+                    if (result) {
+                        window.location.href = "http://localhost/login/teacherlogin.html";
+                    } else {
+                        window.location.href = "http://localhost/login/studentlogin.html";
+                    }
+                },
+            },
         });
     </script>
 </body>
