@@ -1,6 +1,6 @@
 package kr.pe.fourj.domain;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -47,8 +47,8 @@ public class Review {
 	private String content;
 	
 	@NonNull
-	@Column(name="date_time")
-	private LocalDateTime dateTime;
+	@Column(name="review_date")
+	private LocalDate date;
 	
 	@NonNull
 	private Integer star;

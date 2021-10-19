@@ -10,7 +10,8 @@ public interface TeacherRepository extends JpaRepository<Teacher, Long>{
 	
 	List<Teacher> findByName(String name);
 	List<Teacher> findByNameContaining(String name);
-	List<Teacher> findByGender(Integer gender);
+	List<Teacher> findByGender(String gender);
+	List<Teacher> findByCareer(String career);
 	List<Teacher> findBySchool(String school);
 	List<Teacher> findBySchoolContaining(String school);
 	List<Teacher> findByMajor(String major);

@@ -1,6 +1,6 @@
 package kr.pe.fourj.service;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,12 +40,12 @@ public class ReviewService {
         return flag;
     }
 	
-	public void updateReview(Student student, Course course, ReviewDTO.Update dto) throws NotFoundException {
-		Review review = reviewRepository.findByStudentIdxAndCourseIdx(student, course);
-		LocalDateTime dateTime = LocalDateTime.now();
+	public void updateReview(ReviewDTO.Update dto) throws NotFoundException {
+		Review review = findOne(dto.getIdx());
+		LocalDate date = LocalDate.now();
 
 		review.setContent(dto.getContent());
-		review.setDateTime(dateTime);
+		review.setDate(date);
 		review.setStar(dto.getStar());
 
 		reviewRepository.save(review);

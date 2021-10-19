@@ -1,6 +1,6 @@
 package kr.pe.fourj.domain;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -55,11 +55,11 @@ public class Course {
 	
 	@Column(name="open_date")
 	@NonNull
-	private Date openDate;
+	private LocalDate openDate;
 	
 	@Column(name="close_date")
 	@NonNull
-	private Date closeDate;
+	private LocalDate closeDate;
 	
 	@NonNull
 	private String status;
@@ -85,5 +85,9 @@ public class Course {
 	@OneToMany(mappedBy="courseIdx", cascade=CascadeType.ALL)
 	@JsonBackReference
 	private List<Likes> likesList;
+	
+	@OneToMany(mappedBy="courseIdx", cascade=CascadeType.ALL)
+	@JsonBackReference
+	private List<Cart> cartList;
 
 }

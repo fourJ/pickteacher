@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>Pick Teacher</title>
+    <!-- Favicon-->
+    <link rel="icon" type="image/x-icon" href="../assets/pick.ico" />
+    <!-- Font Awesome icons (free version)-->
+    <script src="https://use.fontawesome.com/releases/v5.15.3/js/all.js" crossorigin="anonymous"></script>
+    <!-- Simple line icons-->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.5.5/css/simple-line-icons.min.css"
+        rel="stylesheet" />
+    <!-- Google fonts-->
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic"
+        rel="stylesheet" type="text/css" />
+    <!-- Vue.js -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <!-- axios -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <!-- stylesheet -->
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css" />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <style>
+        .w3header {
+            padding: 0;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            left: 0;
+            right: 0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Header -->
+    <div class="w3header" id="header" style="margin-bottom: 30px">
+        <div style="background-color: #ecb807; margin-bottom: 50px;">
+            <a href="/index.html" class="logo">Pick Teacher</a>
+            <div style="float: right;">
+                <a @click="logoutclick" style="color: white; cursor: pointer;" v-if="loginsuccess">로그아웃</a>
+                <a @click="loginclick" style="color: white; cursor: pointer;" v-else="loginsuccess">로그인</a>
+            </div>
+        </div>
+
+        <div class="w3header" id="header" v-if="success" style="background-color: #1d809f; margin-top: 50px">
+            <a href="mypage_teacher.html" class="logo">My Page</a>
+            <div style="float: right;">
+                <a @click="teacherinfo" style="color: white; cursor: pointer;">내 정보 수정</a>
+                <a href="teacher_courseList.html">내 강의목록</a>
+                <a href="teacher_coursesave.html">강의 추가</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="w3-container" id="app" style="margin: 120px 50px;">
+        <h2>마이페이지</h2>
+        <hr />
+
+        <div v-if="success">
+            <div>
+                <h5>{{teacher.name}}님, 오늘도 화이팅:)</h5>
+            </div>
+
+            <div style="margin-top: 30px;">
+                <table class="w3-table-all" v-if="success">
+                    <tr class="w3-green">
+                        <th>선생님 이름</th>
+                        <th>선생님 성별</th>
+                        <th>선생님 주소</th>
+                        <th>선생님 번호</th>
+                        <th>선생님 경력</th>
+                        <th>선생님 전공</th>
+                        <th>선생님 출신학교</th>
+                    </tr>
+                    <tr>
+                        <td>{{teacher.name}}</td>
+                        <td>{{teacher.gender}}</td>
+                        <td>{{teacher.address}}</td>
+                        <td>{{teacher.phone}}</td>
+                        <td>{{teacher.career}}</td>
+                        <td>{{teacher.major}}</td>
+                        <td>{{teacher.school}}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+
+        new Vue({
+            el: "#app",
+            data: {
+                teacherSuccess: "",
+                teacher: [],
+
+                success: false,
+                courseSuccess: "",
+                courseList: [],
+
+                detailPage: "http://localhost/getCourseDetail/",
+                updatePage: "http://localhost/getCourseUpdate/",
+                studentPage: "http://localhost/getCourseStudent/",
+            },
+            created: function () {
+                axios({
+                    method: "get",
+                    url: "http://localhost/teacher",
+                    params: {
+                        idx: sessionStorage.getItem("teacherIdx")
+                    },
+                })
+                    .then((resData) => {
+                        this.success = true;
+                        this.teacherSuccess = resData.data.success;
+                        this.teacher = resData.data.teacher;
+                    })
+                    .catch((errorData) => {
+                        return console.log(errorData);
+                    });
+            }
+        });
+
+        new Vue({
+            el: "#header",
+            data: {
+                success: false,
+                datas: [],
+                teacherIdx: sessionStorage.getItem("teacherIdx"),
+                loginsuccess: false,
+            },
+            created: function () {
+                axios({
+                    method: "get",
+                    url: "http://localhost/teacher",
+                    params: {
+                        idx: sessionStorage.getItem("teacherIdx"),
+                    }
+                })
+                    .then((resData) => {
+                        this.success = resData.data.success;
+                        this.datas = resData.data.teacher;
+
+                        if (this.teacherIdx != null) {
+                            this.loginsuccess = true;
+                        } else {
+                            this.loginsuccess = false;
+                        }
+
+                    })
+                    .catch((errorData) => {
+                        console.log(errorData.response.data.message);
+                    });
+            },
+            methods: {
+                teacherinfo: function () {
+                    if (this.teacherIdx != null) {
+                        axios({
+                            method: "get",
+                            url: "http://localhost/teacher",
+                            params: {
+                                idx: sessionStorage.getItem("teacherIdx"),
+                            }
+                        })
+                            .then((resData) => {
+                                this.success = resData.data.success;
+                                var inputpw = prompt("비밀번호를 입력하세요:)");
+                                if (inputpw != null) {
+                                    if (inputpw == this.datas.pw) {
+                                        window.location.href =
+                                            "http://localhost/mypage/teacher_update.html";
+                                    } else {
+                                        alert("비밀번호를 재입력하세요!");
+                                    }
+                                } else {
+                                    window.location.reload();
+                                }
+                            })
+                            .catch((errorData) => {
+                                console.log(errorData.response.data.message);
+                            });
+                    } else {
+                        if (window.confirm("잠깐!! 🤭 학생 회원이신가요?")) {
+                            window.location.href = "http://localhost/login/studentlogin.html";
+                        } else {
+                            window.location.href = "http://localhost/login/teacherlogin.html";
+                        }
+                    }
+                },
+                logoutclick: function () {
+                    const result = confirm("로그아웃 하시겠습니까?");
+                    if (result) {
+                        sessionStorage.clear();
+                        this.loginsuccess = false;
+                        window.location.href = "http://localhost/index.html";
+                    }
+                },
+                loginclick: function () {
+                    const result = confirm("선생님이신가요?");
+                    if (result) {
+                        window.location.href = "http://localhost/login/teacherlogin.html";
+                    } else {
+                        window.location.href = "http://localhost/login/studentlogin.html";
+                    }
+                },
+            },
+        });
+    </script>
+</body>
+
+</html>

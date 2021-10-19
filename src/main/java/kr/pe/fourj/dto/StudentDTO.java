@@ -1,6 +1,8 @@
 package kr.pe.fourj.dto;
 
-import java.util.Date;
+import java.time.LocalDate;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 import lombok.Data;
 import lombok.NonNull;
@@ -12,18 +14,28 @@ public class StudentDTO {
 		private String id;
 		private String pw;
 		private String name;
-		private Date birth;
+		
+		@DateTimeFormat(pattern = "yyyy-MM-dd")
+		private LocalDate birth;
+		
 		private String nickName;
-		private Integer gender;
+		private String gender;
 		private String address;
 		private String phone;
 	}
 	
 	@Data
 	public static class Update {
+		private Long idx;
+		private String pw;
 		private String nickName;
 		private String address;
 		private String phone;
+	}
+	
+	@Data
+	public static class Delete {
+		private Long idx;
 	}
 	
 	@Data

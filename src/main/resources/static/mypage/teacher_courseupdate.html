@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>Pick Teacher</title>
+    <!-- Favicon-->
+    <link rel="icon" type="image/x-icon" href="../assets/pick.ico" />
+
+    <!-- Font Awesome icons (free version)-->
+    <script src="https://use.fontawesome.com/releases/v5.15.3/js/all.js" crossorigin="anonymous"></script>
+    <!-- Simple line icons-->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.5.5/css/simple-line-icons.min.css"
+        rel="stylesheet" />
+    <!-- Google fonts-->
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic"
+        rel="stylesheet" type="text/css" />
+    <!-- Vue.js -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <!-- axios -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+    <!-- stylesheet -->
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css" />
+    <link rel="stylesheet" href="../css/styles.css" />
+
+    <style>
+        .w3header {
+            padding: 0;
+        }
+
+        input[type="text"] {
+            width: 20%;
+            padding: 12px 20px;
+            margin: 8px 0;
+            box-sizing: border-box;
+            border: 3px solid #ccc;
+            -webkit-transition: 0.5s;
+            transition: 0.5s;
+            outline: none;
+        }
+
+        input[type="text"]:focus {
+            border: 3px solid #555;
+        }
+
+        input[type="text"],
+        select {
+            width: 100%;
+            padding: 12px 20px;
+            margin: 8px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        input[type="submit"] {
+            width: 5%;
+            background-color: #4caf50;
+            color: white;
+            padding: 2px 4px;
+            margin: 8px 0;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        /* div {
+  border-radius: 5px;
+  background-color: #f2f2f2;
+  padding: 20px;
+} */
+    </style>
+</head>
+
+<body>
+
+    <!-- Header -->
+    <div>
+        <div class="w3header">
+            <a href="/index.html" class="logo">Pick Teacher</a>
+        </div>
+        <div class="w3header" id="header" v-if="success" style="background-color: #1d809f; margin-bottom: 30px">
+            <a href="mypage_teacher.html" class="logo">My Page</a>
+            <div class="w3header-right">
+                <a @click="teacherinfo" style="color: white; cursor: pointer;">내 정보 수정</a>
+                <a href="teacher_courseList.html">내 강의목록</a>
+                <a href="teacher_coursesave.html">강의 추가</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="w3-container" style="margin: 50px">
+        <h3>강의수정 페이지</h3>
+        <hr>
+
+        <div id="app">
+            <form action="http://localhost/course" method="post">
+                <input type="hidden" name="_method" value="put" />
+                <input type="hidden" name="idx" v-bind:value="courseIdx" readonly />
+
+                <label>강의명 변경</label>
+                <input type="text" name="title" v-bind:value="course.title" placeholder="강의명을 입력해주세요." required />
+
+                <br /><br />
+
+                <label for="target">대상학년 pick</label>
+                <select name="target" required>
+                    <option value="중1">중1</option>
+                    <option value="중2">중2</option>
+                    <option value="중3">중3</option>
+                    <option value="고1">고1</option>
+                    <option value="고2">고2</option>
+                    <option value="고3">고3</option>
+                </select>
+
+                <br /><br />
+
+                <label for="schedule">요일 pick</label>
+                <select name="schedule" required>
+                    <option value="월">월</option>
+                    <option value="화">화</option>
+                    <option value="수">수</option>
+                    <option value="목">목</option>
+                    <option value="금">금</option>
+                    <option value="토">토</option>
+                    <option value="일">일</option>
+                </select>
+
+                <br /><br />
+
+                <label for="type">타입 pick</label>
+                <select name="type" required>
+                    <option value="온라인">온라인</option>
+                    <option value="오프라인">오프라인</option>
+                </select>
+
+                <br /><br />
+
+                <label>개강일</label>
+                <input type="date" name="openDate" v-bind:value="course.openDate" required />
+                <br />
+
+                <label>종강일</label>
+                <input type="date" name="closeDate" v-bind:value="course.closeDate" required />
+
+                <br /><br />
+
+                <label for="status">상태</label>
+                <input type="text" name="status" v-bind:value="course.status" readonly />
+
+                <br /><br />
+
+                <label>정원 수</label>
+                <input type="text" name="headCount" v-bind:value="course.headCount" pattern="[0-9]{1,3}"
+                    placeholder="강의 최대 정원 수를 입력해주세요." required />
+
+                <br /><br />
+
+                <label>수강비</label>
+                <input type="text" name="tuition" v-bind:value="course.tuition" pattern="[0-9]{1,100}"
+                    placeholder="강의 수강비를 입력해주세요." required />
+
+                <br /><br />
+
+                <input type="submit" value="수정완료" />
+            </form>
+        </div>
+    </div>
+
+
+
+    <script>
+        new Vue({
+            el: "#app",
+            data: {
+                courseIdx: window.location.search.substring(
+                    window.location.search.indexOf("=") + 1
+                ),
+                success: "",
+                course: [],
+                updateSuccess: "",
+            },
+            created: function () {
+                axios({
+                    method: "get",
+                    url: "http://localhost/course",
+                    params: {
+                        idx: this.courseIdx,
+                    },
+                })
+                    .then((resData) => {
+                        this.courseSuccess = resData.data.success;
+                        this.course = resData.data.course;
+                    })
+                    .catch((errorData) => {
+                        return console.log(errorData);
+                    });
+            },
+            // methods: {
+            //     courseUpdate: function () {
+            //         axios({
+            //             method: "put",
+            //             url: "http://localhost/review",
+            //             data: {
+
+            //                 courseidx: this.courseIdx,
+            //                 schedule: this.course.title,
+            //                 openDate: this.course.openDate,
+            //                 closeDate: this.course.closeDate,
+            //                 status: this.course.status,
+            //                 tuition: this.course.tuition,
+            //                 target: this.cours.target,
+            //             },
+            //         })
+            //             .then((resData) => {
+            //                 this.updateSuccess = resData.data.success;
+            //                 alert("후기 수정 성공!");
+            //                 window.location.reload();
+            //                 location.href =
+            //                     "http://localhost/reviewcommunity/reviewmyall.html";
+            //             })
+            //             .catch((errorData) => {
+            //                 return console.log(errorData);
+            //             });
+            //     },
+            // },
+        });
+    </script>
+</body>
+
+</html>

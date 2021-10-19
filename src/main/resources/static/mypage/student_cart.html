@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>Pick Teacher</title>
+    <!-- Favicon-->
+    <link rel="icon" type="image/x-icon" href="../assets/pick.ico" />
+    <!-- Font Awesome icons (free version)-->
+    <script src="https://use.fontawesome.com/releases/v5.15.3/js/all.js" crossorigin="anonymous"></script>
+    <!-- Simple line icons-->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.5.5/css/simple-line-icons.min.css"
+        rel="stylesheet" />
+    <!-- Google fonts-->
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic"
+        rel="stylesheet" type="text/css" />
+    <!-- Vue.js -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <!-- axios -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <!-- stylesheet -->
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css" />
+    <link rel="stylesheet" href="../css/styles.css" />
+
+    <style>
+        .mySlides {
+            display: none;
+        }
+
+        .w3-left,
+        .w3-right,
+        .w3-badge {
+            cursor: pointer;
+        }
+
+        .w3-badge {
+            height: 13px;
+            width: 13px;
+            padding: 0;
+        }
+
+        .w3header {
+            padding: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <div id="header" class="w3header">
+        <a href="http://localhost/index.html" class="logo">Pick Teacher</a>
+        <div v-if="studentIdx == null && teacherIdx == null" class="w3header-right">
+            <a class="login" @click="login" style="color: white; cursor: pointer;">로그인</a>
+            <a class="signup" @click="signup" style="color: white; cursor: pointer;">회원 가입</a>
+        </div>
+        <div v-if="studentIdx != null || teacherIdx != null" class="w3header-right">
+            <a @click="logout" style="color: white; cursor: pointer;">로그아웃</a>
+        </div>
+    </div>
+
+    <div class="w3header" style="background-color: #1d809f; margin-bottom: 30px">
+        <a href=" mypage_student.html" class="logo">My Page</a>
+        <div style="float: right;">
+            <a @click="teacherinfo" style="color: white; cursor: pointer;">내 정보 수정</a>
+            <a href="student_catalog.html">수강내역</a>
+            <a href="student_cart.html">장바구니</a>
+            <a href="student_likes.html">찜한 강의</a>
+        </div>
+    </div>
+
+    <div class="w3-container" id="app" style="margin: 50px;">
+        <h2>나의 장바구니</h2>
+        <hr />
+
+        <div style="margin-top: 30px;" v-if="resultSize == '0'">장바구니에 담은 강의가 없어요. 강의를 담아 주세요:)</div>
+
+        <div v-if="success && resultSize != '0'">
+            <table class="w3-table-all" v-show="success">
+                <thead>
+                    <tr class="w3-red">
+                        <th>상태</th>
+                        <th>과목</th>
+                        <th>강의명</th>
+                        <th>수업시간</th>
+                        <th>개강일</th>
+                        <th>종강일</th>
+                        <th>대상 학년</th>
+                        <th>유형</th>
+                        <th>수강료</th>
+                        <th>정원</th>
+                        <th>선생님</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tr v-for="v in datas">
+                    <td>{{v.courseIdx.status}}</td>
+                    <td>{{v.courseIdx.subject}}</td>
+                    <td><a v-bind:href="courseDetailPage + v.courseIdx.idx">{{v.courseIdx.title}}</a></td>
+                    <td>{{v.courseIdx.schedule}}</td>
+                    <td>{{v.courseIdx.openDate}}</td>
+                    <td>{{v.courseIdx.closeDate}}</td>
+                    <td>{{v.courseIdx.target}}</td>
+                    <td>{{v.courseIdx.type}}</td>
+                    <td>{{v.courseIdx.tuition}}</td>
+                    <td>{{v.courseIdx.headCount}}</td>
+                    <td><a
+                            v-bind:href="teacherDetailPage + v.courseIdx.teacherIdx.idx">{{v.courseIdx.teacherIdx.name}}</a>
+                    </td>
+                    <td>
+                        <a class="w3button" v-bind:href="url1 + v.courseIdx.idx + url2 + studentIdx">수강 신청</a>
+
+                    </td>
+                    <td>
+                        <span class="w3button" @click="deleteCart(v.courseIdx.idx)">삭제하기</span>
+                    </td>
+                    <!-- v-bind:href="deleteurl + v.courseIdx.idx" -->
+                </tr>
+            </table>
+            <div style="margin-top: 20px; margin-bottom: 20px;">
+                <span>이미 수강중이거나 / 마감일자가 지났거나 / 정원이 다 찬 강의는 수강신청이 불가합니다. </span> <br>
+                <b>위 경우 수강신청 버튼 클릭시, 해당 장바구니 내역이 자동으로 삭제됩니다.</b>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        new Vue({
+            el: "#app",
+            data: {
+                success: false,
+                datas: [],
+
+                url1: "http://localhost/sendCatalog/",
+                url2: "/cart/",
+                resultSize: "",
+                studentIdx: sessionStorage.getItem("studentIdx"),
+
+                courseDetailPage: "http://localhost/getCourseDetail/",
+                teacherDetailPage: "http://localhost/getTeacherDetail/"
+            },
+            created: function () {
+                if (this.studentIdx != null) {
+                    axios({
+                        method: "get",
+                        url: "http://localhost/cart/studentidx",
+                        params: {
+                            studentIdx: this.studentIdx,
+                        }
+                    })
+                        .then((resData) => {
+                            this.success = resData.data.success;
+                            this.datas = resData.data.cartList;
+                            this.resultSize = this.datas.length;
+                        })
+                        .catch((errorData) => {
+                            console.log(errorData.response.data.message);
+                            alert(errorData)
+                        });
+                } else {
+                    if (window.confirm("잠깐!! 🤭 학생 회원이신가요?")) {
+                        window.location.href = "http://localhost/login/studentlogin.html";
+                    } else {
+                        window.location.href = "http://localhost/login/teacherlogin.html";
+                    }
+                }
+            },
+            methods: {
+                deleteCart: function (idx) {
+                    axios({
+                        method: "delete",
+                        url: "http://localhost/cart",
+                        params: {
+                            studentIdx: this.studentIdx,
+                            courseIdx: idx,
+                        },
+                    })
+                        .then((resData) => {
+                            this.success = resData.data.success;
+                            console.log("삭제성공");
+                            alert("삭제성공");
+                            window.location.reload();
+                        })
+                        .catch((errorData) => {
+                            console.log(errorData.response.data.message);
+                        });
+                },
+            },
+        });
+
+        new Vue({
+            el: "#header",
+            data: {
+                studentIdx: sessionStorage.getItem("studentIdx"),
+                teacherIdx: sessionStorage.getItem("teacherIdx")
+            },
+            methods: {
+                logout: function () {
+                    if (sessionStorage != null) {
+                        sessionStorage.clear();
+                        alert("로그아웃 성공 💨");
+                        window.location.href = "http://localhost/index.html";
+                    } else {
+                        alert("로그아웃 실패");
+                    }
+                },
+            }
+        })
+    </script>
+</body>
+
+</html>

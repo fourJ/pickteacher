@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>Pick Teacher</title>
+    <!-- Favicon-->
+    <link rel="icon" type="image/x-icon" href="../assets/pick.ico" />
+
+    <!-- Font Awesome icons (free version)-->
+    <script src="https://use.fontawesome.com/releases/v5.15.3/js/all.js" crossorigin="anonymous"></script>
+    <!-- Simple line icons-->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.5.5/css/simple-line-icons.min.css"
+        rel="stylesheet" />
+    <!-- Google fonts-->
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic"
+        rel="stylesheet" type="text/css" />
+    <!-- Vue.js -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <!-- axios -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <!-- stylesheet -->
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css" />
+    <link rel="stylesheet" href="../css/styles.css" />
+
+    <style>
+        .w3header {
+            padding: 0;
+        }
+
+        /* The Modal (background) */
+        .modal {
+            display: none;
+            /* Hidden by default */
+            position: fixed;
+            /* Stay in place */
+            z-index: 1;
+            /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%;
+            /* Full width */
+            height: 100%;
+            /* Full height */
+            overflow: auto;
+            /* Enable scroll if needed */
+            background-color: rgb(0, 0, 0);
+            /* Fallback color */
+            background-color: rgba(0, 0, 0, 0.4);
+            /* Black w/ opacity */
+            padding-top: 60px;
+        }
+
+        /* Modal Content/Box */
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto 15% auto;
+            /* 5% from the top, 15% from the bottom and centered */
+            border: 1px solid #888;
+            width: 80%;
+            /* Could be more or less, depending on screen size */
+            padding-bottom: 60px;
+        }
+
+        /* The Close Button (x) */
+        .close {
+            position: absolute;
+            right: 25px;
+            top: 0;
+            color: #000;
+            font-size: 35px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: red;
+            cursor: pointer;
+        }
+
+        .modal_search_condition {
+            margin-right: 15px;
+        }
+
+        .modal_search_input {
+            display: inline;
+            margin-right: 8px;
+        }
+
+        .search_result_none {
+            margin-top: 30px;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        .teacherlist-result:hover {
+            background-color: WhiteSmoke;
+            border-radius: 2%;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <div id="header" class="w3header">
+        <a href="/index.html" class="logo">Pick Teacher</a>
+        <div v-if="studentIdx != null || teacherIdx != null" class="w3header-right">
+            <a @click="logout" style="color: white; cursor: pointer;">로그아웃</a>
+        </div>
+    </div>
+
+    <div class="w3header" style="background-color: #1d809f; margin-bottom: 30px">
+        <a href="http://localhost/detail/course.html" class="logo">Search Teacher</a>
+    </div>
+
+    <!-- Main -->
+    <div id="app" style="margin: 50px">
+        <h3>선생님 검색하기</h3>
+        <hr />
+
+        <div style="
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: space-between;
+                ">
+            <!-- Search Bar -->
+            <div id="search-bar">
+                <div>
+                    <input v-model="searchInput" class="search-bar_input" type="text" id="teacher-name"
+                        placeholder="선생님 이름을 입력하세요" />
+
+                    <button class="addbutton" @click="findAllByNameContaining">
+                        검색
+                    </button>
+                </div>
+            </div>
+            <!-- Search Condition -->
+            <button onclick="document.getElementById('id01').style.display='block'" style="width: auto">
+                자세히 검색
+            </button>
+
+            <!-- Seach Condition - Modal -->
+            <div id="id01" class="modal">
+                <form class="modal-content animate" style="background-color: #dedede">
+                    <div class="imgcontainer">
+                        <!-- modal 닫기(X) -->
+                        <span onclick="document.getElementById('id01').style.display='none'" class="close"
+                            title="Close Modal">&times;</span>
+
+                        <!-- 로고나 제목 -->
+                        <div style="margin: 10%; text-align: center;">
+                            <h1>👩‍🏫 Pick Teacher 👨‍🏫</h1>
+                            <h2>나에게 맞는 선생님 찾기</h2>
+                        </div>
+                    </div>
+
+                    <div class="container">
+                        <div style="margin-bottom: 10px;">
+                            <label for="search_condition" style="margin-right: 10px;"><b>검색 조건</b></label>
+                            <select name="search_condition" v-model="searchCondition">
+                                <option value="">검색 조건 선택</option>
+                                <option value="gender">성별</option>
+                                <option value="career">경력</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <!-- 성별 검색인 경우 -->
+                            <div class="search_input" name="search_input_gender" v-show="searchCondition=='gender'">
+                                <label for="search_input_gender" class="modal_search_condition">성별</label><br />
+                                <div class="modal_search_input">
+                                    <input type="radio" name="gender" value="남자" checked v-model="gender" />
+                                    <label for="gender">남</label>
+                                </div>
+                                <div class="modal_search_input">
+                                    <input type="radio" name="gender" value="여자" v-model="gender" />
+                                    <label for="gender">여</label>
+                                </div>
+                            </div>
+
+                            <!-- 경력 검색인 경우 -->
+                            <div class="search_input" name="search_input_career" v-show="searchCondition=='career'">
+                                <label for="search_input_career" class="modal_search_condition">경력</label><br />
+                                <div class="modal_search_input">
+                                    <input type="radio" name="career" value="신입" v-model="career" />
+                                    <label for="career">신입</label>
+                                </div>
+                                <div class="modal_search_input">
+                                    <input type="radio" name="career" value="1-5년" v-model="career" />
+                                    <label for="career">1-5년</label>
+                                </div>
+                                <div class="modal_search_input">
+                                    <input type="radio" name="career" value="6-10년" v-model="career" />
+                                    <label for="career">6-10년</label>
+                                </div>
+                                <div class="modal_search_input">
+                                    <input type="radio" name="career" value="10년이상" v-model="career" />
+                                    <label for="career">10년이상</label>
+                                </div>
+                            </div>
+
+                            <br />
+
+                            <button @click="findAll">검색 조건 초기화</button>
+
+                            <br />
+
+                            <a class="btn btn-primary" style="width: 100%; margin-top: 20px"
+                                @click="conditionedSearch">검색</a>
+
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div style="
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: space-between;
+                ">
+            <!-- Search Count -->
+            <div>
+                <span>총 {{resultSize}}명의 선생님을 찾았습니다.</span>
+            </div>
+            <!-- Search Sort Condition-->
+            <!-- <select name="search_condition">
+                    <option value="">정렬</option>
+                    <option value="sort-likes">인기순</option>
+                    <option value="sort-career">신규강사순</option>
+                    <option value="sort-review">후기순</option>
+                </select> -->
+        </div>
+
+        <!-- Search Result -->
+        <div class="teacher_list" style="
+                    display: flex;
+                    flex-wrap: wrap;
+                    justify-content: space-between;
+                    margin-top: 50px;
+                " v-if="success">
+            <div class="search_result_none" v-if="resultSize == '0'">
+                해당 조건의 선생님이 존재하지 않습니다.
+            </div>
+
+            <a class="teacherlist-result" v-for="t in teacherInfo" v-show="success"
+                style="padding: 10px; margin-bottom: 20px;" v-bind:href="detailPage+t.idx">
+                <div>
+                    {{t.name}}
+                </div>
+                <img v-bind:src="imageSrc1 + t.idx + imageSrc2"
+                    style="margin-top: 10px; margin-bottom: 10px; border-radius: 5px;" />
+                <div>
+                    <span>{{t.major}}</span>
+                    <span> / </span>
+                    <span>{{t.career}}</span>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        new Vue({
+            el: "#app",
+            data: {
+                success: false,
+                teacherInfo: [],
+                resultSize: "",
+
+                searchInput: "",
+
+                searchCondition: "",
+                gender: "",
+                school: "",
+                major: "",
+                career: "",
+
+                imageSrc1: "../assets/img/teacher/",
+                imageSrc2: ".jpg",
+
+                detailPage: "http://localhost/getTeacherDetail/",
+            },
+            created: function () {
+                axios({
+                    method: "get",
+                    url: "http://localhost/teacherall",
+                })
+                    .then((resData) => {
+                        console.log(resData.data.success);
+                        console.log(resData.data.teacherList);
+                        this.success = resData.data.success;
+                        this.teacherInfo = resData.data.teacherList;
+                        this.resultSize = this.teacherInfo.length;
+                    })
+                    .catch((errorData) => {
+                        return console.log(errorData);
+                    });
+            },
+            methods: {
+                findAll: function () {
+                    axios({
+                        method: "get",
+                        url: "http://localhost/teacherall",
+                    })
+                        .then((resData) => {
+                            this.success = resData.data.success;
+                            this.teacherInfo = resData.data.courseList;
+                            this.resultSize = this.teacherInfo.length;
+                        })
+                        .catch((errorData) => {
+                            return console.log(errorData);
+                        });
+                },
+                findAllByNameContaining: function () {
+                    axios({
+                        method: "get",
+                        url: "http://localhost/teacher/namecontaining",
+                        params: {
+                            name: this.searchInput,
+                        },
+                    })
+                        .then((resData) => {
+                            console.log(resData.data.success);
+                            console.log(resData.data.teacherList);
+                            this.success = resData.data.success;
+                            this.teacherInfo = resData.data.teacherList;
+                            this.resultSize = this.teacherInfo.length;
+                        })
+                        .catch((errorData) => { });
+                },
+                conditionedSearch: function () {
+                    if (this.searchCondition === "gender") {
+                        this.findAllByGender();
+                    } else if (this.searchCondition === "career") {
+                        this.findAllByCareer();
+                    }
+                    document.getElementById("id01").style.display = "none";
+                    this.searchInput = "";
+                },
+                findAllByGender: function () {
+                    axios({
+                        method: "get",
+                        url: "http://localhost/teacher/gender",
+                        params: {
+                            gender: this.gender,
+                        },
+                    })
+                        .then((resData) => {
+                            console.log(resData.data.success);
+                            console.log(resData.data.teacherList);
+                            this.success = resData.data.success;
+                            this.teacherInfo = resData.data.teacherList;
+                            this.resultSize = this.teacherInfo.length;
+                        })
+                        .catch((errorData) => {
+                            return console.log(errorData);
+                        });
+                },
+                findAllByCareer: function () {
+                    axios({
+                        method: "get",
+                        url: "http://localhost/teacher/career",
+                        params: {
+                            career: this.career,
+                        },
+                    })
+                        .then((resData) => {
+                            console.log(resData.data.success);
+                            console.log(resData.data.teacherList);
+                            this.success = resData.data.success;
+                            this.teacherInfo = resData.data.teacherList;
+                            this.resultSize = this.teacherInfo.length;
+                        })
+                        .catch((errorData) => {
+                            return console.log(errorData);
+                        });
+                },
+            },
+        });
+
+        new Vue({
+            el: "#header",
+            data: {
+                studentIdx: sessionStorage.getItem("studentIdx"),
+                teacherIdx: sessionStorage.getItem("teacherIdx")
+            },
+            methods: {
+                logout: function () {
+                    if (sessionStorage != null) {
+                        sessionStorage.clear();
+                        alert("로그아웃 성공 💨");
+                        window.location.href = "http://localhost/index.html";
+                    } else {
+                        alert("로그아웃 실패");
+                    }
+                },
+            }
+        })
+    </script>
+</body>
+
+</html>

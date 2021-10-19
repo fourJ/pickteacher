@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>Pick Teacher</title>
+    <!-- Favicon-->
+    <link rel="icon" type="image/x-icon" href="/src/main/resources/static/assets/pick.ico" />
+    <!-- Font Awesome icons (free version)-->
+    <script src="https://use.fontawesome.com/releases/v5.15.3/js/all.js" crossorigin="anonymous"></script>
+    <!-- Simple line icons-->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.5.5/css/simple-line-icons.min.css"
+        rel="stylesheet" />
+    <!-- Google fonts-->
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic"
+        rel="stylesheet" type="text/css" />
+    <!-- Vue.js -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+    <!-- stylesheet -->
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css" />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <link rel="stylesheet" href="css/info.css" />
+    <style>
+        .mySlides {
+            display: none;
+        }
+
+        .w3-left,
+        .w3-right,
+        .w3-badge {
+            cursor: pointer;
+        }
+
+        .w3-badge {
+            height: 13px;
+            width: 13px;
+            padding: 0;
+        }
+
+        .w3header {
+            padding: 0;
+        }
+
+        th,
+        td {
+            text-align: left;
+            padding: 5px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        th {
+            background-color: #04aa6d;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <div id="header" class="w3header">
+        <a href="http://localhost/index.html" class="logo">Pick Teacher</a>
+        <div v-if="studentIdx == null && teacherIdx == null" class="w3header-right">
+            <a class="login" @click="login" style="color: white; cursor: pointer;">로그인</a>
+            <a class="signup" @click="signup" style="color: white; cursor: pointer;">회원 가입</a>
+        </div>
+        <div v-if="studentIdx != null || teacherIdx != null" class="w3header-right">
+            <a @click="logout" style="color: white; cursor: pointer;">로그아웃</a>
+        </div>
+    </div>
+
+    <div class="w3header" style="background-color: #1d809f; margin-bottom: 30px">
+        <a href="http://localhost/detail/course.html" class="logo">Teacher Detail</a>
+    </div>
+
+    <!-- Main -->
+    <div id="app" style="margin: 50px">
+        <h3>선생님 상세페이지</h3>
+        <hr />
+
+        <div>
+            <h4>{{teacher.name}} 선생님</h4>
+            <img v-bind:src="imageSrc1 + teacher.idx + imageSrc2" />
+            <br><br>
+
+            <table style="width: 100%" v-if="teacherSuccess">
+                <tr>
+                    <th>전공</th>
+                    <th>경력</th>
+                    <th>학력</th>
+                    <th>성별</th>
+                </tr>
+                <tr>
+                    <td>{{teacher.major}}</td>
+                    <td>{{teacher.career}}</td>
+                    <td>{{teacher.school}} 졸업</td>
+                    <td>{{teacher.gender}}</td>
+                </tr>
+            </table>
+        </div>
+
+        <hr />
+
+        <div>
+            <!-- 강사의 담당 강의 리스트 -->
+            <button @click="getCourse">강의 리스트 보기</button>
+
+            <div v-if="courseSize == '0'">
+                <span>해당 강의에 대한 후기가 없습니다.</span>
+            </div>
+
+            <div v-if="courseSuccess && courseSize != '0'">
+                <!-- 테이블로 강의 리스트 -->
+                <table style="width: 100%">
+                    <tr>
+                        <th>번호</th>
+                        <th>상태</th>
+                        <th>과목</th>
+                        <th>강의명</th>
+                        <th>강의 요일</th>
+                        <th>개강일</th>
+                        <th>종강일</th>
+                        <th>대상 학년</th>
+                        <th>진행 방식</th>
+                        <th>수강비</th>
+                        <th>수강 인원</th>
+                        <th>강의 상세</th>
+                    </tr>
+                    <tr v-for="c in courseList">
+                        <td>{{c.idx}}</td>
+                        <td>{{c.status}}</td>
+                        <td>{{c.subject}}</td>
+                        <td>{{c.title}}</td>
+                        <td>{{c.schedule}}</td>
+                        <td>{{c.openDate}}</td>
+                        <td>{{c.closeDate}}</tdn>
+                        <td>{{c.target}}</td>
+                        <td>{{c.type}}</td>
+                        <td>{{c.tuition}}</td><br />
+                        <td>{{c.headCount}}</td>
+                        <td><a v-bind:href="detailPage + c.idx">더보기</a></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <hr />
+    </div>
+
+    <script>
+        new Vue({
+            el: "#app",
+            data: {
+                teacherIdx: window.location.search.substring(
+                    window.location.search.indexOf("=") + 1
+                ),
+
+                teacherSuccess: "",
+                teacher: [],
+
+                courseSuccess: "",
+                courseList: [],
+                courseSize: "",
+
+                imageSrc1: "../assets/img/teacher/",
+                imageSrc2: ".jpg",
+
+                detailPage: "http://localhost/getCourseDetail/",
+            },
+            created: function () {
+                axios({
+                    method: "get",
+                    url: "http://localhost/teacher",
+                    params: {
+                        idx: this.teacherIdx,
+                    },
+                })
+                    .then((resData) => {
+                        this.teacherSuccess = resData.data.success;
+                        this.teacher = resData.data.teacher;
+                    })
+                    .catch((errorData) => {
+                        return console.log(errorData);
+                    });
+            },
+            methods: {
+                getCourse: function () {
+                    axios({
+                        method: "get",
+                        url: "http://localhost/course/teacheridx",
+                        params: {
+                            teacherIdx: this.teacher.idx,
+                        },
+                    })
+                        .then((resData) => {
+                            this.courseSuccess = resData.data.success;
+                            this.courseList = resData.data.courseList;
+                            this.courseSize = courseList.length;
+                        })
+                        .catch((errorData) => {
+                            return console.log(errorData);
+                        });
+                },
+            },
+        });
+
+        new Vue({
+            el: "#header",
+            data: {
+                studentIdx: sessionStorage.getItem("studentIdx"),
+                teacherIdx: sessionStorage.getItem("teacherIdx")
+            },
+            methods: {
+                logout: function () {
+                    if (sessionStorage != null) {
+                        sessionStorage.clear();
+                        alert("로그아웃 성공 💨");
+                        window.location.href = "http://localhost/index.html";
+                    } else {
+                        alert("로그아웃 실패");
+                    }
+                },
+            }
+        })
+    </script>
+</body>
+
+</html>

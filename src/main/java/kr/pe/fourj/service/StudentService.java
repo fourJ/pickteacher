@@ -29,8 +29,10 @@ public class StudentService {
 		return save.getIdx();
 	}
 
-	public void updateStudent(Long studentIdx, StudentDTO.Update dto) throws NotFoundException {
-		Student student = findOne(studentIdx);
+	public void updateStudent(StudentDTO.Update dto) throws NotFoundException {
+		Student student = findOne(dto.getIdx());
+		
+		student.setPw(dto.getPw());
 		student.setNickName(dto.getNickName());
 		student.setAddress(dto.getAddress());
 		student.setPhone(dto.getPhone());
@@ -38,8 +40,9 @@ public class StudentService {
 		studentRepository.save(student);
 	}
 	
-	public void deleteStudent(Long studentIdx) throws NotFoundException {
-		Student student = findOne(studentIdx);
+	public void deleteStudent(StudentDTO.Delete dto) throws NotFoundException {
+		Student student = findOne(dto.getIdx());
+		
 		studentRepository.deleteById(student.getIdx());
 	}
 	
