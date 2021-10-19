@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>Pick Teacher</title>
+    <!-- Favicon-->
+    <link rel="icon" type="image/x-icon" href="../assets/pick.ico" />
+
+    <!-- Font Awesome icons (free version)-->
+    <script src="https://use.fontawesome.com/releases/v5.15.3/js/all.js" crossorigin="anonymous"></script>
+    <!-- Simple line icons-->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.5.5/css/simple-line-icons.min.css"
+        rel="stylesheet" />
+    <!-- Google fonts-->
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic"
+        rel="stylesheet" type="text/css" />
+    <!-- Vue.js -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <!-- axios -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+    <!-- stylesheet -->
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css" />
+    <link rel="stylesheet" href="../css/styles.css" />
+
+    <style>
+        .w3header {
+            padding: 0;
+        }
+
+        input[type="text"] {
+            width: 20%;
+            padding: 12px 20px;
+            margin: 8px 0;
+            box-sizing: border-box;
+            border: 3px solid #ccc;
+            -webkit-transition: 0.5s;
+            transition: 0.5s;
+            outline: none;
+        }
+
+        input[type="text"]:focus {
+            border: 3px solid #555;
+        }
+
+        input[type="text"],
+        select {
+            width: 100%;
+            padding: 12px 20px;
+            margin: 8px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        input[type="submit"] {
+            width: 5%;
+            background-color: #4caf50;
+            color: white;
+            padding: 2px 4px;
+            margin: 8px 0;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        /* div {
+  border-radius: 5px;
+  background-color: #f2f2f2;
+  padding: 20px;
+} */
+    </style>
+</head>
+
+<body>
+
+    <!-- Header -->
+    <div>
+        <div class="w3header">
+            <a href="/index.html" class="logo">Pick Teacher</a>
+        </div>
+        <div class="w3header" id="header" v-if="success" style="background-color: #1d809f; margin-bottom: 30px">
+            <a href="mypage_teacher.html" class="logo">My Page</a>
+            <div class="w3header-right">
+                <a @click="teacherinfo" style="color: white; cursor: pointer;">내 정보 수정</a>
+                <a href="teacher_courseList.html">내 강의목록</a>
+                <a href="teacher_coursesave.html">강의 추가</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="w3-container" style="margin: 50px">
+        <h3>강의 추가 페이지</h3>
+        <hr>
+
+        <div id="app">
+            <form action="http://localhost/course/save" method="post">
+                <input type="hidden" name="teacherIdx" v-bind:value="teacherIdx" />
+
+                <label>강의명</label>
+                <input type="text" name="title" placeholder="강의명을 입력해주세요." required />
+
+                <br /><br />
+                <label for="subject">과목 pick</label>
+                <select name="subject" required>
+                    <option value="" selected>과목 선택</option>
+                    <option value="국어">국어</option>
+                    <option value="영어">영어</option>
+                    <option value="수학">수학</option>
+                    <option value="사회탐구">사회탐구</option>
+                    <option value="과학탐구">과학탐구</option>
+                    <option value="제2외국어">제2외국어</option>
+                    <option value="코딩">코딩</option>
+                </select>
+
+                <br /><br />
+
+                <label for="target">대상학년 pick</label>
+                <select name="target" required>
+                    <option value="" selected>대상학년 선택</option>
+                    <option value="중1">중1</option>
+                    <option value="중2">중2</option>
+                    <option value="중3">중3</option>
+                    <option value="고1">고1</option>
+                    <option value="고2">고2</option>
+                    <option value="고3">고3</option>
+                </select>
+
+                <br /><br />
+
+                <label for="schedule">요일 pick</label>
+                <select name="schedule" required>
+                    <option value="" selected>요일 선택</option>
+                    <option value="월">월</option>
+                    <option value="화">화</option>
+                    <option value="수">수</option>
+                    <option value="목">목</option>
+                    <option value="금">금</option>
+                    <option value="토">토</option>
+                    <option value="일">일</option>
+                </select>
+
+                <br /><br />
+
+                <label for="type">타입 pick</label>
+                <select name="type" required>
+                    <option value="" selected>타입 선택</option>
+                    <option value="온라인">온라인</option>
+                    <option value="오프라인">오프라인</option>
+                </select>
+
+                <br /><br />
+
+                <label>개강일</label>
+                <input type="date" name="openDate" required />
+                <br />
+
+                <label>종강일</label>
+                <input type="date" name="closeDate" required />
+
+                <br /><br />
+
+                <label>정원 수</label>
+                <input type="text" name="headCount" pattern="[0-9]{1,3}" placeholder="강의 최대 정원 수를 입력해주세요." required />
+
+                <br /><br />
+
+                <label>수강비</label>
+                <input type="text" name="tuition" pattern="[0-9]{1,100}" placeholder="강의 수강비를 입력해주세요." required />
+
+
+                <br /><br />
+
+                <input type="submit" value="완료" />
+            </form>
+        </div>
+    </div>
+
+
+
+    <script>
+        new Vue({
+            el: "#app",
+            data: {
+                teacherIdx: sessionStorage.getItem('teacherIdx'),
+            }
+        })
+
+        new Vue({
+            el: "#header",
+            data: {
+                success: false,
+                datas: [],
+                studentIdx: sessionStorage.getItem("studentIdx"),
+            },
+            created: function () {
+                axios({
+                    method: "get",
+                    url: "http://localhost/student",
+                    params: {
+                        idx: sessionStorage.getItem("studentIdx"),
+                    }
+                })
+                    .then((resData) => {
+                        this.success = resData.data.success;
+                        this.datas = resData.data.student;
+                    })
+                    .catch((errorData) => {
+                        console.log(errorData.response.data.message);
+                    });
+            },
+            methods: {
+                teacherinfo: function () {
+                    if (this.teacherIdx != null) {
+                        var inputpw = prompt("비밀번호를 입력하세요:)");
+                        if (inputpw != null) {
+                            if (inputpw == this.datas.pw) {
+                                window.location.href =
+                                    "http://localhost/mypage/teacher_update.html";
+                            } else {
+                                alert("비밀번호를 재입력하세요!");
+                            }
+                        } else {
+                            window.location.reload();
+                        }
+                    } else {
+                        if (window.confirm("잠깐!! 🤭 학생 회원이신가요?")) {
+                            window.location.href = "http://localhost/login/studentlogin.html";
+                        } else {
+                            window.location.href = "http://localhost/login/teacherlogin.html";
+                        }
+                    }
+                },
+                logoutclick: function () {
+                    const result = confirm("로그아웃 하시겠습니까?");
+                    if (result) {
+                        sessionStorage.clear();
+                        this.loginsuccess = false;
+                        window.location.href = "http://localhost/index.html";
+                    }
+                },
+                loginclick: function () {
+                    const result = confirm("선생님이신가요?");
+                    if (result) {
+                        window.location.href = "http://localhost/login/teacherlogin.html";
+                    } else {
+                        window.location.href = "http://localhost/login/studentlogin.html";
+                    }
+                },
+            },
+        });
+    </script>
+</body>
+
+</html>

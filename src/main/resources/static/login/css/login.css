@@ -1,0 +1,249 @@
+* {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	width: 100%;
+	height: 100vh;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	perspective: 1800px;
+	overflow: hidden;
+	transform-style: preserve-3d;
+	background-image: radial-gradient(circle 248px at center, #16d9e3 0%, #30c7ec 47%, #46aef7 100%);
+}
+
+.container {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	transition: transform 800ms ease;
+	transform-style: preserve-3d;
+	&.active {
+		transform: rotateY(180deg);
+	}
+}
+
+.app {
+	width: 550px;
+	height: 500px;
+	background: #34495E;
+	color: #fff;
+	font-family: montserrat;
+	display: grid;
+	grid-template-columns: 1fr;
+	grid-template-rows: 80px 1fr;
+	overflow: hidden;
+	backface-visibility: hidden;
+	position: absolute;
+	box-shadow: -2px 5px 15px rgba(0,0,0,0.35);
+	&.front {
+		transform: rotateY(0deg) translateZ(0em);
+	}
+	&.back {
+		transform: rotateY(180deg) translateZ(0.5px);
+	}
+}
+
+.btn {
+	height: 50px;
+	outline: none;
+	border: none;
+	cursor: pointer;
+	background: #1ABC9C;
+	letter-spacing: 1px;
+	font-size: 18px;
+}
+
+.header {
+	position: relative;
+	width: 100%;
+	display: grid;
+	grid-template-rows: 1fr;
+	grid-template-columns: 150px 1fr;
+	background: #2C3E50;
+	padding: 0 20px;
+
+	.info {
+		height: 100%;
+		font-weight: 800;
+		font-size: 2.5rem;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		letter-spacing: 2px;
+	}
+	.prompt {
+		height: 100%;
+		display: flex;
+		justify-content: flex-end;
+		align-items: center;
+		font-size: 0.8rem;
+		font-weight: 600;
+		color: rgba(255, 255, 255, 0.8);
+		margin-right: 20px;
+		.btn {
+			padding: 0 20px;
+			margin-left: 20px;
+			color: #fff;
+		}
+	}
+}
+
+.main {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding: 20px;
+}
+
+	.user_field {
+		width: 92%;
+		height: 100%;
+		background: rgba(44, 62, 80, 0.6);
+		padding: 10px 30px;
+		border-radius: 20px;
+		display: flex;
+		flex-direction: column;
+  }
+
+		.direct.login {
+			padding: 10px 0;
+			display: flex;
+    }
+
+			.icon {
+				position: relative;
+				width: 2.2rem;
+				height: 2.2rem;
+				margin-right: 20px;
+				border-radius: 50%;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				cursor: pointer;
+				background: #fff;
+				overflow: hidden;
+      }
+				.before {
+					content: '';
+					position: absolute;
+					left: -3px;
+					top: -3px;
+					width: 2.5rem;
+					height: 2.5rem;
+					border-radius: 50%;
+					transition: all 400ms ease;
+					transform: scale(0.4);
+					background: #1ABC9C;
+					z-index: 1;
+					opacity: 0;
+				}
+				i {
+					z-index: 2;
+					transition: all 300ms ease;
+					color: #000;
+					font-size: 1rem;
+				}
+
+				a:hover {
+					a::before{
+						transform: scale(1);
+						opacity: 1;
+					}
+					i {
+						color: #fff;
+					}
+		.option_text {
+			font-size: 15px;
+			margin: 5px 0 10px 0;
+		}
+		._details {
+			width: 100%;
+			height: 100%;
+    }
+			.textbox {
+				position: relative;
+				margin: 10px 0 20px 0;
+				height: 60px;
+				display: flex;
+				align-items: center;
+      }
+				input {
+					position: relative;
+					height: 40px;
+					width: 70%;
+					border: none;
+					background: none;
+					border-bottom: 2px solid #fff;
+					font-size: 18px;
+					color: #fff;
+					padding: 0 10px;
+					letter-spacing: 1px;
+					outline: none;
+        }
+					.input:focus{
+						.input_detail {
+							font-size: 12px;
+							left: 10px;
+							top: 15%;
+							color: #1ABC9C;
+							opacity: 1;
+						}
+				.input_detail {
+					position: absolute;
+					left: 10px;
+					top: 50%;
+					font-size: 16px;
+					transform: translateY(-50%);
+					pointer-events: none;
+					user-select: none;
+					font-weight: 800;
+					opacity: 0.7;
+					transition: all 200ms ease;
+				}
+	.btn.login {
+		position: relative;
+		color: #fff;
+		align-self: flex-end;
+		margin: 20px 20px 0 0;
+		padding: 10px 0;
+		width: 160px;
+	}	
+
+.app.back .header {
+	grid-template-columns: 200px 1fr;
+}
+.app.back .main .user_field ._details .textbox {
+	height: 40px;
+}
+.app.back .main .user_field ._details .textbox input:focus+.input_detail{
+	top: 0%;
+}
+
+
+
+.support{
+	z-index: -1;
+	position: absolute;
+	right: 10px;
+	bottom: 10px;
+	padding: 10px;
+	display: flex;
+}
+a{
+	margin: 0 20px;
+	color: #fff;
+	font-size: 2rem;
+	transition: all 400ms ease;
+}
+
+a:hover{
+	color: #222;
+}

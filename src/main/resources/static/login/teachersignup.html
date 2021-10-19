@@ -1,0 +1,273 @@
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>Pick Teacher</title>
+    <!-- Favicon-->
+    <link rel="icon" type="image/x-icon" href="../assets/pick.ico" />
+    <!-- Font Awesome icons (free version)-->
+    <script src="https://use.fontawesome.com/releases/v5.15.3/js/all.js" crossorigin="anonymous"></script>
+    <!-- Simple line icons-->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.5.5/css/simple-line-icons.min.css"
+        rel="stylesheet" />
+    <!-- Google fonts-->
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic"
+        rel="stylesheet" type="text/css" />
+    <!-- Vue.js -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <!-- stylesheet -->
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css" />
+    <link rel="stylesheet" href="../css/styles.css" />
+
+    <!-- Material Design Lite CSS -->
+    <link rel="stylesheet" href="../login/css/google.css" />
+    <!-- Font Awesome CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" />
+    <!-- Material Design icon font -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+    <link rel="stylesheet" href="/css/styles.css" />
+</head>
+
+<style>
+    .util-center {
+        margin: auto;
+    }
+
+    .util-max-512px {
+        max-width: 512px;
+    }
+
+    .util-spacing-h--40px {
+        margin-top: 40px;
+        margin-bottom: 40px;
+    }
+
+    .util-no-decoration {
+        text-decoration: none;
+    }
+</style>
+
+<body class="mdl-color--blue-grey-50">
+    <!-- Header -->
+    <div id="header" class="w3header">
+        <a href="http://localhost/index.html" class="logo">Pick Teacher</a>
+        <div v-if="studentIdx == null && teacherIdx == null" class="w3header-right">
+            <a class="login" @click="login" style="color: white; cursor: pointer;">로그인</a>
+            <a class="signup" @click="signup" style="color: white; cursor: pointer;">회원 가입</a>
+        </div>
+        <div v-if="studentIdx != null || teacherIdx != null" class="w3header-right">
+            <a @click="logout" style="color: white; cursor: pointer;">로그아웃</a>
+        </div>
+    </div>
+    <div class="w3header" style="background-color: #1d809f; margin-bottom: 30px">
+        <a href="http://localhost/login/teachersignup.html" class="logo">Teacher SignUp</a>
+    </div>
+
+    <!-- REGISTER FORM -->
+    <div class="mdl-grid" id="signup">
+        <div class="
+                    mdl-card
+                    mdl-shadow--16dp
+                    util-center
+                    util-spacing-h--40px
+                ">
+            <div class="mdl-card__title mdl-color--teal-500">
+                <h2 class="mdl-card__title-text mdl-color-text--white">
+                    픽티처의 선생님이 되고 싶어요 🙋‍♀️
+                </h2>
+            </div>
+            <div class="mdl-card__supporting-text mdl-grid">
+
+                <form action="http://localhost/teacher" method="post">
+                    <input type="hidden" name="action" value="register" />
+
+                    <div class="
+                                mdl-textfield mdl-js-textfield
+                                mdl-textfield--floating-label
+                                mdl-cell mdl-cell--12-col
+                            ">
+                        <label class="
+                                    mdl-textfield__label
+                                    mdl-color-text--grey
+                                " for="textfield_new_username">아이디</label>
+                        <input class="mdl-textfield__input" type="text" required="" name="id"
+                            pattern="^[a-z0-9_-]{3,15}$" />
+                        <span class="mdl-textfield__error">3~15글자 (소문자, 숫자, _, - 가능)</span>
+                    </div>
+
+                    <div class="
+                                mdl-textfield mdl-js-textfield
+                                mdl-textfield--floating-label
+                                mdl-cell mdl-cell--12-col
+                            ">
+                        <label class="
+                                    mdl-textfield__label
+                                    mdl-color-text--grey
+                                " for="textfield_new_password">비밀번호</label>
+                        <input class="mdl-textfield__input" type="password" id="pw1" name="pw" required=""
+                            pattern="^[a-zA-Z0-9]+$" />
+                        <span class="mdl-textfield__error">
+                            6~20글자 (소문자, 대문자, 숫자, @, #, $, % 가능)
+                        </span>
+                    </div>
+
+                    <div class="
+                                mdl-textfield mdl-js-textfield
+                                mdl-textfield--floating-label
+                                mdl-cell mdl-cell--12-col
+                            ">
+                        <label class="
+                                    mdl-textfield__label
+                                    mdl-color-text--grey
+                                " for="textfield_password_confirm">비밀번호 확인</label>
+                        <input class="mdl-textfield__input" type="password" id="pw2" required="" name="password_confirm"
+                            onchange="check()" />
+                    </div>
+
+                    <div class="
+                                mdl-textfield mdl-js-textfield
+                                mdl-textfield--floating-label
+                                mdl-cell mdl-cell--12-col
+                            ">
+                        <label class="
+                                    mdl-textfield__label
+                                    mdl-color-text--grey
+                                " for="textfield_new_username">이름</label>
+                        <input class="mdl-textfield__input" type="text" name="name" required="" />
+                    </div>
+
+                    <!-- Gender -->
+                    <div class="
+                                mdl-textfield mdl-js-textfield
+                                mdl-textfield--floating-label
+                                mdl-cell mdl-cell--12-col
+                            ">
+                        <label class="
+                                mdl-textfield__label
+                                mdl-color-text--grey
+                            " for="textfield_new_username">성별</label>
+                        <select id="genderList" name="gender" style="margin-top: 30px;">
+                            <option value="여자">여자</option>
+                            <option value="남자">남자</option>
+                        </select>
+                    </div>
+
+                    <div class="
+                                mdl-textfield mdl-js-textfield
+                                mdl-textfield--floating-label
+                                mdl-cell mdl-cell--12-col
+                            ">
+                        <label class="
+                                    mdl-textfield__label
+                                    mdl-color-text--grey
+                                " for="textfield_new_username">거주지</label>
+                        <input class="mdl-textfield__input" type="text" required="" name="address" />
+                    </div>
+
+                    <div class="
+                                mdl-textfield mdl-js-textfield
+                                mdl-textfield--floating-label
+                                mdl-cell mdl-cell--12-col
+                            ">
+                        <label class="
+                                    mdl-textfield__label
+                                    mdl-color-text--grey
+                                " for="textfield_new_username">전화번호</label>
+                        <input class="mdl-textfield__input" type="tel" required="" name="phone"
+                            pattern="^[0-9_-]{3,15}$" />
+                        <span class="mdl-textfield__error">-제외 숫자만 입력</span>
+                    </div>
+
+                    <!-- Career -->
+                    <div class="
+                                mdl-textfield mdl-js-textfield
+                                mdl-textfield--floating-label
+                                mdl-cell mdl-cell--12-col
+                            ">
+                        <label class="
+                                    mdl-textfield__label
+                                    mdl-color-text--grey
+                                " for="textfield_new_username">경력</label>
+                        <input class="mdl-textfield__input" type="text" required="" name="career" list="careerList" />
+                        <datalist id="careerList">
+                            <option value="신입"></option>
+                            <option value="1-5년"></option>
+                            <option value="6-10년"></option>
+                            <option value="10년이상"></option>
+                        </datalist>
+                    </div>
+
+                    <div class="
+                                mdl-textfield mdl-js-textfield
+                                mdl-textfield--floating-label
+                                mdl-cell mdl-cell--12-col
+                            ">
+                        <label class="
+                                    mdl-textfield__label
+                                    mdl-color-text--grey
+                                " for="textfield_new_username">전공</label>
+                        <input class="mdl-textfield__input" type="text" required="" name="major" list="majorList" />
+                        <datalist id="majorList">
+                            <option value="컴퓨터공학과"></option>
+                            <option value="영어영문과"></option>
+                            <option value="경영학과"></option>
+                            <option value="사회체육과"></option>
+                        </datalist>
+                    </div>
+
+                    <div class="
+                                mdl-textfield mdl-js-textfield
+                                mdl-textfield--floating-label
+                                mdl-cell mdl-cell--12-col
+                            ">
+                        <label class="
+                                    mdl-textfield__label
+                                    mdl-color-text--grey
+                                " for="textfield_new_username">출신 학교</label>
+                        <input class="mdl-textfield__input" type="text" required="" name="school"
+                            pattern="^[a-z0-9_-]{3,15}$" v-on:keyup.enter="login" />
+                    </div>
+
+                    <div class="mdl-cell mdl-cell--12-col send-button" align="center">
+                        <button class="
+                                    mdl-button
+                                    mdl-js-ripple-effect
+                                    mdl-js-button
+                                    mdl-button--raised mdl-button--colored
+                                " type="submit">
+                            가입하기
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        function check() {
+            var pw1 = document.getElementById("pw1").value;
+            var pw2 = document.getElementById("pw2").value;
+            if (pw1 != "" && pw2 != "") {
+                if (pw1 != pw2) {
+                    alert("비밀번호가 일치하지 않습니다!");
+                    window.location.reload();
+                } else {
+                    return true;
+                }
+            } else {
+                alert("비밀번호를 입력해주세요!");
+                window.location.reload();
+            }
+        }
+    </script>
+
+    <!-- Material Design Lite JavaScript -->
+    <script src="https://storage.googleapis.com/code.getmdl.io/1.0.0/material.min.js"></script>
+    <!-- <script src="/js/scripts.js"></script> -->
+</body>
+
+</html>

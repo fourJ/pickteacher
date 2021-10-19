@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>Pick Teacher</title>
+    <!-- Favicon-->
+    <link rel="icon" type="image/x-icon" href="../assets/pick.ico" />
+
+    <!-- Font Awesome icons (free version)-->
+    <script src="https://use.fontawesome.com/releases/v5.15.3/js/all.js" crossorigin="anonymous"></script>
+    <!-- Simple line icons-->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.5.5/css/simple-line-icons.min.css"
+        rel="stylesheet" />
+    <!-- Google fonts-->
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic"
+        rel="stylesheet" type="text/css" />
+    <!-- Vue.js -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <!-- axios -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+    <!-- stylesheet -->
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css" />
+    <link rel="stylesheet" href="../css/styles.css" />
+
+    <style>
+        .w3header {
+            padding: 0;
+        }
+
+        input[type="text"] {
+            width: 20%;
+            padding: 12px 20px;
+            margin: 8px 0;
+            box-sizing: border-box;
+            border: 3px solid #ccc;
+            -webkit-transition: 0.5s;
+            transition: 0.5s;
+            outline: none;
+        }
+
+        input[type="text"]:focus {
+            border: 3px solid #555;
+        }
+
+        input[type="text"],
+        select {
+            width: 100%;
+            padding: 12px 20px;
+            margin: 8px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        input[type="submit"] {
+            width: 5%;
+            background-color: #4caf50;
+            color: white;
+            padding: 2px 4px;
+            margin: 8px 0;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        /* div {
+  border-radius: 5px;
+  background-color: #f2f2f2;
+  padding: 20px;
+} */
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <div id="header" class="w3header">
+        <a href="/index.html" class="logo">Pick Teacher</a>
+        <div v-if="studentIdx != null || teacherIdx != null" class="w3header-right">
+            <a @click="logout" style="color: white; cursor: pointer;">로그아웃</a>
+        </div>
+    </div>
+
+    <div class="w3header" style="background-color: #1d809f; margin-bottom: 30px">
+        <a href="reivewall.html" class="logo">Reivew Update</a>
+        <div class="w3header-right">
+            <a v-show="teacherIdx == null && studentIdx != null" href="reviewpage.html">후기 작성하기</a>
+            <a href="reivewall.html">전체 후기</a>
+            <a v-show="teacherIdx == null && studentIdx != null" href="reviewmyall.html">내가 쓴 글</a>
+        </div>
+    </div>
+
+    <div class="w3-container" style="margin: 50px">
+        <h3>후기 수정하기</h3>
+        <hr>
+
+        <div id="app">
+            <div id="reviewWrite">
+                <label>내가 들은 수업</label>
+                <input type="text" v-model="reviewTitle" readonly />
+
+                <br /><br />
+                <label for="star">별점</label>
+                <select id="star" name="star" v-model="review.star">
+                    <option value="1">☆☆☆☆★</option>
+                    <option value="2">☆☆☆★★</option>
+                    <option value="3">☆☆★★★</option>
+                    <option value="4">☆★★★★</option>
+                    <option value="5">★★★★★</option>
+                </select>
+
+                <br /><br />
+
+                <label for="content">내용</label>
+                <input type="text" id="content" name="content" style="height: 100" v-model="review.content" />
+
+                <br /><br />
+
+                <input type="submit" value="수정완료" @click="reviewUpdate" />
+            </div>
+        </div>
+    </div>
+
+    <script>
+        new Vue({
+            el: "#app",
+            data: {
+                reviewIdx: window.location.search.substring(
+                    window.location.search.indexOf("=") + 1
+                ),
+
+                success: "",
+                review: [],
+                reviewTitle: "",
+                updateSuccess: "",
+
+                studentIdx: sessionStorage.getItem("studentIdx"),
+                teacherIdx: sessionStorage.getItem("teacherIdx")
+            },
+            created: function () {
+                axios({
+                    method: "get",
+                    url: "http://localhost/review",
+                    params: {
+                        idx: this.reviewIdx,
+                    },
+                })
+                    .then((resData) => {
+                        this.success = resData.data.success;
+                        this.review = resData.data.review;
+                        this.reviewTitle =
+                            resData.data.review.courseIdx.title;
+                    })
+                    .catch((errorData) => {
+                        alert(errorData);
+                    });
+            },
+            methods: {
+                reviewUpdate: function () {
+                    axios({
+                        method: "put",
+                        url: "http://localhost/review",
+                        data: {
+                            idx: this.reviewIdx,
+                            star: this.review.star,
+                            content: this.review.content,
+                        },
+                    })
+                        .then((resData) => {
+                            this.updateSuccess = resData.data.success;
+                            alert("후기 수정 성공!");
+                            window.location.reload();
+                            location.href =
+                                "http://localhost/reviewcommunity/reviewmyall.html";
+                        })
+                        .catch((errorData) => {
+                            return console.log(errorData);
+                        });
+                },
+            },
+        });
+
+        new Vue({
+            el: "#header",
+            data: {
+                studentIdx: sessionStorage.getItem("studentIdx"),
+                teacherIdx: sessionStorage.getItem("teacherIdx")
+            },
+            methods: {
+                logout: function () {
+                    if (sessionStorage != null) {
+                        sessionStorage.clear();
+                        alert("로그아웃 성공 💨");
+                        window.location.href = "http://localhost/index.html";
+                    } else {
+                        alert("로그아웃 실패");
+                    }
+                },
+            }
+        })
+    </script>
+</body>
+
+</html>

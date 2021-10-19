@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>Pick Teacher</title>
+    <!-- Favicon-->
+    <link rel="icon" type="image/x-icon" href="/src/main/resources/static/assets/pick.ico" />
+    <!-- Font Awesome icons (free version)-->
+    <script src="https://use.fontawesome.com/releases/v5.15.3/js/all.js" crossorigin="anonymous"></script>
+    <!-- Simple line icons-->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.5.5/css/simple-line-icons.min.css"
+        rel="stylesheet" />
+    <!-- Google fonts-->
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic"
+        rel="stylesheet" type="text/css" />
+    <!-- Vue.js -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+    <!-- stylesheet -->
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css" />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <link rel="stylesheet" href="css/info.css" />
+
+    <!-- javascript -->
+    <script src="../js/scripts.js"></script>
+
+    <style>
+        .mySlides {
+            display: none;
+        }
+
+        .w3-left,
+        .w3-right,
+        .w3-badge {
+            cursor: pointer;
+        }
+
+        .w3-badge {
+            height: 13px;
+            width: 13px;
+            padding: 0;
+        }
+
+        .w3header {
+            padding: 0;
+        }
+
+        th,
+        td {
+            text-align: left;
+            padding: 5px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        th {
+            background-color: #04aa6d;
+            color: white;
+        }
+
+        .courseHighlight {
+            font-weight: 900;
+            color: white;
+            background-color: red;
+        }
+
+        img {
+            width: 250px;
+            height: 150px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <div id="header" class="w3header">
+        <a href="http://localhost/index.html" class="logo">Pick Teacher</a>
+        <div v-if="studentIdx == null && teacherIdx == null" class="w3header-right">
+            <a class="login" @click="login" style="color: white; cursor: pointer;">로그인</a>
+            <a class="signup" @click="signup" style="color: white; cursor: pointer;">회원 가입</a>
+        </div>
+        <div v-if="studentIdx != null || teacherIdx != null" class="w3header-right">
+            <a @click="logout" style="color: white; cursor: pointer;">로그아웃</a>
+        </div>
+    </div>
+
+    <div class="w3header" style="background-color: #1d809f; margin-bottom: 30px">
+        <a href="http://localhost/detail/course.html" class="logo">Course Detail</a>
+    </div>
+
+    <!-- Main -->
+    <div id="app" style="margin: 50px">
+        <h3>강의 상세페이지</h3>
+        <hr />
+
+        <div>
+            <h4>{{course.title}}</h4>
+            <img v-bind:src="imageSrc1 + course.idx + imageSrc2" />
+            <br><br>
+
+            <table style="width: 100%" v-if="courseSuccess && catalogSuccess">
+                <tr>
+                    <th>상태</th>
+                    <th>과목</th>
+                    <th>강의명</th>
+                    <th>수업시간</th>
+                    <th>개강일</th>
+                    <th>종강일</th>
+                    <th>대상 학년</th>
+                    <th>유형</th>
+                    <th>수강료</th>
+                    <th>정원</th>
+                    <th>선생님</th>
+                </tr>
+                <tr>
+                    <td><span class="courseHighlight">{{course.status}}</span></td>
+                    <td>{{course.subject}}</td>
+                    <td>{{course.title}}</td>
+                    <td>{{course.schedule}}</td>
+                    <td>{{course.openDate}}</td>
+                    <td>{{course.closeDate}}</tdn>
+                    <td>{{course.target}}</td>
+                    <td>{{course.type}}</td>
+                    <td>{{course.tuition}}</td><br />
+                    <td>{{catalogSize}} / {{course.headCount}}</td>
+                    <td><a v-bind:href="detailPage + course.teacherIdx.idx">{{course.teacherIdx.name}}</a></td>
+                </tr>
+            </table>
+        </div>
+
+        <br>
+
+        <div v-if="teacherIdx === null && studentIdx != null">
+            <!-- 찜 하기 / 장바구니 / 수강신청 버튼 -->
+            <div id="likes" style="display: inline;">
+                <button v-if="likesCheck == '0'" @click="saveLikes">찜 하기</button>
+                <button v-if="likesCheck == '1'" @click="deleteLikes">찜 취소</button>
+            </div>
+            <button v-if="course.status != '마감' && catalogSize < course.headCount" @click="saveCart">장바구니</button>
+            <button v-if="course.status != '마감' && catalogSize < course.headCount" @click="saveCatalog">수강신청</button>
+        </div>
+
+        <hr>
+
+        <div>
+            <!-- 후기 리스트 -->
+            <button @click="getReviewList">후기 보기</button>
+
+            <br>
+            <br>
+            <div v-if="reviewSize == '0'">
+                <span>해당 강의에 대한 후기가 없습니다.</span>
+            </div>
+            <div v-if="reviewSuccess && reviewSize != '0'">
+                <!-- 테이블로 리뷰 리스트 -->
+                <table style="width: 100%">
+                    <tr>
+                        <th>작성자</th>
+                        <th>닉네임</th>
+                        <th>강의명</th>
+                        <th>과목</th>
+                        <th>작성시간</th>
+                        <th>후기내용</th>
+                        <th>별점</th>
+                    </tr>
+                    <tr v-for="v in reviewList">
+                        <td>{{v.studentIdx.name}}</td>
+                        <td>{{v.studentIdx.nickName}}</td>
+                        <td>{{v.courseIdx.title}}</td>
+                        <td>{{v.courseIdx.subject}}</td>
+                        <td>{{v.date}}</td>
+                        <td>{{v.content}}</td>
+                        <td>{{v.star}}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <hr />
+
+    <script>
+        new Vue({
+            el: "#app",
+            data: {
+                courseIdx: window.location.search.substring(
+                    window.location.search.indexOf("=") + 1
+                ),
+
+                courseSuccess: "",
+                course: [],
+
+                catalogSuccess: "",
+                catalogList: [],
+                catalogSize: "",
+
+                reviewSuccess: "",
+                reviewList: [],
+                reviewSize: "",
+
+                imageSrc1: "../assets/img/course/",
+                imageSrc2: ".jpg",
+
+                detailPage: "http://localhost/getTeacherDetail/",
+
+                teacherIdx: sessionStorage.getItem("teacherIdx"),
+                studentIdx: sessionStorage.getItem("studentIdx"),
+
+                likesCheckSuccess: "",
+                likesCheck: ""
+            },
+            created: function () {
+                axios({
+                    method: "get",
+                    url: "http://localhost/course",
+                    params: {
+                        idx: this.courseIdx,
+                    },
+                })
+                    .then((resData) => {
+                        this.courseSuccess = resData.data.success;
+                        this.course = resData.data.course;
+                    })
+                    .catch((errorData) => {
+                        return console.log(errorData);
+                    });
+            },
+            beforeMount: function () {
+                axios({
+                    method: "get",
+                    url: "http://localhost/likes/check",
+                    params: {
+                        studentIdx: this.studentIdx,
+                        courseIdx: this.courseIdx,
+                    }
+                })
+                    .then((resData) => {
+                        this.likesCheckSuccess = resData.data.success;
+                        this.likesCheck = resData.data.check;
+                    })
+                    .catch((errorData) => {
+                        return console.log(errorData);
+                    });
+
+            },
+            mounted: function () {
+                axios({
+                    method: "get",
+                    url: "http://localhost/catalog/courseidx",
+                    params: {
+                        courseIdx: this.courseIdx,
+                    },
+                })
+                    .then((resData) => {
+                        this.catalogSuccess = resData.data.success;
+                        this.catalogList = resData.data.catalogList;
+                        this.catalogSize = resData.data.catalogList.length;
+                    })
+                    .catch((errorData) => {
+                        return console.log(errorData);
+                    });
+            },
+            methods: {
+                saveLikes: function () {
+                    if (sessionStorage.getItem("studentIdx") != null) {
+                        axios({
+                            method: "post",
+                            url: "http://localhost/likes",
+                            data: {
+                                studentIdx: this.studentIdx,
+                                courseIdx: this.courseIdx,
+                            },
+                        })
+                            .then((resData) => {
+                                if (resData.data.success) {
+                                    alert("찜 저장 성공");
+                                    if (window.confirm("내 찜 목록으로 이동할까요?")) {
+                                        window.location.href = "http://localhost/mypage/student_likes.html";
+                                    } else {
+                                        location.reload();
+                                    }
+                                } else {
+                                    alert("이미 찜이 되어있는 강의입니다.");
+                                    if (window.confirm("내 찜 목록으로 이동할까요?")) {
+                                        window.location.href = "http://localhost/mypage/student_likes.html";
+                                    } else {
+                                        location.reload();
+                                    }
+                                }
+                            })
+                            .catch((errorData) => {
+                                return console.log(errorData);
+                            })
+                    } else {
+                        alert("로그인이 필요한 기능입니다.");
+                        window.location.href = "http://localhost/login/studentlogin.html";
+                    }
+                },
+                deleteLikes: function () {
+                    if (sessionStorage.getItem("studentIdx") != null) {
+                        axios({
+                            method: "delete",
+                            url: "http://localhost/likes",
+                            params: {
+                                studentIdx: this.studentIdx,
+                                courseIdx: this.courseIdx,
+                            },
+                        })
+                            .then((resData) => {
+                                if (resData.data.success) {
+                                    alert("찜 삭제 성공");
+                                    if (window.confirm("내 찜 목록으로 이동할까요?")) {
+                                        window.location.href = "http://localhost/mypage/student_likes.html";
+                                    } else {
+                                        location.reload();
+                                    }
+                                } else {
+                                    alert("찜이 되어있지 않은 강의입니다.");
+                                    if (window.confirm("내 찜 목록으로 이동할까요?")) {
+                                        window.location.href = "http://localhost/mypage/student_likes.html";
+                                    } else {
+                                        location.reload();
+                                    }
+                                }
+                            })
+                            .catch((errorData) => {
+                                return console.log(errorData);
+                            })
+                    } else {
+                        alert("로그인이 필요한 기능입니다.");
+                        window.location.href = "http://localhost/login/studentlogin.html";
+                    }
+                },
+                saveCart: function () {
+                    if (sessionStorage.getItem("studentIdx") != null) {
+                        axios({
+                            method: "post",
+                            url: "http://localhost/cart",
+                            data: {
+                                studentIdx: this.studentIdx,
+                                courseIdx: this.courseIdx,
+                            },
+                        })
+                            .then((resData) => {
+                                if (resData.data.success) {
+                                    alert("장바구니 저장 성공");
+                                    if (window.confirm("내 장바구니로 이동할까요?")) {
+                                        window.location.href = "http://localhost/mypage/student_cart.html";
+                                    } else {
+                                        location.reload();
+                                    }
+                                } else {
+                                    alert("이미 장바구니에 있는 강의입니다.");
+                                    if (window.confirm("내 장바구니로 이동할까요?")) {
+                                        window.location.href = "http://localhost/mypage/student_cart.html";
+                                    } else {
+                                        location.reload();
+                                    }
+                                }
+                            })
+                            .catch((errorData) => {
+                                return console.log(errorData);
+                            })
+                    } else {
+                        alert("로그인이 필요한 기능입니다.");
+                        window.location.href = "http://localhost/login/studentlogin.html";
+                    }
+                },
+                saveCatalog: function () {
+                    if (sessionStorage.getItem("studentIdx") != null) {
+                        axios({
+                            method: "post",
+                            url: "http://localhost/catalog",
+                            data: {
+                                studentIdx: this.studentIdx,
+                                courseIdx: this.courseIdx,
+                            },
+                        })
+                            .then((resData) => {
+                                if (resData.data.success) {
+                                    alert("수강신청 성공");
+                                    if (window.confirm("내 수강내역으로 이동할까요?")) {
+                                        window.location.href = "http://localhost/mypage/student_catalog.html";
+                                    } else {
+                                        location.reload();
+                                    }
+                                } else {
+                                    alert("이미 수강하고 있는 강의입니다.");
+                                    if (window.confirm("내 수강내역으로 이동할까요?")) {
+                                        window.location.href = "http://localhost/mypage/student_catalog.html";
+                                    } else {
+                                        location.reload();
+                                    }
+                                }
+                                //window.location.href = "";
+                            })
+                            .catch((errorData) => {
+                                return console.log(errorData);
+                            })
+                    } else {
+                        alert("로그인이 필요한 기능입니다.");
+                        window.location.href = "http://localhost/login/studentlogin.html";
+                    }
+                },
+                getReviewList: function () {
+                    axios({
+                        method: "get",
+                        url: "http://localhost/review/courseidx",
+                        params: {
+                            courseIdx: this.courseIdx,
+                        },
+                    })
+                        .then((resData) => {
+                            this.reviewSuccess = resData.data.success;
+                            this.reviewList = resData.data.reviewList;
+                            this.reviewSize = resData.data.reviewList.length;
+                            for (let r of this.reviewList) {
+                                if (r.star == "1") {
+                                    r.star = "☆☆☆☆★";
+                                } else if (r.star == "2") {
+                                    r.star = "☆☆☆★★";
+                                } else if (r.star == "3") {
+                                    r.star = "☆☆★★★";
+                                } else if (r.star == "4") {
+                                    r.star = "☆★★★★";
+                                } else if (r.star == "5") {
+                                    r.star = "★★★★★";
+                                }
+                            }
+                        })
+                        .catch((errorData) => {
+                            return console.log(errorData);
+                        });
+                },
+            },
+        });
+
+        new Vue({
+            el: "#header",
+            data: {
+                studentIdx: sessionStorage.getItem("studentIdx"),
+                teacherIdx: sessionStorage.getItem("teacherIdx")
+            },
+            methods: {
+                logout: function () {
+                    if (sessionStorage != null) {
+                        sessionStorage.clear();
+                        alert("로그아웃 성공 💨");
+                        window.location.href = "http://localhost/index.html";
+                    } else {
+                        alert("로그아웃 실패");
+                    }
+                },
+            }
+        })
+    </script>
+</body>
+
+</html>

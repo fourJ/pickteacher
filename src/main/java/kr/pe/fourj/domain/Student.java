@@ -1,5 +1,6 @@
 package kr.pe.fourj.domain;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -11,14 +12,16 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 
-import lombok.AllArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@AllArgsConstructor
+@RequiredArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
@@ -39,14 +42,18 @@ public class Student {
 	private String name;
 	
 	@NonNull
-	private Integer birth;
+	private LocalDate birth;
+	
+
+	@NonNull
+	private Integer age;
 	
 	@NonNull
 	@Column(name="nick_name")
 	private String nickName;
 	
 	@NonNull
-	private Integer gender;
+	private String gender;
 	
 	@NonNull
 	private String address;
@@ -55,15 +62,20 @@ public class Student {
 	private String phone;
 	
 	@OneToMany(mappedBy="studentIdx", cascade=CascadeType.ALL)
+	@JsonBackReference
 	private List<Catalog> catalogList;
 	
 	@OneToMany(mappedBy="studentIdx", cascade=CascadeType.ALL)
+	@JsonBackReference
 	private List<Cart> cartList;
 	
 	@OneToMany(mappedBy="studentIdx", cascade=CascadeType.ALL)
+	@JsonBackReference
 	private List<Likes> likesList;
 	
 	@OneToMany(mappedBy="studentIdx", cascade=CascadeType.ALL)
+	@JsonBackReference
 	private List<Review> reviewList;
 
+	
 }

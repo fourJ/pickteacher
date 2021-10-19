@@ -1,10 +1,9 @@
 package kr.pe.fourj.domain;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -12,14 +11,16 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 
-import lombok.AllArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@AllArgsConstructor
+@RequiredArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
@@ -31,21 +32,23 @@ public class Review {
 	private Long idx;
 	
 	@NonNull
-	@ManyToOne(fetch=FetchType.LAZY)
+	@ManyToOne
 	@JoinColumn(name="student_idx")
+	@JsonManagedReference
 	private Student studentIdx;
 	
 	@NonNull
-	@ManyToOne(fetch=FetchType.LAZY)
+	@ManyToOne
 	@JoinColumn(name="course_idx")
+	@JsonManagedReference
 	private Course courseIdx;
 	
 	@NonNull
 	private String content;
 	
 	@NonNull
-	@Column(name="date_time")
-	private Date dateTime;
+	@Column(name="review_date")
+	private LocalDate date;
 	
 	@NonNull
 	private Integer star;
