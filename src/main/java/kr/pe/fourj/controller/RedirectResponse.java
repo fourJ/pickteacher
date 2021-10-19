@@ -114,11 +114,14 @@ public class RedirectResponse {
 	public RedirectView updateTeacher(TeacherDTO.Update dto) {
 		System.out.println("-- 선생님 수정 시도 --");
 		
+		boolean result = false;
 		try {
 			teacherService.updateTeacher(dto);
+			result = true;
 		} catch (NotFoundException e) {
 			e.printStackTrace();
 		}		
+
 		return new RedirectView("/mypage/mypage_teacher.html");
 	}
 		
@@ -130,34 +133,18 @@ public class RedirectResponse {
 	}
 	
 	/**
+	 *	Review 
+	 */
+	// 내가 쓴 글에서 상세페이지로 이동
+	@GetMapping("getReviewDetail/{idx}")
+	public RedirectView getReviewDetail(@PathVariable Long idx, RedirectAttributes attr) {
+		attr.addAttribute("reviewIdx", idx);
+		return new RedirectView("/reviewcommunity/reviewupdatepage.html");
+	}
+
+	/**
 	 * Course
 	 */
-	//강의 저장
-	@PostMapping("/course/save")
-	public RedirectView saveCourse(CourseDTO.Create dto) {
-		System.out.println("-- 강의 저장 시도 --");
-		
-			String status = courseService.calculateStatus(dto.getOpenDate(), dto.getCloseDate());
-			try {
-				Teacher teacher = teacherService.findOne(dto.getTeacherIdx());
-
-				try {
-					courseService.saveCourse(new Course(teacher, 
-							dto.getTitle(), dto.getSubject(), 
-							dto.getSchedule(), dto.getType(), 
-							dto.getOpenDate(), dto.getCloseDate(), 
-							status, dto.getHeadCount(), 
-							dto.getTuition(), dto.getTarget()));
-				} catch (ArgumentNullException e1) {
-					e1.printStackTrace();
-				}
-			} catch (NotFoundException e2) {
-				e2.printStackTrace();
-			}
-		
-		return new RedirectView("/mypage/teacher_courseList.html");
-	}
-		
 	//강의 수정
 	@PutMapping("/course")
 	public RedirectView updateCourse(CourseDTO.Update dto) {
@@ -170,10 +157,10 @@ public class RedirectResponse {
 			e.printStackTrace();
 		}
 
-		return new RedirectView("/mypage/teacher_courseList.html");
+		return new RedirectView("mypage/teacher_courseList.html");
 	}
 	
-	//강의 상세페이지로 이동
+	//강의 찾기에서 상세페이지로 이동
 	@GetMapping("getCourseDetail/{idx}")
 	public RedirectView getCourseDetail(@PathVariable Long idx, RedirectAttributes attr) {
 		attr.addAttribute("courseIdx", idx);
@@ -187,7 +174,7 @@ public class RedirectResponse {
 		return new RedirectView("/mypage/teacher_courseupdate.html");
 	}
 
-	//강의별 학생 리스트로 이동
+	//학생리스트로 이동
 	@GetMapping("getCourseStudent/{idx}")
 	public RedirectView getCourseStudent(@PathVariable Long idx, RedirectAttributes attr) {
 		attr.addAttribute("courseIdx", idx);
@@ -207,30 +194,21 @@ public class RedirectResponse {
 			Course course = courseService.findOne(courseIdx);		
 			LocalDate date = LocalDate.now();
 
-			if(courseService.checkStatus(course) && course.getHeadCount() > course.getCatalogList().size()) {
-				if(catalogService.isNotAlreadyCatalog(student, course)) {
-					try {
+			//course.getHeadCount() > catalogService.findAllByCourseIdx(course).size()
+			if(courseService.checkStatus(course)) {
+				try {
+					boolean checkCart = cartService.isNotAlreadyCart(student, course);
+					if(!checkCart) {
 						catalogService.saveCatalog(new Catalog(student, course, date));
 						cartService.deleteCart(student, course);
+					}else {
+						System.out.println("해당 강의가 장바구니에 없습니다.");
 					}
-					catch (ArgumentNullException e) {
-						e.printStackTrace();
-					}
-				}else {
-					System.out.println("동일한 강의를 이미 수강하고 있습니다.");
-					try {
-						cartService.deleteCart(student, course);
-					} catch (ArgumentNullException e) {
-						e.printStackTrace();
-					}
-				}			
-			} else {
-				System.out.println("마감일이 지났거나 정원이 초과했습니다.");
-				try {
-					cartService.deleteCart(student, course);
 				} catch (ArgumentNullException e) {
 					e.printStackTrace();
 				}
+			} else {
+				System.out.println("동일한 강의를 이미 수강신청 하셨거나, 마감일이 지났거나, 정원이 다 찼습니다.");
 			}
 		} catch (NotFoundException e) {
 			e.printStackTrace();
@@ -238,16 +216,5 @@ public class RedirectResponse {
 
 		return new RedirectView("/mypage/student_catalog.html");
 	}
-	
-	/**
-	 *	Review 
-	 */
-	// 내가 쓴 글에서 상세페이지로 이동
-	@GetMapping("getReviewDetail/{idx}")
-	public RedirectView getReviewDetail(@PathVariable Long idx, RedirectAttributes attr) {
-		attr.addAttribute("reviewIdx", idx);
-		return new RedirectView("/reviewcommunity/reviewupdatepage.html");
-	}
-
 
 }
