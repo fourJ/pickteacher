@@ -142,30 +142,16 @@
             methods: {
                 teacherinfo: function () {
                     if (this.idx != null) {
-                        axios({
-                            method: "get",
-                            url: "http://localhost/teacher/update?idx=" + this.idx,
-                            parmas: {
-                                idx: sessionStorage.getItem("teacherIdx")
+                        var inputpw = prompt("비밀번호를 입력하세요:)");
+                        if (inputpw != null) {
+                            if (inputpw == this.datas.pw) {
+                                window.location.href =
+                                    "http://localhost/mypage/teacher_update.html";
+                            } else {
+                                alert("비밀번호를 재입력하세요!");
                             }
-                        })
-                            .then((resData) => {
-                                this.success = resData.data.success;
-                                var inputpw = prompt("비밀번호를 입력하세요:)");
-                                if (inputpw != null) {
-                                    if (inputpw == this.datas.pw) {
-                                        window.location.href =
-                                            "http://localhost/mypage/teacher_update.html";
-                                    } else {
-                                        alert("비밀번호를 재입력하세요!");
-                                    }
-                                } else {
-                                    window.location.reload();
-                                }
-                            })
-                            .catch((errorData) => {
-                                console.log(errorData);
-                            });
+                        }
+
                     } else {
                         if (window.confirm("잠깐!! 🤭 선생님이신가요?")) {
                             window.location.href = "http://localhost/login/teacherlogin.html";

@@ -143,6 +143,7 @@
             <button onclick="document.getElementById('id01').style.display='block'" style="width: auto">
                 자세히 검색
             </button>
+
             <!-- Seach Condition - Modal -->
             <div id="id01" class="modal">
                 <form class="modal-content animate" style="background-color: #dedede">
@@ -152,65 +153,68 @@
                             title="Close Modal">&times;</span>
 
                         <!-- 로고나 제목 -->
-                        <div style="
-                                    background-color: #ecb807;
-                                    height: 50px;
-                                    margin: 10%;
-                                ">
-                            로고 이미지를 넣어도 됨
+                        <div style="margin: 10%; text-align: center;">
+                            <h1>👩‍🏫 Pick Teacher 👨‍🏫</h1>
+                            <h2>나에게 맞는 선생님 찾기</h2>
                         </div>
                     </div>
 
                     <div class="container">
-                        <label for="search_condition"><b>검색 조건</b></label>
-                        <select name="search_condition" v-model="searchCondition">
-                            <option value="">검색 조건 선택</option>
-                            <option value="gender">성별</option>
-                            <option value="career">경력</option>
-                            <!-- 이 조건으로 찾기 백에 없음 -->
-                        </select>
-                        <br />
-                        <label for="search_input"><b>입력</b></label>
-                        <!-- 성별 검색인 경우 -->
-                        <div class="search_input" name="search_input_gender" v-show="searchCondition=='gender'">
-                            <label for="search_input_gender" class="modal_search_condition">성별</label><br />
-                            <div class="modal_search_input">
-                                <input type="radio" name="gender" value="남자" checked v-model="gender" />
-                                <label for="gender">남</label>
-                            </div>
-                            <div class="modal_search_input">
-                                <input type="radio" name="gender" value="여자" v-model="gender" />
-                                <label for="gender">여</label>
-                            </div>
-                        </div>
-                        <!-- 경력 검색인 경우 -->
-                        <div class="search_input" name="search_input_career" v-show="searchCondition=='career'">
-                            <!-- 선택하는 체크박스로? -->
-                            <label for="search_input_career" class="modal_search_condition">경력</label><br />
-                            <div class="modal_search_input">
-                                <input type="radio" name="career" value="신입" v-model="career" />
-                                <label for="career">신입</label>
-                            </div>
-                            <div class="modal_search_input">
-                                <input type="radio" name="career" value="1-5년" v-model="career" />
-                                <label for="career">1-5년</label>
-                            </div>
-                            <div class="modal_search_input">
-                                <input type="radio" name="career" value="6-10년" v-model="career" />
-                                <label for="career">6-10년</label>
-                            </div>
-                            <div class="modal_search_input">
-                                <input type="radio" name="career" value="10년이상" v-model="career" />
-                                <label for="career">10년이상</label>
-                            </div>
+                        <div style="margin-bottom: 10px;">
+                            <label for="search_condition" style="margin-right: 10px;"><b>검색 조건</b></label>
+                            <select name="search_condition" v-model="searchCondition">
+                                <option value="">검색 조건 선택</option>
+                                <option value="gender">성별</option>
+                                <option value="career">경력</option>
+                            </select>
                         </div>
 
-                        <br />
+                        <div>
+                            <!-- 성별 검색인 경우 -->
+                            <div class="search_input" name="search_input_gender" v-show="searchCondition=='gender'">
+                                <label for="search_input_gender" class="modal_search_condition">성별</label><br />
+                                <div class="modal_search_input">
+                                    <input type="radio" name="gender" value="남자" checked v-model="gender" />
+                                    <label for="gender">남</label>
+                                </div>
+                                <div class="modal_search_input">
+                                    <input type="radio" name="gender" value="여자" v-model="gender" />
+                                    <label for="gender">여</label>
+                                </div>
+                            </div>
 
-                        <button @click="findAll">검색 조건 초기화</button>
+                            <!-- 경력 검색인 경우 -->
+                            <div class="search_input" name="search_input_career" v-show="searchCondition=='career'">
+                                <label for="search_input_career" class="modal_search_condition">경력</label><br />
+                                <div class="modal_search_input">
+                                    <input type="radio" name="career" value="신입" v-model="career" />
+                                    <label for="career">신입</label>
+                                </div>
+                                <div class="modal_search_input">
+                                    <input type="radio" name="career" value="1-5년" v-model="career" />
+                                    <label for="career">1-5년</label>
+                                </div>
+                                <div class="modal_search_input">
+                                    <input type="radio" name="career" value="6-10년" v-model="career" />
+                                    <label for="career">6-10년</label>
+                                </div>
+                                <div class="modal_search_input">
+                                    <input type="radio" name="career" value="10년이상" v-model="career" />
+                                    <label for="career">10년이상</label>
+                                </div>
+                            </div>
 
-                        <a class="btn btn-primary" style="width: 100%; margin-top: 20px"
-                            @click="conditionedSearch">검색</a>
+                            <br />
+
+                            <button @click="findAll">검색 조건 초기화</button>
+
+                            <br />
+
+                            <a class="btn btn-primary" style="width: 100%; margin-top: 20px"
+                                @click="conditionedSearch">검색</a>
+
+                        </div>
+
                     </div>
                 </form>
             </div>
@@ -245,17 +249,19 @@
                 해당 조건의 선생님이 존재하지 않습니다.
             </div>
 
-            <div class="teacherlist-result" v-for="t in teacherInfo" v-show="success"
-                style="padding: 10px; margin-bottom: 20px;">
-                <a v-bind:href="detailPage+t.idx" class="link">
-                    {{t.name}} </a><br />
-                <img v-bind:src="imageSrc1 + t.idx + imageSrc2" />
+            <a class="teacherlist-result" v-for="t in teacherInfo" v-show="success"
+                style="padding: 10px; margin-bottom: 20px;" v-bind:href="detailPage+t.idx">
+                <div>
+                    {{t.name}}
+                </div>
+                <img v-bind:src="imageSrc1 + t.idx + imageSrc2"
+                    style="margin-top: 10px; margin-bottom: 10px; border-radius: 5px;" />
                 <div>
                     <span>{{t.major}}</span>
                     <span> / </span>
                     <span>{{t.career}}</span>
                 </div>
-            </div>
+            </a>
         </div>
     </div>
 

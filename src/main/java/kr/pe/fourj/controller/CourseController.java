@@ -6,8 +6,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import kr.pe.fourj.domain.Catalog;
@@ -16,7 +14,6 @@ import kr.pe.fourj.domain.Student;
 import kr.pe.fourj.domain.Teacher;
 import kr.pe.fourj.dto.CourseDTO;
 import kr.pe.fourj.dto.ResponseDTO;
-import kr.pe.fourj.exception.Exception.ArgumentNullException;
 import kr.pe.fourj.exception.Exception.NotFoundException;
 import kr.pe.fourj.service.CourseService;
 import kr.pe.fourj.service.ReviewService;
@@ -34,35 +31,6 @@ public class CourseController {
 	private StudentService studentService;
 	@Autowired
 	private ReviewService reviewService;
-	
-	//강의 저장
-	@PostMapping("/course")
-	public ResponseDTO.Create saveCourse(@RequestBody CourseDTO.Create dto) {
-		System.out.println("-- 강의 저장 시도 --");
-		
-		boolean result = false;
-		Long saveId = null;
-			String status = courseService.calculateStatus(dto.getOpenDate(), dto.getCloseDate());
-			try {
-				Teacher teacher = teacherService.findOne(dto.getTeacherIdx());
-
-				try {
-					saveId = courseService.saveCourse(new Course(teacher, 
-							dto.getTitle(), dto.getSubject(), 
-							dto.getSchedule(), dto.getType(), 
-							dto.getOpenDate(), dto.getCloseDate(), 
-							status, dto.getHeadCount(), 
-							dto.getTuition(), dto.getTarget()));
-					result = true;
-				} catch (ArgumentNullException e1) {
-					e1.printStackTrace();
-				}
-			} catch (NotFoundException e2) {
-				e2.printStackTrace();
-			}
-		
-		return new ResponseDTO.Create(saveId, result);
-	}
 
 	//강의 삭제
 	@DeleteMapping("/course")

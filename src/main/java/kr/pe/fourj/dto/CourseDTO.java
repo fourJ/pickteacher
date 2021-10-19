@@ -15,7 +15,11 @@ public class CourseDTO {
 		private String subject;
 		private String schedule;
 		private String type;
+		
+		@DateTimeFormat(pattern = "yyyy-MM-dd")
 		private LocalDate openDate;
+	
+		@DateTimeFormat(pattern = "yyyy-MM-dd")
 		private LocalDate closeDate;
 		private Integer headCount;
 		private Integer tuition;

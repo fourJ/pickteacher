@@ -103,7 +103,7 @@
                 <label>내가 들은 수업</label>
                 <input type="text" v-model="reviewTitle" readonly />
 
-                <br />
+                <br /><br />
                 <label for="star">별점</label>
                 <select id="star" name="star" v-model="review.star">
                     <option value="1">☆☆☆☆★</option>
@@ -115,12 +115,12 @@
 
                 <br /><br />
 
-                <br />
                 <label for="content">내용</label>
                 <input type="text" id="content" name="content" style="height: 100" v-model="review.content" />
-                <!-- <button><a href="reivewall.html">완료</a></button> -->
 
-                <input type="submit" value="수정완료" @click="reviewUpdate" /><br /><br />
+                <br /><br />
+
+                <input type="submit" value="수정완료" @click="reviewUpdate" />
             </div>
         </div>
     </div>

@@ -116,7 +116,7 @@
 
         <div style="margin-bottom: 50px">
             <div class="container px-4">
-                <form action="http://localhost/teacher" method="post">
+                <form action="http://localhost/teacher/update" method="post">
                     <input type="hidden" name="_method" value="put" />
                     <input type="hidden" name="idx" v-bind:value="teacherIdx" />
 
@@ -161,13 +161,12 @@
                     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-cell mdl-cell--12-col">
                         <label class="mdl-textfield__label mdl-color-text--grey"
                             for="textfield_new_username">Career</label>
-                        <input class="mdl-textfield__input" type="text" required="" name="career"
-                            v-bind:value="datas.career" list="careerList" />
+                        <input class="mdl-textfield__input" type="text" required="" name="career" list="careerList" />
                         <datalist id="careerList">
-                            <option value="신입"></option>
-                            <option value="1-5년"></option>
-                            <option value="6-10년"></option>
-                            <option value="10년이상"></option>
+                            <option value="신입">신입</option>
+                            <option value="1-5년">1-5년</option>
+                            <option value="6-10년">6-10년</option>
+                            <option value="10년이상">10년이상</option>
                         </datalist>
                     </div>
 
@@ -235,7 +234,7 @@
                             this.datas = resData.data.teacher;
                         })
                         .catch((errorData) => {
-                            console.log(errorData.response.data.message);
+                            //console.log(errorData);
                         });
                 } else {
                     if (window.confirm("잠깐!! 🤭 학생 회원이신가요?")) {
@@ -265,12 +264,13 @@
                                 window.location.href =
                                     "http://localhost/index.html";
                             } else {
+                                window.reload();
                                 window.location.href =
                                     "http://localhost/mypage/teacher_update.html";
                             }
                         })
                         .catch((errorData) => {
-                            console.log(errorData.response.data.message);
+                            //console.log(errorData);
                         });
                 },
             },
@@ -296,7 +296,7 @@
                         this.datas = resData.data.teacher;
                     })
                     .catch((errorData) => {
-                        console.log(errorData.response.data.message);
+                        //console.log(errorData);
                     });
             },
             methods: {

@@ -85,5 +85,9 @@ public class Course {
 	@OneToMany(mappedBy="courseIdx", cascade=CascadeType.ALL)
 	@JsonBackReference
 	private List<Likes> likesList;
+	
+	@OneToMany(mappedBy="courseIdx", cascade=CascadeType.ALL)
+	@JsonBackReference
+	private List<Cart> cartList;
 
 }

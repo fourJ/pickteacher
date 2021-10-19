@@ -119,15 +119,16 @@
                     <td><a v-bind:href="detailPage + course.teacherIdx.idx">{{course.teacherIdx.name}}</a></td>
                 </tr>
             </table>
-            <!--담당 강사에서 강사 테이블로 넘어가게-->
         </div>
 
         <br>
 
-        <div v-if="teacherIdx === null">
+        <div v-if="teacherIdx === null && studentIdx != null">
             <!-- 찜 하기 / 장바구니 / 수강신청 버튼 -->
-            <button @click="saveLikes">찜 하기</button>
-            <button @click="deleteLikes">찜 취소</button>
+            <div id="likes" style="display: inline;">
+                <button v-if="likesCheck == '0'" @click="saveLikes">찜 하기</button>
+                <button v-if="likesCheck == '1'" @click="deleteLikes">찜 취소</button>
+            </div>
             <button v-if="course.status != '마감' && catalogSize < course.headCount" @click="saveCart">장바구니</button>
             <button v-if="course.status != '마감' && catalogSize < course.headCount" @click="saveCatalog">수강신청</button>
         </div>
@@ -168,8 +169,9 @@
             </div>
         </div>
 
-        <hr />
     </div>
+
+    <hr />
 
     <script>
         new Vue({
@@ -196,7 +198,10 @@
                 detailPage: "http://localhost/getTeacherDetail/",
 
                 teacherIdx: sessionStorage.getItem("teacherIdx"),
-                studentIdx: sessionStorage.getItem("studentIdx")
+                studentIdx: sessionStorage.getItem("studentIdx"),
+
+                likesCheckSuccess: "",
+                likesCheck: ""
             },
             created: function () {
                 axios({
@@ -213,6 +218,24 @@
                     .catch((errorData) => {
                         return console.log(errorData);
                     });
+            },
+            beforeMount: function () {
+                axios({
+                    method: "get",
+                    url: "http://localhost/likes/check",
+                    params: {
+                        studentIdx: this.studentIdx,
+                        courseIdx: this.courseIdx,
+                    }
+                })
+                    .then((resData) => {
+                        this.likesCheckSuccess = resData.data.success;
+                        this.likesCheck = resData.data.check;
+                    })
+                    .catch((errorData) => {
+                        return console.log(errorData);
+                    });
+
             },
             mounted: function () {
                 axios({
@@ -406,49 +429,6 @@
             },
         });
 
-        new Vue({
-            el: "#likes",
-            data: {
-                studentIdx: sessionStorage.getItem("studentIdx"),
-                courseIdx: "",
-
-                likesCheckSuccess: "",
-                likesCheck: ""
-            },
-            created: function () {
-                axios({
-                    method: "get",
-                    url: "http://localhost/course",
-                    params: {
-                        idx: this.courseIdx
-                    },
-                })
-                    .then((resData) => {
-                        this.courseSuccess = resData.data.success;
-                        this.course = resData.data.course;
-                    })
-                    .catch((errorData) => {
-                        return console.log(errorData);
-                    });
-            },
-            mounted: function () {
-                axios({
-                    method: "get",
-                    url: "http://localhost/likes/check",
-                    params: {
-                        studentIdx: this.studentIdx,
-                        courseIdx: this.course.idx,
-                    }
-                })
-                    .then((resData) => {
-                        this.likesCheckSuccess = resData.data.success;
-                        this.likesCheck = resData.data.check;
-                    })
-                    .catch((errorData) => {
-                        return console.log(errorData);
-                    });
-            }
-        });
     </script>
 </body>
 

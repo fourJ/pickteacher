@@ -156,156 +156,162 @@
             <button onclick="document.getElementById('id01').style.display='block'" style="width: auto">
                 자세히 검색
             </button>
+
             <!-- Seach Condition - Modal -->
             <div id="id01" class="modal">
-                <form class="modal-content animate" style="background-color: #dedede">
+                <form class="modal-content animate" style="background-color: #dedede;">
                     <div class="imgcontainer">
                         <!-- modal 닫기(X) -->
                         <span onclick="document.getElementById('id01').style.display='none'" class="close"
                             title="Close Modal">&times;</span>
 
                         <!-- 로고나 제목 -->
-                        <div style="
-                                    background-color: #ecb807;
-                                    height: 50px;
-                                    margin: 10%;
-                                ">
-                            로고 이미지를 넣어도 됨
+                        <div style="margin: 10%; text-align: center;">
+                            <h1>👩‍🏫 Pick Teacher 👨‍🏫</h1>
+                            <h2>나에게 맞는 강의 찾기</h2>
                         </div>
                     </div>
 
                     <div class="container">
-                        <label for="search_condition"><b>검색 조건</b></label>
-                        <select name="search_condition" v-model="searchCondition">
-                            <option value="">검색 조건 선택</option>
-                            <option value="subject">과목</option>
-                            <option value="target">대상 학년</option>
-                            <option value="schedule">수업 요일</option>
-                            <option value="type">수업 진행방식</option>
-                            <option value="tuition">가격</option>
-                        </select>
-                        <br />
-                        <label for="search_input"><b>입력</b></label>
-                        <!-- 과목 검색인 경우 -->
-                        <div class="search_input" name="search_input_subject" v-show="searchCondition=='subject'">
-                            <label for="search_input_subject" class="modal_search_condition">과목</label><br />
-                            <div class="modal_search_input">
-                                <input type="radio" name="subject" value="국어" v-model="subject" />
-                                <label for="subject">국어</label>
-                            </div>
-                            <div class="modal_search_input">
-                                <input type="radio" name="subject" value="영어" v-model="subject" />
-                                <label for="subject">영어</label>
-                            </div>
-                            <div class="modal_search_input">
-                                <input type="radio" name="subject" value="수학" v-model="subject" />
-                                <label for="subject">수학</label>
-                            </div>
-                            <div class="modal_search_input">
-                                <input type="radio" name="subject" value="사회탐구" v-model="subject" />
-                                <label for="subject">사회탐구</label>
-                            </div>
-                            <div class="modal_search_input">
-                                <input type="radio" name="subject" value="과학탐구" v-model="subject" />
-                                <label for="subject">과학탐구</label>
-                            </div>
-                            <div class="modal_search_input">
-                                <input type="radio" name="subject" value="제2외국어" v-model="subject" />
-                                <label for="subject">제2외국어</label>
-                            </div>
-                            <div class="modal_search_input">
-                                <input type="radio" name="subject" value="코딩" v-model="subject" />
-                                <label for="subject">코딩</label>
-                            </div>
+                        <div style="margin-bottom: 10px;">
+                            <label for="search_condition" style="margin-right: 10px;"><b>검색 조건</b></label>
+                            <select name="search_condition" v-model="searchCondition">
+                                <option value="">검색 조건 선택</option>
+                                <option value="subject">과목</option>
+                                <option value="target">대상 학년</option>
+                                <option value="schedule">수업 요일</option>
+                                <option value="type">수업 진행방식</option>
+                                <option value="tuition">가격</option>
+                            </select>
                         </div>
 
-                        <!-- 대상 학년 검색인 경우 -->
-                        <div class="search_input" name="search_input_target" v-show="searchCondition=='target'">
-                            <label for="search_input_target" class="modal_search_condition">대상 학년</label><br />
-                            <div class="modal_search_input">
-                                <input type="radio" name="target" value="중1" v-model="target" />
-                                <label for="target">중1</label>
+                        <div>
+                            <!-- 과목 검색인 경우 -->
+                            <div class="search_input" name="search_input_subject" v-show="searchCondition=='subject'">
+                                <label for="search_input_subject" class="modal_search_condition">과목</label><br />
+                                <div class="modal_search_input">
+                                    <input type="radio" name="subject" value="국어" v-model="subject" />
+                                    <label for="subject">국어</label>
+                                </div>
+                                <div class="modal_search_input">
+                                    <input type="radio" name="subject" value="영어" v-model="subject" />
+                                    <label for="subject">영어</label>
+                                </div>
+                                <div class="modal_search_input">
+                                    <input type="radio" name="subject" value="수학" v-model="subject" />
+                                    <label for="subject">수학</label>
+                                </div>
+                                <div class="modal_search_input">
+                                    <input type="radio" name="subject" value="사회탐구" v-model="subject" />
+                                    <label for="subject">사회탐구</label>
+                                </div>
+                                <div class="modal_search_input">
+                                    <input type="radio" name="subject" value="과학탐구" v-model="subject" />
+                                    <label for="subject">과학탐구</label>
+                                </div>
+                                <div class="modal_search_input">
+                                    <input type="radio" name="subject" value="제2외국어" v-model="subject" />
+                                    <label for="subject">제2외국어</label>
+                                </div>
+                                <div class="modal_search_input">
+                                    <input type="radio" name="subject" value="코딩" v-model="subject" />
+                                    <label for="subject">코딩</label>
+                                </div>
                             </div>
-                            <div class="modal_search_input">
-                                <input type="radio" name="target" value="중2" v-model="target" />
-                                <label for="target">중2</label>
-                            </div>
-                            <div class="modal_search_input">
-                                <input type="radio" name="target" value="중3" v-model="target" />
-                                <label for="target">중3</label>
-                            </div>
-                            <div class="modal_search_input">
-                                <input type="radio" name="target" value="고1" v-model="target" />
-                                <label for="target">고1</label>
-                            </div>
-                            <div class="modal_search_input">
-                                <input type="radio" name="target" value="고2" v-model="target" />
-                                <label for="target">고2</label>
-                            </div>
-                            <div class="modal_search_input">
-                                <input type="radio" name="target" value="고3" v-model="target" />
-                                <label for="target">고3</label>
-                            </div>
-                        </div>
-                        <!-- 수업 요일 검색인 경우 -->
-                        <div class="search_input" name="search_input_schedule" v-show="searchCondition=='schedule'">
-                            <label for="search_input_schedule" class="modal_search_condition">진행 요일</label><br />
-                            <div class="modal_search_input">
-                                <input type="radio" name="schedule" value="월" v-model="schedule" />
-                                <label for="schedule">월</label>
-                            </div>
-                            <div class="modal_search_input">
-                                <input type="radio" name="schedule" value="화" v-model="schedule" />
-                                <label for="schedule">화</label>
-                            </div>
-                            <div class="modal_search_input">
-                                <input type="radio" name="schedule" value="수" v-model="schedule" />
-                                <label for="schedule">수</label>
-                            </div>
-                            <div class="modal_search_input">
-                                <input type="radio" name="schedule" value="목" v-model="schedule" />
-                                <label for="schedule">목</label>
-                            </div>
-                            <div class="modal_search_input">
-                                <input type="radio" name="schedule" value="금" v-model="schedule" />
-                                <label for="schedule">금</label>
-                            </div>
-                            <div class="modal_search_input">
-                                <input type="radio" name="schedule" value="토" v-model="schedule" />
-                                <label for="schedule">토</label>
-                            </div>
-                            <div class="modal_search_input">
-                                <input type="radio" name="schedule" value="일" v-model="schedule" />
-                                <label for="schedule">일</label>
-                            </div>
-                        </div>
-                        <!-- 수업 진행방식 검색인 경우 -->
-                        <div class="search_input" name="search_input_type" v-show="searchCondition=='type'">
-                            <label for="search_input_type" class="modal_search_condition">진행방식</label><br />
-                            <div class="modal_search_input">
-                                <input type="radio" name="type" value="온라인" v-model="type" />
-                                <label for="type">온라인</label>
-                            </div>
-                            <div class="modal_search_input">
-                                <input type="radio" name="type" value="오프라인" v-model="type" />
-                                <label for="type">오프라인</label>
-                            </div>
-                        </div>
-                        <!-- 가격 검색인 경우 -->
-                        <div class="search_input" name="search_input_tutition" v-show="searchCondition=='tuition'">
-                            <label for="search_input_tutition" class="modal_search_condition">최대 가격</label><br />
-                            <input type="range" name="tuition" value="0" min="100000" max="1000000" step="10000"
-                                oninput="document.getElementById('input-tuition').innerHTML=this.value;"
-                                v-model="tuition" />
-                            <span id="input-tuition"></span>
-                        </div>
 
-                        <br />
+                            <!-- 대상 학년 검색인 경우 -->
+                            <div class="search_input" name="search_input_target" v-show="searchCondition=='target'">
+                                <label for="search_input_target" class="modal_search_condition">대상 학년</label><br />
+                                <div class="modal_search_input">
+                                    <input type="radio" name="target" value="중1" v-model="target" />
+                                    <label for="target">중1</label>
+                                </div>
+                                <div class="modal_search_input">
+                                    <input type="radio" name="target" value="중2" v-model="target" />
+                                    <label for="target">중2</label>
+                                </div>
+                                <div class="modal_search_input">
+                                    <input type="radio" name="target" value="중3" v-model="target" />
+                                    <label for="target">중3</label>
+                                </div>
+                                <div class="modal_search_input">
+                                    <input type="radio" name="target" value="고1" v-model="target" />
+                                    <label for="target">고1</label>
+                                </div>
+                                <div class="modal_search_input">
+                                    <input type="radio" name="target" value="고2" v-model="target" />
+                                    <label for="target">고2</label>
+                                </div>
+                                <div class="modal_search_input">
+                                    <input type="radio" name="target" value="고3" v-model="target" />
+                                    <label for="target">고3</label>
+                                </div>
+                            </div>
 
-                        <button @click="findAll">검색 조건 초기화</button>
+                            <!-- 수업 요일 검색인 경우 -->
+                            <div class="search_input" name="search_input_schedule" v-show="searchCondition=='schedule'">
+                                <label for="search_input_schedule" class="modal_search_condition">진행 요일</label><br />
+                                <div class="modal_search_input">
+                                    <input type="radio" name="schedule" value="월" v-model="schedule" />
+                                    <label for="schedule">월</label>
+                                </div>
+                                <div class="modal_search_input">
+                                    <input type="radio" name="schedule" value="화" v-model="schedule" />
+                                    <label for="schedule">화</label>
+                                </div>
+                                <div class="modal_search_input">
+                                    <input type="radio" name="schedule" value="수" v-model="schedule" />
+                                    <label for="schedule">수</label>
+                                </div>
+                                <div class="modal_search_input">
+                                    <input type="radio" name="schedule" value="목" v-model="schedule" />
+                                    <label for="schedule">목</label>
+                                </div>
+                                <div class="modal_search_input">
+                                    <input type="radio" name="schedule" value="금" v-model="schedule" />
+                                    <label for="schedule">금</label>
+                                </div>
+                                <div class="modal_search_input">
+                                    <input type="radio" name="schedule" value="토" v-model="schedule" />
+                                    <label for="schedule">토</label>
+                                </div>
+                                <div class="modal_search_input">
+                                    <input type="radio" name="schedule" value="일" v-model="schedule" />
+                                    <label for="schedule">일</label>
+                                </div>
+                            </div>
 
-                        <a class="btn btn-primary" style="width: 100%; margin-top: 20px"
-                            @click="conditionedSearch">검색</a>
+                            <!-- 수업 진행방식 검색인 경우 -->
+                            <div class="search_input" name="search_input_type" v-show="searchCondition=='type'">
+                                <label for="search_input_type" class="modal_search_condition">진행방식</label><br />
+                                <div class="modal_search_input">
+                                    <input type="radio" name="type" value="온라인" v-model="type" />
+                                    <label for="type">온라인</label>
+                                </div>
+                                <div class="modal_search_input">
+                                    <input type="radio" name="type" value="오프라인" v-model="type" />
+                                    <label for="type">오프라인</label>
+                                </div>
+                            </div>
+
+                            <!-- 가격 검색인 경우 -->
+                            <div class="search_input" name="search_input_tutition" v-show="searchCondition=='tuition'">
+                                <label for="search_input_tutition" class="modal_search_condition">최대 가격</label><br />
+                                <input type="range" name="tuition" value="0" min="100000" max="1000000" step="10000"
+                                    oninput="document.getElementById('input-tuition').innerHTML=this.value;"
+                                    v-model="tuition" />
+                                <span id="input-tuition"></span>
+                            </div>
+
+                            <br />
+
+                            <button @click="findAll">검색 조건 초기화</button>
+
+                            <br>
+
+                            <a class="btn btn-primary" style="width: 100%; margin-top: 20px"
+                                @click="conditionedSearch">검색</a>
+                        </div>
                     </div>
                 </form>
             </div>
@@ -342,13 +348,13 @@
                 해당 조건의 강의가 존재하지 않습니다.
             </div>
 
-            <div class="courselist-result" v-if="success && !statusCheck" v-for="c in courseInfo"
-                style="padding: 10px; margin-bottom: 20px;">
-                <span>[{{c.status}}]</span>
-                <a v-bind:href="detailPage + c.idx" class="link">
-                    {{c.title}}<br />
-                </a>
-                <img v-bind:src="imageSrc1 + c.idx + imageSrc2" />
+            <a class="courselist-result" v-if="success && !statusCheck" v-for="c in courseInfo"
+                style="padding: 10px; margin-bottom: 20px;" v-bind:href="detailPage + c.idx">
+                <div>
+                    <span>[{{c.status}}] </span>
+                    <span>{{c.title}}</span>
+                </div>
+                <img v-bind:src="imageSrc1 + c.idx + imageSrc2" style="margin-top: 10px; margin-bottom: 10px;" />
                 <div>
                     <span>{{c.target}}</span> /
                     <span>{{c.subject}}</span> /
@@ -357,18 +363,17 @@
                     <span>{{c.schedule}}</span> /
                     <span>{{c.openDate}} ~ {{c.closeDate}}</span><br />
                     <span>{{c.tuition}}원</span>
-                    <br />
                 </div>
-            </div>
+            </a>
 
-            <div class="courselist-result" v-if="success && statusCheck" v-for="s in statusCourse"
-                style="padding: 10px; margin-bottom: 20px;">
-                <span>[{{s.status}}]</span>
-                <a v-bind:href="detailPage + s.idx" class="link">
-                    {{s.title}}<br />
-                </a>
-                <img v-bind:src="imageSrc1 + s.idx + imageSrc2" />
-                <div class="list_tcc">
+            <a class="courselist-result" v-if="success && statusCheck" v-for="s in statusCourse"
+                style="padding: 10px; margin-bottom: 20px;" v-bind:href="detailPage + s.idx">
+                <div>
+                    <span>[{{s.status}}] </span>
+                    <span>{{s.title}}</span>
+                </div>
+                <img v-bind:src="imageSrc1 + s.idx + imageSrc2" style="margin-top: 10px; margin-bottom: 10px;" />
+                <div>
                     <span>{{s.target}}</span> /
                     <span>{{s.subject}}</span> /
                     <span>{{s.type}}</span><br />
@@ -377,7 +382,7 @@
                     <span>{{s.openDate}} ~ {{s.closeDate}}</span><br />
                     <span>{{s.tuition}}원</span>
                 </div>
-            </div>
+            </a>
         </div>
     </div>
 

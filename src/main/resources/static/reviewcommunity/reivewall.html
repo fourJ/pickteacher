@@ -74,21 +74,29 @@
     <div class="w3header">
         <a href="/index.html" class="logo">Pick Teacher</a>
     </div>
-    <div class="w3header" style="background-color: #1d809f; margin-bottom: 30px">
-        <a href="reivewall.html" class="logo">Review List</a>
-        <div class="w3header-right">
-            <a v-if="teacherIdx == null && studentIdx != null" href="reviewpage.html">후기 작성하기</a>
-            <a href="reivewall.html">전체 후기</a>
-            <a v-if="teacherIdx == null && studentIdx != null" href="reviewmyall.html">내가 쓴 글</a>
-        </div>
-    </div>
 
-    <div id="review" class="w3-container" style="margin: 50px">
-        <h3>전체 후기 보기</h3>
-        <hr />
+
+
+
+    <div id="review">
+
+
+        <div class="w3header" style="background-color: #1d809f; margin-bottom: 30px">
+            <a href="reivewall.html" class="logo">Review List</a>
+            <div class="w3header-right">
+                <a href="reviewpage.html" v-if="!teacherIdx">후기 작성하기</a>
+                <a href="reivewall.html">전체 후기</a>
+                <a href="reviewupdatepage.html" v-if="!teacherIdx">내가 쓴 글</a>
+                <!-- <a href="reviewmyall.html">내가 쓴 글</a> -->
+            </div>
+        </div>
+
+
         <!-- <button>1.모든 후기보기</button> -->
         <!-- <button @click="reqResAjax()">1.모든 후기보기</button> -->
-        <div v-if="resData">
+        <div v-if="resData" class="w3-container" style="margin: 50px">
+            <h3>전체 후기 보기</h3>
+            <hr />
             <table style="width: 100%" v-show="resData">
                 <tr>
                     <th>작성자</th>
@@ -130,6 +138,8 @@
             },
 
             created: function () {
+                console.log(this.studentIdx)
+                console.log(this.teacherIdx)
                 axios({
                     method: "get",
                     url: "http://localhost/reviewall",

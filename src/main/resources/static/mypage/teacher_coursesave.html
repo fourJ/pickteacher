@@ -99,21 +99,34 @@
     </div>
 
     <div class="w3-container" style="margin: 50px">
-        <h3>강의수정 페이지</h3>
+        <h3>강의 추가 페이지</h3>
         <hr>
 
         <div id="app">
-            <form action="http://localhost/course" method="post">
-                <input type="hidden" name="_method" value="put" />
-                <input type="hidden" name="idx" v-bind:value="courseIdx" readonly />
+            <form action="http://localhost/course/save" method="post">
+                <input type="hidden" name="teacherIdx" v-bind:value="teacherIdx" />
 
-                <label>강의명 변경</label>
-                <input type="text" name="title" v-bind:value="course.title" placeholder="강의명을 입력해주세요." required />
+                <label>강의명</label>
+                <input type="text" name="title" placeholder="강의명을 입력해주세요." required />
+
+                <br /><br />
+                <label for="subject">과목 pick</label>
+                <select name="subject" required>
+                    <option value="" selected>과목 선택</option>
+                    <option value="국어">국어</option>
+                    <option value="영어">영어</option>
+                    <option value="수학">수학</option>
+                    <option value="사회탐구">사회탐구</option>
+                    <option value="과학탐구">과학탐구</option>
+                    <option value="제2외국어">제2외국어</option>
+                    <option value="코딩">코딩</option>
+                </select>
 
                 <br /><br />
 
                 <label for="target">대상학년 pick</label>
                 <select name="target" required>
+                    <option value="" selected>대상학년 선택</option>
                     <option value="중1">중1</option>
                     <option value="중2">중2</option>
                     <option value="중3">중3</option>
@@ -126,6 +139,7 @@
 
                 <label for="schedule">요일 pick</label>
                 <select name="schedule" required>
+                    <option value="" selected>요일 선택</option>
                     <option value="월">월</option>
                     <option value="화">화</option>
                     <option value="수">수</option>
@@ -139,6 +153,7 @@
 
                 <label for="type">타입 pick</label>
                 <select name="type" required>
+                    <option value="" selected>타입 선택</option>
                     <option value="온라인">온라인</option>
                     <option value="오프라인">오프라인</option>
                 </select>
@@ -146,32 +161,26 @@
                 <br /><br />
 
                 <label>개강일</label>
-                <input type="date" name="openDate" v-bind:value="course.openDate" required />
+                <input type="date" name="openDate" required />
                 <br />
 
                 <label>종강일</label>
-                <input type="date" name="closeDate" v-bind:value="course.closeDate" required />
-
-                <br /><br />
-
-                <label for="status">상태</label>
-                <input type="text" name="status" v-bind:value="course.status" readonly />
+                <input type="date" name="closeDate" required />
 
                 <br /><br />
 
                 <label>정원 수</label>
-                <input type="text" name="headCount" v-bind:value="course.headCount" pattern="[0-9]{1,3}"
-                    placeholder="강의 최대 정원 수를 입력해주세요." required />
+                <input type="text" name="headCount" pattern="[0-9]{1,3}" placeholder="강의 최대 정원 수를 입력해주세요." required />
 
                 <br /><br />
 
                 <label>수강비</label>
-                <input type="text" name="tuition" v-bind:value="course.tuition" pattern="[0-9]{1,100}"
-                    placeholder="강의 수강비를 입력해주세요." required />
+                <input type="text" name="tuition" pattern="[0-9]{1,100}" placeholder="강의 수강비를 입력해주세요." required />
+
 
                 <br /><br />
 
-                <input type="submit" value="수정완료" />
+                <input type="submit" value="완료" />
             </form>
         </div>
     </div>
@@ -182,58 +191,9 @@
         new Vue({
             el: "#app",
             data: {
-                courseIdx: window.location.search.substring(
-                    window.location.search.indexOf("=") + 1
-                ),
-                success: "",
-                course: [],
-                updateSuccess: "",
-            },
-            created: function () {
-                axios({
-                    method: "get",
-                    url: "http://localhost/course",
-                    params: {
-                        idx: this.courseIdx,
-                    },
-                })
-                    .then((resData) => {
-                        this.courseSuccess = resData.data.success;
-                        this.course = resData.data.course;
-                    })
-                    .catch((errorData) => {
-                        return console.log(errorData);
-                    });
-            },
-            // methods: {
-            //     courseUpdate: function () {
-            //         axios({
-            //             method: "put",
-            //             url: "http://localhost/review",
-            //             data: {
-
-            //                 courseidx: this.courseIdx,
-            //                 schedule: this.course.title,
-            //                 openDate: this.course.openDate,
-            //                 closeDate: this.course.closeDate,
-            //                 status: this.course.status,
-            //                 tuition: this.course.tuition,
-            //                 target: this.cours.target,
-            //             },
-            //         })
-            //             .then((resData) => {
-            //                 this.updateSuccess = resData.data.success;
-            //                 alert("후기 수정 성공!");
-            //                 window.location.reload();
-            //                 location.href =
-            //                     "http://localhost/reviewcommunity/reviewmyall.html";
-            //             })
-            //             .catch((errorData) => {
-            //                 return console.log(errorData);
-            //             });
-            //     },
-            // },
-        });
+                teacherIdx: sessionStorage.getItem('teacherIdx'),
+            }
+        })
     </script>
 </body>
 
