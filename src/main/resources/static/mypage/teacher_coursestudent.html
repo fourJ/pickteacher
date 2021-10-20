@@ -66,11 +66,14 @@
 <body>
 
     <!-- Header -->
-    <div>
+    <div id="header">
         <div class="w3header">
             <a href="/index.html" class="logo">Pick Teacher</a>
+            <div v-if="studentIdx != null || teacherIdx != null" class="w3header-right">
+                <a @click="logout" style="color: white; cursor: pointer;">로그아웃</a>
+            </div>
         </div>
-        <div class="w3header" id="header" v-if="success" style="background-color: #1d809f; margin-bottom: 30px">
+        <div class="w3header" style="background-color: #1d809f; margin-bottom: 30px">
             <a href="mypage_teacher.html" class="logo">My Page</a>
             <div class="w3header-right">
                 <a @click="teacherinfo" style="color: white; cursor: pointer;">내 정보 수정</a>
@@ -83,7 +86,11 @@
     <div id="app" style="margin: 50px">
         <h3>나의 학생 리스트</h3>
         <hr />
-        <div v-if="resData">
+        <div v-if="resultSize == '0'">
+            <span>해당 강의를 수강중인 학생이 없습니다.</span>
+        </div>
+
+        <div v-if="resData && resultSize != '0'">
             <table style="width: 100%" v-show="resData">
                 <tr>
                     <th>학생번호</th>
@@ -120,8 +127,9 @@
                 courseIdx: window.location.search.substring(
                     window.location.search.indexOf("=") + 1
                 ),
+                resultSize: '',
 
-                studentList: [],
+                studentList: []
             },
 
             created: function () {
@@ -134,10 +142,8 @@
                 })
                     .then((resData) => {
                         this.resData = true;
-
-                        console.log(resData.data);
                         this.studentList = resData.data.studentList;
-                        console.log(this.studentList);
+                        this.resultSize = this.studentList.length;
                     })
                     .catch((errorData) => {
                         alert(errorData);
@@ -152,18 +158,19 @@
                 success: false,
                 datas: [],
                 studentIdx: sessionStorage.getItem("studentIdx"),
+                teacherIdx: sessionStorage.getItem("teacherIdx")
             },
             created: function () {
                 axios({
                     method: "get",
-                    url: "http://localhost/student",
+                    url: "http://localhost/teacher",
                     params: {
-                        idx: sessionStorage.getItem("studentIdx"),
+                        idx: sessionStorage.getItem("teacherIdx"),
                     }
                 })
                     .then((resData) => {
                         this.success = resData.data.success;
-                        this.datas = resData.data.student;
+                        this.datas = resData.data.teacher;
                     })
                     .catch((errorData) => {
                         console.log(errorData.response.data.message);
@@ -191,20 +198,13 @@
                         }
                     }
                 },
-                logoutclick: function () {
-                    const result = confirm("로그아웃 하시겠습니까?");
-                    if (result) {
+                logout: function () {
+                    if (sessionStorage != null) {
                         sessionStorage.clear();
-                        this.loginsuccess = false;
+                        alert("로그아웃 성공 💨");
                         window.location.href = "http://localhost/index.html";
-                    }
-                },
-                loginclick: function () {
-                    const result = confirm("선생님이신가요?");
-                    if (result) {
-                        window.location.href = "http://localhost/login/teacherlogin.html";
                     } else {
-                        window.location.href = "http://localhost/login/studentlogin.html";
+                        alert("로그아웃 실패");
                     }
                 },
             },
