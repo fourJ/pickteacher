@@ -50,11 +50,14 @@
 
 <body>
     <!-- Header -->
-    <div>
+    <div id="header">
         <div class="w3header">
             <a href="/index.html" class="logo">Pick Teacher</a>
+            <div v-if="studentIdx != null || teacherIdx != null" class="w3header-right">
+                <a @click="logout" style="color: white; cursor: pointer;">로그아웃</a>
+            </div>
         </div>
-        <div class="w3header" id="header" v-if="success" style="background-color: #1d809f; margin-bottom: 30px">
+        <div class="w3header" v-if="success" style="background-color: #1d809f; margin-bottom: 30px">
             <a href="mypage_student.html" class="logo">My Page</a>
             <div class="w3header-right">
                 <a @click="studentinfo" style="color: white; cursor: pointer;">내 정보</a>
@@ -179,6 +182,7 @@
                 success: false,
                 datas: [],
                 studentIdx: sessionStorage.getItem("studentIdx"),
+                teacherIdx: sessionStorage.getItem("teacherIdx")
             },
             created: function () {
                 axios({
@@ -214,6 +218,15 @@
                         } else {
                             window.location.href = "http://localhost/login/teacherlogin.html";
                         }
+                    }
+                },
+                logout: function () {
+                    if (sessionStorage != null) {
+                        sessionStorage.clear();
+                        alert("로그아웃 성공 💨");
+                        window.location.href = "http://localhost/index.html";
+                    } else {
+                        alert("로그아웃 실패");
                     }
                 },
             },
