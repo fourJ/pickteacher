@@ -101,10 +101,10 @@ public class RedirectResponse {
 		if(teacherService.findTeacherById(dto.getId()) == null) {
 			try {
 				teacherService.saveTeacher(new Teacher(dto.getId(),dto.getPw(), 
-																dto.getName(), dto.getGender(), 
-																dto.getAddress(), dto.getPhone(), 
-																dto.getCareer(), dto.getMajor(), 
-																dto.getSchool(), date));
+								       dto.getName(), dto.getGender(), 
+								       dto.getAddress(), dto.getPhone(), 
+								       dto.getCareer(), dto.getMajor(), 
+								       dto.getSchool(), date));
 			} catch (ArgumentNullException e) {
 				e.printStackTrace();
 			}
@@ -164,33 +164,33 @@ public class RedirectResponse {
 	}
 	
 	//강의 저장
-//	@PostMapping("/course")
-//	public RedirectView saveCourse(@RequestBody CourseDTO.Create dto) {
-//		System.out.println("-- 강의 저장 시도 --");
-//		
-//		boolean result = false;
-//		Long saveId = null;
-//			String status = courseService.calculateStatus(dto.getOpenDate(), dto.getCloseDate());
-//			try {
-//				Teacher teacher = teacherService.findOne(dto.getTeacherIdx());
-//
-//				try {
-//					saveId = courseService.saveCourse(new Course(teacher, 
-//							dto.getTitle(), dto.getSubject(), 
-//							dto.getSchedule(), dto.getType(), 
-//							dto.getOpenDate(), dto.getCloseDate(), 
-//							status, dto.getHeadCount(), 
-//							dto.getTuition(), dto.getTarget()));
-//					result = true;
-//				} catch (ArgumentNullException e1) {
-//					e1.printStackTrace();
-//				}
-//			} catch (NotFoundException e2) {
-//				e2.printStackTrace();
-//			}
-//		
-//			return new RedirectView("mypage/teacher_courseList.html");
-//	}
+	@PostMapping("/course")
+	public RedirectView saveCourse(@RequestBody CourseDTO.Create dto) {
+		System.out.println("-- 강의 저장 시도 --");
+		
+		boolean result = false;
+		Long saveId = null;
+			String status = courseService.calculateStatus(dto.getOpenDate(), dto.getCloseDate());
+			try {
+				Teacher teacher = teacherService.findOne(dto.getTeacherIdx());
+
+				try {
+					saveId = courseService.saveCourse(new Course(teacher, 
+							dto.getTitle(), dto.getSubject(), 
+							dto.getSchedule(), dto.getType(), 
+							dto.getOpenDate(), dto.getCloseDate(), 
+							status, dto.getHeadCount(), 
+							dto.getTuition(), dto.getTarget()));
+					result = true;
+				} catch (ArgumentNullException e1) {
+					e1.printStackTrace();
+				}
+			} catch (NotFoundException e2) {
+				e2.printStackTrace();
+			}
+		
+			return new RedirectView("mypage/teacher_courseList.html");
+	}
 	
 	//강의 저장
 	   @PostMapping("/course/save")
