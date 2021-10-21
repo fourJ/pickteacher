@@ -112,9 +112,9 @@ function mainheader() {
 // 로그인 확인 =======================================================================
 function reviewcommunity(url) {
     if (sessionStorage.getItem("studentIdx") != null) {
-        window.location.href = "http://localhost/reviewcommunity/reivewall.html"
+        window.location.href = "http://localhost/reviewcommunity/reviewall.html"
     } else if (sessionStorage.getItem("teacherIdx") != null) {
-        window.location.href = "http://reviewcommunity/reivewall.html";
+        window.location.href = "http://localhost/reviewcommunity/reviewall.html";
     } else {
         alert("로그인은 하셨나요? 🤔");
     }
