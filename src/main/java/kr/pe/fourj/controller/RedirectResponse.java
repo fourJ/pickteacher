@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
@@ -17,6 +18,7 @@ import kr.pe.fourj.domain.Course;
 import kr.pe.fourj.domain.Student;
 import kr.pe.fourj.domain.Teacher;
 import kr.pe.fourj.dto.CourseDTO;
+import kr.pe.fourj.dto.ResponseDTO;
 import kr.pe.fourj.dto.StudentDTO;
 import kr.pe.fourj.dto.TeacherDTO;
 import kr.pe.fourj.exception.Exception.ArgumentNullException;
@@ -44,6 +46,8 @@ public class RedirectResponse {
 	/**
 	 * Student
 	 */
+	
+	
 	//학생 저장
 	@PostMapping("/student")
 	public RedirectView saveStudent(StudentDTO.Create dto) throws NotFoundException {
@@ -69,6 +73,7 @@ public class RedirectResponse {
 
 		return new RedirectView("index.html");
 	}
+	
 	
 	//학생 수정
 	@PutMapping("/student")
@@ -157,6 +162,62 @@ public class RedirectResponse {
 
 		return new RedirectView("mypage/teacher_courseList.html");
 	}
+	
+	//강의 저장
+//	@PostMapping("/course")
+//	public RedirectView saveCourse(@RequestBody CourseDTO.Create dto) {
+//		System.out.println("-- 강의 저장 시도 --");
+//		
+//		boolean result = false;
+//		Long saveId = null;
+//			String status = courseService.calculateStatus(dto.getOpenDate(), dto.getCloseDate());
+//			try {
+//				Teacher teacher = teacherService.findOne(dto.getTeacherIdx());
+//
+//				try {
+//					saveId = courseService.saveCourse(new Course(teacher, 
+//							dto.getTitle(), dto.getSubject(), 
+//							dto.getSchedule(), dto.getType(), 
+//							dto.getOpenDate(), dto.getCloseDate(), 
+//							status, dto.getHeadCount(), 
+//							dto.getTuition(), dto.getTarget()));
+//					result = true;
+//				} catch (ArgumentNullException e1) {
+//					e1.printStackTrace();
+//				}
+//			} catch (NotFoundException e2) {
+//				e2.printStackTrace();
+//			}
+//		
+//			return new RedirectView("mypage/teacher_courseList.html");
+//	}
+	
+	//강의 저장
+	   @PostMapping("/course/save")
+	   public RedirectView saveCourse(CourseDTO.Create dto) {
+	      System.out.println("-- 강의 저장 시도 --");
+	      
+	      Long saveId = null;
+	         String status = courseService.calculateStatus(dto.getOpenDate(), dto.getCloseDate());
+	         try {
+	            Teacher teacher = teacherService.findOne(dto.getTeacherIdx());
+
+	            try {
+	               saveId = courseService.saveCourse(new Course(teacher, 
+	                     dto.getTitle(), dto.getSubject(), 
+	                     dto.getSchedule(), dto.getType(), 
+	                     dto.getOpenDate(), dto.getCloseDate(), 
+	                     status, dto.getHeadCount(), 
+	                     dto.getTuition(), dto.getTarget()));
+	            } catch (ArgumentNullException e1) {
+	               e1.printStackTrace();
+	            }
+	         } catch (NotFoundException e2) {
+	            e2.printStackTrace();
+	         }
+	      
+	      return new RedirectView("/mypage/mypage_teacher.html");
+	   }
 	
 	//강의 찾기에서 상세페이지로 이동
 	@GetMapping("getCourseDetail/{idx}")
